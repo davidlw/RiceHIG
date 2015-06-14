@@ -70,3 +70,8 @@ PbPb MC sample (53X):
 - Hijing, 2M: /Hijing_PbPb_MinimumBias_b13_cmssw5_3_14_batch3/davidlw-RecoSkim_ReTracking_v4-dd6885b0f4b8f9abc410a7927d883b77/USER
 - Hijing, 2M: /Hijing_PbPb_MinimumBias_b13_cmssw5_3_14_batch4/davidlw-RecoSkim_ReTracking_v4-dd6885b0f4b8f9abc410a7927d883b77/USER
 - Hijing, 2M: /Hijing_PbPb_MinimumBias_b13_cmssw5_3_14_batch1/davidlw-RecoSkim_ReTracking_v4-dd6885b0f4b8f9abc410a7927d883b77/USER
+
+PbPb MC sample (74X):
+- HYDJET, 180K:
+  - DIGI-RAW: /Hydjet_Quenched_MinBias_5020GeV/mnguyen-HydjetMB_740pre8_MCHI2_74_V3_53XBS_DIGI-RAW-6da45e4e90741bc03dbd9aec5f36c050/USER
+  - RECO: /Hydjet_Quenched_MinBias_5020GeV/mnguyen-HydjetMB_740pre8_MCHI2_74_V3_53XBS_RECO_v2-5e9447e73d909a826044ea40afa73dc6/USER
