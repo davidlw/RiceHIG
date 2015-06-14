@@ -75,3 +75,6 @@ PbPb MC sample (74X):
 - HYDJET, 180K:
   - DIGI-RAW: /Hydjet_Quenched_MinBias_5020GeV/mnguyen-HydjetMB_740pre8_MCHI2_74_V3_53XBS_DIGI-RAW-6da45e4e90741bc03dbd9aec5f36c050/USER
   - RECO: /Hydjet_Quenched_MinBias_5020GeV/mnguyen-HydjetMB_740pre8_MCHI2_74_V3_53XBS_RECO_v2-5e9447e73d909a826044ea40afa73dc6/USER
+- Pyquen signal only:
+  - DIGI-RAW: /QCD_pthat80_740pre8_MCHI2_74_V3_GEN-SIM/mnguyen-QCD_pthat80_740pre8_MCHI2_74_V3_DIGI-RAW-458fd3d162c410b376fe0a43b9072217/USER
+  - RECO: /QCD_pthat80_740pre8_MCHI2_74_V3_GEN-SIM/mnguyen-QCD_pthat80_740pre8_MCHI2_74_V3_RECO-fa4d7cedb51d6196cc0424fd90debe3f/USER
