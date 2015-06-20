@@ -1,6 +1,6 @@
 import FWCore.ParameterSet.Config as cms
 
-ntrkfilter = cms.EDProducer('MyNtrkFilter',
+ntrkfilter = cms.EDFilter('MyNtrkFilter',
   vertexCollName  = cms.InputTag('offlinePrimaryVertices'),
   trackCollName  = cms.InputTag('generalTracks'),
   genCollName  = cms.InputTag('genParticles'),
