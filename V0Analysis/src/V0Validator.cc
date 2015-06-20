@@ -48,14 +48,14 @@ V0Validator::~V0Validator() {
 
 }
 
-void V0Validator::beginRun(const edm::Run& iRun, const edm::EventSetup& iSetup) {
+void V0Validator::beginJob() {
   //std::cout << "Running V0Validator" << std::endl;
   //theDQMstore = edm::Service<DQMStore>().operator->();
   //std::cout << "In beginJob() at line 1" << std::endl;
   //edm::Service<TFileService> fs;
 
   TH1::SetDefaultSumw2();
-
+/*
   const double small = 1e-3;
   double pt;
   for(pt =   0  ; pt <   2.0-small; pt +=  0.2 ) ptBins.push_back(pt); 
@@ -65,12 +65,38 @@ void V0Validator::beginRun(const edm::Run& iRun, const edm::EventSetup& iSetup) 
   for(pt =   6.0; pt <   9.0-small; pt +=  3.0 ) ptBins.push_back(pt);  
   ptBins.push_back(9.0);
   ptBins.push_back(15.0);
-
-  double etaMin   = -3.0;
-  double etaMax   =  3.0;
-  double etaWidth =  0.5;
+*/
+  ptBins.push_back(0);
+  ptBins.push_back(0.6);
+  ptBins.push_back(0.8);
+  ptBins.push_back(1.0);
+  ptBins.push_back(1.2);
+  ptBins.push_back(1.4);
+  ptBins.push_back(1.6);
+  ptBins.push_back(1.8);
+  ptBins.push_back(2.0);
+  ptBins.push_back(2.2);
+  ptBins.push_back(2.4);
+  ptBins.push_back(2.6);
+  ptBins.push_back(2.8);
+  ptBins.push_back(3.0);
+  ptBins.push_back(3.4);
+  ptBins.push_back(3.8);
+  ptBins.push_back(4.2);
+  ptBins.push_back(5.0);
+/*
+  double etaMin   = -2.4;
+  double etaMax   =  2.4;
+  double etaWidth =  0.8;
   for(double eta = etaMin; eta < etaMax + etaWidth/2; eta += etaWidth)
     etaBins.push_back(eta);
+*/
+  etaBins.push_back(-1.9);
+  etaBins.push_back(-1.2);
+  etaBins.push_back(-0.5);
+  etaBins.push_back(0.3);
+  etaBins.push_back(1.0);
+  etaBins.push_back(1.9);
 
   ksGenVsEtaPt = theDQMstore->make<TH2D>("K0sGenVsEtaPt",
                            "Generated K^{0}_{S} vs #eta and p_{T}", etaBins.size()-1, &etaBins[0], ptBins.size()-1, &ptBins[0]);
@@ -183,31 +209,38 @@ void V0Validator::beginRun(const edm::Run& iRun, const edm::EventSetup& iSetup) 
 			      "#Lambda^{0} Fake Rate vs #eta", 40, -2.5, 2.5);
   lamFakeVsPt_num = theDQMstore->make<TH1D>("LamFakeVsPt_num",
 			     "#Lambda^{0} Fake Rate vs p_{T}", 70, 0., 20.);
+  lamFakeVsEtaPt_num = theDQMstore->make<TH2D>("LamFakeVsEtaPt_num",
+                           "#Lambda^{0} Fake Rate vs #eta and p_{T}", etaBins.size()-1, &etaBins[0], ptBins.size()-1, &ptBins[0]);
   lamCascadeVsR_num = theDQMstore->make<TH1D>("LamCascadeVsR_num",
                             "#Lambda^{0} cascade Rate vs #rho", 40, 0., 40.);
   lamCascadeVsEta_num = theDQMstore->make<TH1D>("LamCascadeVsEta_num", 
                               "#Lambda^{0} cascade Rate vs #eta", 40, -2.5, 2.5);
   lamCascadeVsPt_num = theDQMstore->make<TH1D>("LamCascadeVsPt_num",
                              "#Lambda^{0} cascade Rate vs p_{T}", 70, 0., 20.);
+  lamCascadeVsEtaPt_num = theDQMstore->make<TH2D>("LamCascadeVsEtaPt_num",
+                           "#Lambda^{0} cascade Rate vs #eta and p_{T}", etaBins.size()-1, &etaBins[0], ptBins.size()-1, &ptBins[0]);
   lamSecVsR_num = theDQMstore->make<TH1D>("LamSecVsR_num",
                             "#Lambda^{0} Secondary Rate vs #rho", 40, 0., 40.);
   lamSecVsEta_num = theDQMstore->make<TH1D>("LamSecVsEta_num",
                               "#Lambda^{0} Secondary Rate vs #eta", 40, -2.5, 2.5);
   lamSecVsPt_num = theDQMstore->make<TH1D>("LamSecVsPt_num",
                              "#Lambda^{0} Secondary Rate vs p_{T}", 70, 0., 20.);
+  lamSecVsEtaPt_num = theDQMstore->make<TH2D>("LamSecVsEtaPt_num",
+                           "#Lambda^{0} Secondary Rate vs #eta and p_{T}", etaBins.size()-1, &etaBins[0], ptBins.size()-1, &ptBins[0]);
   lamTkFakeVsR_num = theDQMstore->make<TH1D>("LamTkFakeVsR_num",
 			    "#Lambda^{0} Tracking Fake Rate vs #rho", 40, 0., 40.);
   lamTkFakeVsEta_num = theDQMstore->make<TH1D>("LamTkFakeVsEta_num",
 			      "#Lambda^{0} Tracking Fake Rate vs #eta", 40, -2.5, 2.5);
   lamTkFakeVsPt_num = theDQMstore->make<TH1D>("LamTkFakeVsPt_num",
 			     "#Lambda^{0} Tracking Fake Rate vs p_{T}", 70, 0., 20.);
-
   lamFakeVsR_denom = theDQMstore->make<TH1D>("LamFakeVsR_denom",
 			    "#Lambda^{0} Fake Rate vs #rho", 40, 0., 40.);
   lamFakeVsEta_denom = theDQMstore->make<TH1D>("LamFakeVsEta_denom",
 			      "#Lambda^{0} Fake Rate vs #eta", 40, -2.5, 2.5);
   lamFakeVsPt_denom = theDQMstore->make<TH1D>("LamFakeVsPt_denom",
 			     "#Lambda^{0} Fake Rate vs p_{T}", 70, 0., 20.);
+  lamFakeVsEtaPt_denom = theDQMstore->make<TH2D>("LamFakeVsEtaPt_denom",
+                           "#Lambda^{0} Fake Rate vs #eta and p_{T}", etaBins.size()-1, &etaBins[0], ptBins.size()-1, &ptBins[0]);
 
   nKs = theDQMstore->make<TH1D>("nK0s",
 		     "Number of K^{0}_{S} found per event", 60, 0., 60.);
@@ -294,7 +327,7 @@ void V0Validator::beginRun(const edm::Run& iRun, const edm::EventSetup& iSetup) 
   lamMassPtAll = theDQMstore->make<TH2D>("lamMassPtAll",
                                    "Invariant mass vs p_{T} of all #Lambda^{0}",
                                    120, 0, 12.0, lamMassNbins, lamMassXmin, lamMassXmax);
-  for(int i=0;i<12;i++)
+  for(unsigned int i=0;i<etaBins.size()-1;i++)
   {
     ksMassPtAllEta[i] = theDQMstore->make<TH2D>(Form("ksMassPtAllEta%d",i+1),
                                   "Invariant mass vs p_{T} of all K0S",
@@ -317,6 +350,10 @@ void V0Validator::beginRun(const edm::Run& iRun, const edm::EventSetup& iSetup) 
   lamResolutionPt = theDQMstore->make<TH2D>("lamResolutionPt",
                                     "Lambda pT resolution",
                                     120, 0, 12.0, 100, -0.5, 0.5); 
+
+  hVz = theDQMstore->make<TH1D>("vz", ";vz (cm)", 400, -20.0, 20.0);
+  hVxVy = theDQMstore->make<TH2D>("vxvy", ";vx (cm);vy (cm)", 100, -5.0, 5.0, 100, -5.0, 5.0);
+
 }
 
 void V0Validator::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup) {
@@ -329,14 +366,21 @@ void V0Validator::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 
   edm::Handle<reco::VertexCollection> vertices;
   iEvent.getByLabel("offlinePrimaryVertices",vertices);
-  double bestvz=-999.9;// bestvx=-999.9, bestvy=-999.9;
+  double bestvz=-999.9, bestvx=-999.9, bestvy=-999.9;
 //  double bestvzError=-999.9, bestvxError=-999.9, bestvyError=-999.9;
   const reco::Vertex & vtx = (*vertices)[0];
-  bestvz = vtx.z(); //bestvx = vtx.x(); bestvy = vtx.y();
+  bestvz = vtx.z(); bestvx = vtx.x(); bestvy = vtx.y();
 //  bestvzError = vtx.zError(); bestvxError = vtx.xError(); bestvyError = vtx.yError();
 
   if(bestvz < -15.0 || bestvz>15.0) return;
 
+  bestvz=bestvz;
+  bestvy=bestvy;
+  bestvx=bestvx;
+
+  hVz->Fill(bestvz);
+  hVxVy->Fill(bestvx,bestvy);
+  
   // Get event setup info, B-field and tracker geometry
 //  ESHandle<MagneticField> bFieldHandle;
 //  iSetup.get<IdealMagneticFieldRecord>().get(bFieldHandle);
@@ -368,7 +412,8 @@ void V0Validator::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
     const reco::GenParticle & genCand = (*genParticleCollection)[it];
     int id = genCand.pdgId();
 
-    double eta = genCand.rapidity()+0.47;
+//    double eta = genCand.rapidity()+0.47;
+    double eta = genCand.eta();
     double pt  = genCand.pt();
 
     if(fabs(id)==310) ksGenVsEtaPt->Fill(eta,pt);
@@ -400,14 +445,14 @@ void V0Validator::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
          iK0s++) {
       // Fill values to be histogrammed
       K0sCandpT = (sqrt( iK0s->momentum().perp2() ));
-      K0sCandEta = iK0s->rapidity()+0.47;
-//      K0sCandEta = iK0s->momentum().eta();
+//      K0sCandEta = iK0s->rapidity()+0.47;
+      K0sCandEta = iK0s->momentum().eta();
       mass = iK0s->mass();
 
       ksEtaPtAll->Fill( K0sCandEta, K0sCandpT );
       if(K0sCandEta>-3.0 && K0sCandEta<3.0) ksMassAll->Fill( mass );
       if(K0sCandEta>-3.0 && K0sCandEta<3.0) ksMassPtAll->Fill( K0sCandpT, mass );
-      for(int i=0;i<12;i++)
+      for(unsigned int i=0;i<etaBins.size()-1;i++)
         if(K0sCandEta>etaBins[i] && K0sCandEta<etaBins[i+1]) ksMassPtAllEta[i]->Fill( K0sCandpT, mass ); 
     }
   }
@@ -418,15 +463,15 @@ void V0Validator::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
          iLam++) {
       // Fill values to be histogrammed
       LamCandpT = (sqrt( iLam->momentum().perp2() ));
-      LamCandEta = iLam->rapidity()+0.47;
-//      LamCandEta = iLam->momentum().eta();
+//      LamCandEta = iLam->rapidity()+0.47;
+      LamCandEta = iLam->momentum().eta();
       mass = iLam->mass();
 
       lamEtaPtAll->Fill( LamCandEta, LamCandpT );
       if(LamCandEta>-3. && LamCandEta<3.) lamMassAll->Fill( mass );
       if(LamCandEta>-3. && LamCandEta<3.) lamMassPtAll->Fill( LamCandpT, mass );
-      for(int i=0;i<12;i++)
-        if(LamCandEta>etaBins[i] && LamCandEta<etaBins[i+1]) lamMassPtAllEta[i]->Fill( LamCandEta, mass );
+      for(unsigned int i=0;i<etaBins.size()-1;i++)
+        if(LamCandEta>etaBins[i] && LamCandEta<etaBins[i+1]) lamMassPtAllEta[i]->Fill( LamCandpT, mass );
     }
   }
 
@@ -519,7 +564,8 @@ void V0Validator::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 	 iK0s++) {
       // Fill values to be histogrammed
       K0sCandpT = (sqrt( iK0s->momentum().perp2() ));
-      K0sCandEta = iK0s->rapidity();
+//      K0sCandEta = iK0s->rapidity();
+      K0sCandEta = iK0s->eta();
       K0sCandR = (sqrt( iK0s->vertex().perp2() ));
       K0sCandStatus = 0;
       mass = iK0s->mass();
@@ -674,7 +720,8 @@ void V0Validator::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 	 iLam++) {
       // Fill values to be histogrammed
       LamCandpT = (sqrt( iLam->momentum().perp2() ));
-      LamCandEta = iLam->rapidity();
+//      LamCandEta = iLam->rapidity();
+      LamCandEta = iLam->eta();
       LamCandR = (sqrt( iLam->vertex().perp2() ));
       LamCandStatus = 0;
       mass = iLam->mass();
@@ -793,6 +840,7 @@ void V0Validator::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 	lamFakeVsR_num->Fill(LamCandR);
 	lamFakeVsEta_num->Fill(LamCandEta);
 	lamFakeVsPt_num->Fill(LamCandpT);
+        lamFakeVsEtaPt_num->Fill(LamCandEta,LamCandpT);
 	lamCandStatus->Fill((float) LamCandStatus);
 	fakeLamMass->Fill(mass);
         fakeLamMassPt->Fill(LamCandpT,mass);
@@ -804,11 +852,13 @@ void V0Validator::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
         lamCascadeVsR_num->Fill(LamCandR);
         lamCascadeVsEta_num->Fill(LamCandEta);
         lamCascadeVsPt_num->Fill(LamCandpT);
+        lamCascadeVsEtaPt_num->Fill(LamCandEta,LamCandpT);
       }
       if( LamCandStatus == 20 ) {
         lamSecVsR_num->Fill(LamCandR);
         lamSecVsEta_num->Fill(LamCandEta);
         lamSecVsPt_num->Fill(LamCandpT);
+        lamSecVsEtaPt_num->Fill(LamCandEta,LamCandpT);
       }
       if( LamCandStatus == 5 ) {
 	lamTkFakeVsR_num->Fill(LamCandR);
@@ -818,6 +868,7 @@ void V0Validator::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
       lamFakeVsR_denom->Fill(LamCandR);
       lamFakeVsEta_denom->Fill(LamCandEta);
       lamFakeVsPt_denom->Fill(LamCandpT);
+      lamFakeVsEtaPt_denom->Fill(LamCandEta,LamCandpT);
     }
   }
   nLam->Fill( (double) numLamFound );
@@ -848,7 +899,8 @@ void V0Validator::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
       if(!itp1->decayVertices().size()) continue;
 
       double LamGenpTtmp = sqrt(itp1->momentum().perp2());
-      double LamGenEtatmp = itp1->rapidity();
+//      double LamGenEtatmp = itp1->rapidity();
+      double LamGenEtatmp = itp1->momentum().eta();
       lamEffVsEtaPt_denom_test->Fill(LamGenEtatmp,LamGenpTtmp);
       lamEffVsPt_denom_test->Fill(LamGenpTtmp);
     }
@@ -910,7 +962,8 @@ void V0Validator::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 		    if( fabs((*iTP2)->pdgId()) == 3122 && (*iTP2)->status()!=-99 ) {
 		      // found generated Lambda
 		      LamGenpT = sqrt((*iTP2)->momentum().perp2());
-		      LamGenEta = (*iTP2)->rapidity();
+//		      LamGenEta = (*iTP2)->rapidity();
+                      LamGenEta = (*iTP2)->momentum().eta();
 		      LamGenR = sqrt(itp2->vertex().perp2());
 		      genLam++;
 		      if(trueLams.size() > 0) {
@@ -1057,7 +1110,8 @@ void V0Validator::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 		    K0sGenStatus = 0;
 		    if( (*iTP2)->pdgId() == 310 && (*iTP2)->status() != -99 ) {
 		      K0sGenpT = sqrt( (*iTP2)->momentum().perp2() );
-		      K0sGenEta = (*iTP2)->rapidity();
+//		      K0sGenEta = (*iTP2)->rapidity();
+                      K0sGenEta = (*iTP2)->momentum().eta();
 		      K0sGenR = sqrt(itp2->vertex().perp2());
 		      genK0s++;
 		      int loop_2 = 0;
@@ -1175,7 +1229,7 @@ void V0Validator::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
   delete thePrimary;
 }
 
-void V0Validator::endRun(const edm::Run& iRun, const edm::EventSetup& iSetup) {}
+void V0Validator::endJob() {}
 
 //void V0Validator::endJob() {}
 

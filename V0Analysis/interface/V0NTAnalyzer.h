@@ -1,9 +1,9 @@
 // -*- C++ -*-
 //
-// Package:    V0Selector
-// Class:      V0Selector
+// Package:    V0NTAnalyzer
+// Class:      V0NTAnalyzer
 // 
-/**\class V0Selector V0Selector.h RiceHIG/V0Analysis/interface/V0Selector.h
+/**\class V0NTAnalyzer V0NTAnalyzer.h RiceHIG/V0Analysis/interface/V0NTAnalyzer.h
 
  Description: <one line class summary>
 
@@ -15,8 +15,8 @@
 //
 //
 
-#ifndef RICEHIG__V0_SELECTOR_H
-#define RICEHIG__V0_SELECTOR_H
+#ifndef RICEHIG__V0_NTANALYZER_H
+#define RICEHIG__V0_NTANALYZER_H
 
 // system include files
 #include <memory>
@@ -27,7 +27,7 @@
 
 // user include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
-#include "FWCore/Framework/interface/EDProducer.h"
+#include "FWCore/Framework/interface/EDAnalyzer.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
@@ -50,25 +50,30 @@
 #include <TString.h>
 #include <TVector3.h>
 #include <TMatrixD.h>
+#include <TNtuple.h>
   
 #include <Math/Functions.h>
 #include <Math/SVector.h>
 #include <Math/SMatrix.h>
 
-class V0Selector : public edm::EDProducer {
+class V0NTAnalyzer : public edm::EDAnalyzer {
 public:
-  explicit V0Selector(const edm::ParameterSet&);
-  ~V0Selector();
+  explicit V0NTAnalyzer(const edm::ParameterSet&);
+  ~V0NTAnalyzer();
 
 private:
   //virtual void beginJob() ;
   virtual void beginJob();
-  virtual void produce(edm::Event&, const edm::EventSetup&);
+  virtual void analyze(const edm::Event&, const edm::EventSetup&);
   virtual void endJob() ;
 
   edm::InputTag vertexCollName_;
-  std::string v0CollName_;
-  std::string v0IDName_;
+  edm::InputTag v0CollName_;
+
+  TNtuple* v0Ntuple;
+
+  edm::Service<TFileService> theDQMstore;
+/*
   double ptCut1_,ptCut2_;
   int nHitCut1_,nHitCut2_;
   double etaCutMin_,etaCutMax_;
@@ -76,8 +81,7 @@ private:
   double vtxChi2Cut_;
   double cosThetaCut_;
   double decayLSigCut_;
-  double misIDMassCut_;
-  double misIDMassCutEE_;
+*/
 };
 
 #endif

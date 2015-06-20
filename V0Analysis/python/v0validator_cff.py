@@ -10,4 +10,3 @@ v0ValidatorHI = v0Validator.clone(
     kShortCollection = cms.InputTag('generalV0CandidatesHI:Kshort'),
     lambdaCollection = cms.InputTag('generalV0CandidatesHI:Lambda')
 )
-

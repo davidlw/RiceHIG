@@ -1,9 +1,9 @@
 // -*- C++ -*-
 //
-// Package:    V0Selector
-// Class:      V0Selector
+// Package:    V0NTAnalyzer
+// Class:      V0NTAnalyzer
 // 
-/**\class V0Selector V0Selector.cc RiceHIG/V0Analysis/src/V0Selector.cc
+/**\class V0NTAnalyzer V0NTAnalyzer.cc RiceHIG/V0Analysis/src/V0NTAnalyzer.cc
 
  Description: <one line class summary>
 
@@ -19,7 +19,7 @@
 // system include files
 #include <memory>
 
-#include "RiceHIG/V0Analysis/interface/V0Selector.h"
+#include "RiceHIG/V0Analysis/interface/V0NTAnalyzer.h"
 
 const double piMass = 0.13957018;
 const double piMassSquared = piMass*piMass;
@@ -31,13 +31,13 @@ const double lambdaMass = 1.115683;
 const double kshortMass = 0.497614; 
 
 // Constructor
-V0Selector::V0Selector(const edm::ParameterSet& iConfig) 
+V0NTAnalyzer::V0NTAnalyzer(const edm::ParameterSet& iConfig) 
 {
   using std::string;
 
   vertexCollName_ = iConfig.getParameter<edm::InputTag>("vertexCollName");
-  v0CollName_     = iConfig.getParameter<string>("v0CollName");
-  v0IDName_       = iConfig.getParameter<string>("v0IDName");
+  v0CollName_     = iConfig.getParameter<edm::InputTag>("v0CollName");
+/*
   etaCutMin_      = iConfig.getParameter<double>("etaCutMin");
   etaCutMax_      = iConfig.getParameter<double>("etaCutMax");
   ptCut1_         = iConfig.getParameter<double>("ptCut1");
@@ -51,15 +51,11 @@ V0Selector::V0Selector(const edm::ParameterSet& iConfig)
   vtxChi2Cut_     = iConfig.getParameter<double>("vtxChi2Cut");
   cosThetaCut_    = iConfig.getParameter<double>("cosThetaCut");
   decayLSigCut_   = iConfig.getParameter<double>("decayLSigCut");
-  misIDMassCut_   = iConfig.getParameter<double>("misIDMassCut");
-  misIDMassCutEE_ = iConfig.getParameter<double>("misIDMassCutEE");
-  // Trying this with Candidates instead of the simple reco::Vertex
-  produces< reco::VertexCompositeCandidateCollection >(v0IDName_);
-
+*/
 }
 
 // (Empty) Destructor
-V0Selector::~V0Selector() {
+V0NTAnalyzer::~V0NTAnalyzer() {
 
 }
 
@@ -68,7 +64,7 @@ V0Selector::~V0Selector() {
 //
 
 // Producer Method
-void V0Selector::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
+void V0NTAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup) {
 
 //   using std::vector;
    using namespace edm;
@@ -85,13 +81,11 @@ void V0Selector::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
 //   if(bestvz < -15.0 || bestvz>15.0) return;
 
    edm::Handle<reco::VertexCompositeCandidateCollection> v0candidates;
-   iEvent.getByLabel(v0CollName_,v0IDName_,v0candidates);
+   iEvent.getByLabel(v0CollName_,v0candidates);
    if(!v0candidates.isValid()) return;
 
    // Create auto_ptr for each collection to be stored in the Event
-   std::auto_ptr< reco::VertexCompositeCandidateCollection > 
-     theNewV0Cands( new reco::VertexCompositeCandidateCollection() );
-
+   float nt_data[28];
    for( reco::VertexCompositeCandidateCollection::const_iterator v0cand = v0candidates->begin();
          v0cand != v0candidates->end();
          v0cand++) {
@@ -106,62 +100,48 @@ void V0Selector::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
 
        //pt,mass
        double eta = v0cand->eta();
-//       double pt = v0cand->pt();
+       double phi = v0cand->phi();
+       double pt = v0cand->pt();
        double px = v0cand->px();
        double py = v0cand->py();
        double pz = v0cand->pz();
-//       double mass = v0cand->mass();
-
-       if(eta > etaCutMax_ || eta < etaCutMin_) continue;
-
+       double mass = v0cand->mass();
+       double vtxChi2 = v0cand->vertexChi2();
        secvz = v0cand->vz(); secvx = v0cand->vx(); secvy = v0cand->vy();
-
-       //trkNHits
-       int nhit1 = dau1->numberOfValidHits();
-       int nhit2 = dau2->numberOfValidHits();
-
-       if(nhit1 <= nHitCut1_ || nhit2 <= nHitCut2_) continue;
-
-       double pt1 = dau1->pt();
-       double pt2 = dau2->pt();
-
-       if(pt1 <= ptCut1_ || pt2 <= ptCut2_) continue;
-
-       //algo
-//       double algo1 = dau1->algo();
-//       double algo2 = dau2->algo();
-
-       //dau eta
-//       double eta2 = dau2->eta();
 
        //DCA
        math::XYZPoint bestvtx(bestvx,bestvy,bestvz);
 
+       double eta_dau1 = dau1->eta();
+       double phi_dau1 = dau1->phi();
+       double pt_dau1 = dau1->pt();
+       double pterror_dau1 = dau1->ptError();
+       double chi2n_dau1 = dau1->normalizedChi2();
+       double nhits_dau1 = dau1->numberOfValidHits();
        double dzbest1 = dau1->dz(bestvtx);
        double dxybest1 = dau1->dxy(bestvtx);
        double dzerror1 = sqrt(dau1->dzError()*dau1->dzError()+bestvzError*bestvzError);
        double dxyerror1 = sqrt(dau1->d0Error()*dau1->d0Error()+bestvxError*bestvyError);
-       double dzos1 = dzbest1/dzerror1;
-       double dxyos1 = dxybest1/dxyerror1;
-       if(fabs(dzos1) < dzSigCut1_ || fabs(dxyos1) < dxySigCut1_) continue;
+//       double dzos1 = dzbest1/dzerror1;
+//       double dxyos1 = dxybest1/dxyerror1;
 
+       double eta_dau2 = dau2->eta();
+       double phi_dau2 = dau2->phi();
+       double pt_dau2 = dau2->pt();
+       double pterror_dau2 = dau2->ptError();
+       double chi2n_dau2 = dau2->normalizedChi2();
+       double nhits_dau2 = dau2->numberOfValidHits();
        double dzbest2 = dau2->dz(bestvtx);
        double dxybest2 = dau2->dxy(bestvtx);
        double dzerror2 = sqrt(dau2->dzError()*dau2->dzError()+bestvzError*bestvzError);
        double dxyerror2 = sqrt(dau2->d0Error()*dau2->d0Error()+bestvxError*bestvyError);
-       double dzos2 = dzbest2/dzerror2;
-       double dxyos2 = dxybest2/dxyerror2;
-       if(fabs(dzos2) < dzSigCut2_ || fabs(dxyos2) < dxySigCut2_) continue;
-
-       //vtxChi2
-       double vtxChi2 = v0cand->vertexChi2();
-       if(vtxChi2 > vtxChi2Cut_ ) continue;
+//       double dzos2 = dzbest2/dzerror2;
+//       double dxyos2 = dxybest2/dxyerror2;
 
        //PAngle
        TVector3 ptosvec(secvx-bestvx,secvy-bestvy,secvz-bestvz);
        TVector3 secvec(px,py,pz);
        double agl = cos(secvec.Angle(ptosvec));
-       if(agl < cosThetaCut_) continue;
 
        //Decay length
        typedef ROOT::Math::SMatrix<double, 3, 3, ROOT::Math::MatRepSym<double, 3> > SMatrixSym3D;
@@ -170,62 +150,46 @@ void V0Selector::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
        SVector3 distanceVector(secvx-bestvx,secvy-bestvy,secvz-bestvz);
        double dl = ROOT::Math::Mag(distanceVector);
        double dlerror = sqrt(ROOT::Math::Similarity(totalCov, distanceVector))/dl;
-       double dlos = dl/dlerror;
-       if(dlos < decayLSigCut_) continue;
+//       double dlos = dl/dlerror;
 
-       double pd1 = d1->p();
-//       double charged1 = dau1->charge();
-       double pd2 = d2->p();
-//       double charged2 = dau2->charge();
+       nt_data[0] = eta;
+       nt_data[1] = phi;
+       nt_data[2] = pt;
+       nt_data[3] = mass;
+       nt_data[4] = vtxChi2;
+       nt_data[5] = agl;
+       nt_data[6] = dl;
+       nt_data[7] = dlerror;
+       nt_data[8] = eta_dau1;
+       nt_data[9] = phi_dau1;
+       nt_data[10] = pt_dau1;
+       nt_data[11] = pterror_dau1;
+       nt_data[12] = chi2n_dau1;
+       nt_data[13] = nhits_dau1;
+       nt_data[14] = dzbest1;
+       nt_data[15] = dzerror1;
+       nt_data[16] = dxybest1;
+       nt_data[17] = dxyerror1;
+       nt_data[18] = eta_dau2;
+       nt_data[19] = phi_dau2;
+       nt_data[20] = pt_dau2;
+       nt_data[21] = pterror_dau2;
+       nt_data[22] = chi2n_dau2;
+       nt_data[23] = nhits_dau2;
+       nt_data[24] = dzbest2;
+       nt_data[25] = dzerror2;
+       nt_data[26] = dxybest2;
+       nt_data[27] = dxyerror2;
 
-       TVector3 dauvec1(d1->px(),d1->py(),d1->pz());
-       TVector3 dauvec2(d2->px(),d2->py(),d2->pz());
-       TVector3 dauvecsum(dauvec1+dauvec2);
-
-       double energyd1e = sqrt(electronMassSquared+pd1*pd1);
-       double energyd2e = sqrt(electronMassSquared+pd2*pd2);
-       double invmass_ee = sqrt((energyd1e+energyd2e)*(energyd1e+energyd2e)-dauvecsum.Mag2());
-       if(invmass_ee<misIDMassCutEE_) continue;
-
-       if(v0IDName_ == "Lambda")
-       {
-         double massd1=piMass;
-         double massd2=piMass;
-         double energyd1 = sqrt(massd1*massd1+pd1*pd1);
-         double energyd2 = sqrt(massd2*massd2+pd2*pd2);
-         double invmass = sqrt((energyd1+energyd2)*(energyd1+energyd2)-dauvecsum.Mag2());
-         if(fabs(invmass-kshortMass)<misIDMassCut_) continue;
-       }
-
-       if(v0IDName_ == "Kshort")
-       {
-         double massd1=piMass;
-         double massd2=protonMass;
-         double energyd1 = sqrt(massd1*massd1+pd1*pd1);
-         double energyd2 = sqrt(massd2*massd2+pd2*pd2);
-         double invmass = sqrt((energyd1+energyd2)*(energyd1+energyd2)-dauvecsum.Mag2());
-         if(fabs(invmass-lambdaMass)<misIDMassCut_) continue;
-
-         massd2=piMass;
-         massd1=protonMass;
-         energyd1 = sqrt(massd1*massd1+pd1*pd1);
-         energyd2 = sqrt(massd2*massd2+pd2*pd2);
-         invmass = sqrt((energyd1+energyd2)*(energyd1+energyd2)-dauvecsum.Mag2());
-         if(fabs(invmass-lambdaMass)<misIDMassCut_) continue;
-       }
-
-       theNewV0Cands->push_back( *v0cand );
+       v0Ntuple->Fill(nt_data);
    }
-
-   // Write the collections to the Event
-   iEvent.put( theNewV0Cands, std::string(v0IDName_) );
-//   iEvent.put( theNewV0Cands, std::string("") );
 }
 
 
-void V0Selector::beginJob() {
+void V0NTAnalyzer::beginJob() {
+  v0Ntuple = theDQMstore->make<TNtuple>("v0ntuple","v0 ntuple","eta:phi:pt:mass:vtxChi2:agl:dl:dlerror:eta_dau1:phi_dau1:pt_dau1:pterror_dau1:chi2n_dau1:nhits_dau1:dz1:dzerror1:dxy1:dxyerror1:eta_dau2:phi_dau2:pt_dau2:pterror_dau2:chi2n_dau2:nhits_dau2:dz2:dzerror2:dxy2:dxyerror2");
 }
 
 
-void V0Selector::endJob() {
+void V0NTAnalyzer::endJob() {
 }
