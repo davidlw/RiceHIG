@@ -12,6 +12,6 @@ ntrkfilter = cms.EDFilter('MyNtrkFilter',
   nMultMin     = cms.int32(0),
   nMultMax     = cms.int32(100000),
 
-  isGenMult_   = cms.bool(False),
-  isPP_        = cms.bool(True)
+  isGenMult    = cms.bool(False),
+  isPP         = cms.bool(True)
 )
