@@ -1,10 +1,27 @@
 #include "/net/hisrv0001/home/davidlw/useful_macros/CF.C"
 #include "/net/hisrv0001/home/davidlw/useful_macros/GetMultiJetCorrFunc.C"
 
+void drawCorr_2D_test()
+{
+  TString filename = "/net/hisrv0001/home/davidlw/scratch1/DiHadronCorrelations/outputs_312/PPData_Minbias_7TeV/merged/dihadroncorrelation_n110150_lam_ptass033_all_eff0_v38.root";
+  TH2D* h = (TH2D*)Get2DCFv3(filename.Data(),"corr_ana_pp",2,0);
+  TCanvas* c = new TCanvas("c","",550,500);
+  h->Draw("surf1 fb");
+
+  TH2D* h_signal = (TH2D*)Get2DSignal(filename.Data(),"corr_ana_pp",2,0);
+  TH2D* h_background = (TH2D*)Get2DBackground(filename.Data(),"corr_ana_pp",2,0);
+
+  TCanvas* c_signal = new TCanvas("c_signal","c_signal",550,500);
+  h_signal->Draw("surf1");
+  TCanvas* c_background = new TCanvas("c_background","c_background",550,500);
+  h_background->Draw("surf1");
+}
+
 void drawCorr_2D(TString eventtype1="PPData_Minbias_7TeV", TString tag1="TRIGGER85_All_INCLEFF1TRG1v6", int nmin=110, int nmax=1000, int centmin=-1, int centmax=-1, int ptmin=2, int ptmax=1, double zmin=0.95, double zmax=1.05, double etatrgmin=-2.4, double etatrgmax=2.4, double etaassmin=-2.4, double etaassmax=2.4)
 {
-  TString filename = Form("/net/hisrv0001/home/davidlw/scratch1/DiHadronCorrelations/outputs_312/%s/merged/%s_%s_nmin%d_nmax%d_etatrg%.1f-%.1f_etaass%.1f-%.1f_centmin%d_centmax%d.root",eventtype1.Data(),eventtype1.Data(),tag1.Data(),nmin,nmax,etatrgmin,etatrgmax,etaassmin,etaassmax,centmin,centmax);
-  TH2D* h = (TH2D*)Get2DCFv3(filename.Data(),ptmin,ptmax);
+//  TString filename = Form("/net/hisrv0001/home/davidlw/scratch1/DiHadronCorrelations/outputs_312/%s/merged/%s_%s_nmin%d_nmax%d_etatrg%.1f-%.1f_etaass%.1f-%.1f_centmin%d_centmax%d.root",eventtype1.Data(),eventtype1.Data(),tag1.Data(),nmin,nmax,etatrgmin,etatrgmax,etaassmin,etaassmax,centmin,centmax);
+  TString filename = Form("/net/hisrv0001/home/davidlw/scratch1/DiHadronCorrelations/outputs_312/%s/merged/dihadroncorrelation_n110150_lam_ptass033_all_eff0_v38.root");
+  TH2D* h = (TH2D*)Get2DCFv3(filename.Data(),"corr_ana_pp",ptmin,ptmax);
 
   h->SetAxisRange(h->GetMinimum()*zmin,h->GetMaximum()*zmax,"Z");
 
@@ -28,7 +45,7 @@ void drawCorr_2D(TString eventtype1="PPData_Minbias_7TeV", TString tag1="TRIGGER
   latex->DrawLatex(0.045,0.8,"1 < p_{T}^{assoc} < 3 GeV/c");
 
 //  SaveCanvas(c,"pPb/corr",Form("corr2D_pPbNew_pt%d-%d_nmin%d_nmax%d",ptmin,ptmax,nmin,nmax));
-  SaveCanvas(c,"pPb/corr",Form("corr2D_PbPb_pt%d-%d_nmin%d_nmax%d",ptmin,ptmax,nmin,nmax));
+//  SaveCanvas(c,"pPb/corr",Form("corr2D_PbPb_pt%d-%d_nmin%d_nmax%d",ptmin,ptmax,nmin,nmax));
 
   TH2D* h_signal = (TH2D*)Get2DSignal(filename.Data(),ptmin,ptmax);
   TH2D* h_background = (TH2D*)Get2DBackground(filename.Data(),ptmin,ptmax);
@@ -37,7 +54,7 @@ void drawCorr_2D(TString eventtype1="PPData_Minbias_7TeV", TString tag1="TRIGGER
   h_signal->Draw("surf1");
   TCanvas* c_background = new TCanvas("c_background","c_background",550,500);
   h_background->Draw("surf1");
-
+return;
   TFile* fout = new TFile(Form("results/results_2D_N%d%d_eff.root",nmin,nmax),"recreate");
 //  TFile* fout = new TFile(Form("results/results_2D_HF170_noeff.root",nmin,nmax),"recreate");
   h->Write();
