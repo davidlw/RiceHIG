@@ -65,9 +65,27 @@ pp MC sample (428):
 - pythia6, Z2: /MinBias_TuneZ2_7TeV-pythia6/davidlw-Skim_v15-1709136df11f28c8f8a8a944d51c46a6/USER
 #/MinBias_TuneZ2_7TeV-pythia6/davidlw-Skim_v12-0b0ef6f65f16dabff16a120aebf130d5/USER
 
+pp gen-only MC samples (74X):
+- AMPT, 13TeV, MB (50M): /AMPT_pp_Gen/davidlw-MB_string_v2-979568b35a762a2522e333301fdcc1a9/USER
+- AMPT, 13TeV, N>95 (~ 500M MB): /AMPT_pp_Gen/davidlw-HM95_string_v3-3c78ce595414be7d6fe2f5cc51b09c7a/USER
+- AMPT, 7TeV, MB (50M): /AMPT_pp7TeV_Gen/davidlw-MB_string_v2-42c74f69d3873344328e666aaee3fcae/USER
+- AMPT, 7TeV, N>95 (~ 500M MB): /AMPT_pp7TeV_Gen/davidlw-HM85_string_v3-42a5cefc07f647a38fb01a40f5de43ea/USER
+
 PbPb MC sample (53X):
 - HYDJET, 32K: /Hydjet1p8_TuneDrum_Quenched_MinBias_2760GeV/davidlw-RECO_v1-0e6ab43111ff2b7e6299139d8f86b661/USER
 - HYDJET, 50-100% peripheral: TBD
+<<<<<<< HEAD
+- Hijing, 2M: /Hijing_PbPb_MinimumBias_b13_cmssw5_3_14_batch1/davidlw-RecoSkim_v1-96137662441175d818189f055278f49a/USER
+- Hijing, 2M: /Hijing_PbPb_MinimumBias_b13_cmssw5_3_14_batch3/davidlw-RecoSkim3_v1-96137662441175d818189f055278f49a/USER
+- Hijing, 2M: /Hijing_PbPb_MinimumBias_b13_cmssw5_3_14_batch4/davidlw-RecoSkim4_v1-96137662441175d818189f055278f49a/USER
+
+PbPb gen-only MC samples (74X):
+- AMPT, PbPb:
+/AMPT_PbPb_Gen/davidlw-MB_string_v3-8f4c8eeead3283ef9d84889483e24cb0/USER
+/AMPT_PbPb_Gen/davidlw-MB_string_v4-8f4c8eeead3283ef9d84889483e24cb0/USER
+
+=======
 - Hijing, 2M: /Hijing_PbPb_MinimumBias_b13_cmssw5_3_14_batch3/davidlw-RecoSkim_ReTracking_v4-dd6885b0f4b8f9abc410a7927d883b77/USER
 - Hijing, 2M: /Hijing_PbPb_MinimumBias_b13_cmssw5_3_14_batch4/davidlw-RecoSkim_ReTracking_v4-dd6885b0f4b8f9abc410a7927d883b77/USER
 - Hijing, 2M: /Hijing_PbPb_MinimumBias_b13_cmssw5_3_14_batch1/davidlw-RecoSkim_ReTracking_v4-dd6885b0f4b8f9abc410a7927d883b77/USER
+>>>>>>> 88451bd0642a1f98071ec4054784a5598c87d29c
