@@ -56,6 +56,10 @@ class CutParameters {
    double  delta;
    double  mass_trg;
    double  mass_ass;
+   vector<double>  massmean_trg;
+   vector<double>  massmean_ass;
+   vector<double>  masswidth_trg;
+   vector<double>  masswidth_ass;
    double  genpdgId_trg;
    double  genpdgId_ass;
    bool    isstable_trg;
@@ -80,6 +84,10 @@ class CutParameters {
    bool IsInvMass;
    bool IsCorr;
    bool IsHI;
+   bool IsV0SignalTrg;
+   bool IsV0SignalAss;
+   bool IsV0BkgTrg;
+   bool IsV0BkgAss;
    bool IsDoEventShape;
    bool IsTrackNtuple;
    bool IsHIGenInfoNtuple;
@@ -99,7 +107,12 @@ class CutParameters {
    bool IsHITrkQuality;
    bool IsDebug;
    bool IsReCenter;
-   bool IsCheckV0Dau;
+   bool IsDSGenEvt;
+   bool IsCheckTrgV0Dau;
+   bool IsCheckAssV0Dau;
+   bool IsBoostRestFrameGen;
+   bool IsBoostRestFrameV0;
+   bool IsGenRP;
 };
 
 #endif  // CutParameters_

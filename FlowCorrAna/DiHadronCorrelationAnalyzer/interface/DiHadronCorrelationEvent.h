@@ -19,11 +19,15 @@ class DiHadronCorrelationEvent {
    //  vectors for tracks, hits etc
 //   vector<TLorentzVector>  pVect_all;
    vector<TLorentzVector>  pVect_trg[MAXPTTRGBINS];
+   vector<TLorentzVector>  pVect_trg_dau1[MAXPTTRGBINS];
+   vector<TLorentzVector>  pVect_trg_dau2[MAXPTTRGBINS];
    vector<float>    nMultCorrVect_trg;
    vector<float>    chgVect_trg[MAXPTTRGBINS];
    vector<float>    effVect_trg[MAXPTTRGBINS];
 //   double            multcorrVect_trg[MAXPTTRGBINS];
    vector<TLorentzVector>  pVect_ass[MAXPTASSBINS];
+   vector<TLorentzVector>  pVect_ass_dau1[MAXPTASSBINS];
+   vector<TLorentzVector>  pVect_ass_dau2[MAXPTASSBINS];
    vector<float>    nMultCorrVect_ass;
    vector<float>    chgVect_ass[MAXPTASSBINS];
    vector<float>    effVect_ass[MAXPTASSBINS];
@@ -34,7 +38,7 @@ class DiHadronCorrelationEvent {
 //   int               nmult;
 //   int               centbin;
    float            zvtx;
-//   float            epangle;
+   float            epangle;
 
    bool operator<(const DiHadronCorrelationEvent & b) const{
      if (zvtx != b.zvtx) return zvtx < b.zvtx;

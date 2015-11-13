@@ -77,6 +77,7 @@ class DiHadronCorrelationEvent;
 using namespace std;
 using namespace reco;
 using namespace edm;
+using namespace HepMC;
 
 #define PI 3.141592
 
@@ -130,6 +131,8 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
    edm::Handle<int> cbin_;
    edm::EDGetTokenT<int> tag_;
 
+   TNtuple* trackNtuple;
+
    // histograms
    TH2D*  hEffWeight;
    TH2D*  hEtaPhiWeightPos;
@@ -174,6 +177,12 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
    TH1D*  hV0MassPiPi;
    TH1D*  hV0MassEE;
    TH2D*  hInvMassVsPt_Signal;
+   TH1D*  hHighPurityFrac;
+   TH1D*  hdzVtx;
+   TH2D*  hdxyVtx;
+   TH2D*  hnprivsnsec;
+   TH2D*  hdxyVtx_dz1;
+   TH2D*  hnprivsnsec_dz1;
 
    TH2D*  hdNdetadphi_trg[MAXPTTRGBINS];
    TH2D*  hdNdetadphi_ass[MAXPTASSBINS];
@@ -220,6 +229,8 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
    double  yVtxError;
    double  zVtxError;
    int  hiCentrality;
+   double psi0_gen;
+   double pol_lam;
    unsigned int nMult_trg[MAXPTTRGBINS];
    unsigned int nMult_ass[MAXPTASSBINS];
    double nMultCorr_trg[MAXPTTRGBINS];
@@ -240,9 +251,14 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
    virtual void LoopV0Candidates(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg, TString candtype, int pdgID);
    virtual void GetVertices(const edm::Event& iEvent, const edm::EventSetup& iSetup);
    virtual void NormalizeHists() {};
-   virtual void AssignTrgPtBins(double pt, double eta, double phi, double mass, double charge, double effweight);
-   virtual void AssignAssPtBins(double pt, double eta, double phi, double mass, double charge, double effweight);
+   virtual void AssignTrgPtBins(double pt, double eta, double phi, double mass, double charge, double effweight, bool isv0 = false,
+                                double pt_dau1 = -999., double eta_dau1 = -999., double phi_dau1 = -999., double mass_dau1 = -999.,
+                                double pt_dau2 = -999., double eta_dau2 = -999., double phi_dau2 = -999., double mass_dau2 = -999. );
+   virtual void AssignAssPtBins(double pt, double eta, double phi, double mass, double charge, double effweight, bool isv0 = false,
+                                double pt_dau1 = -999., double eta_dau1 = -999., double phi_dau1 = -999., double mass_dau1 = -999.,
+                                double pt_dau2 = -999., double eta_dau2 = -999., double phi_dau2 = -999., double mass_dau2 = -999. );
    virtual double GetEventEngineer(const edm::Event& iEvent, const edm::EventSetup& iSetup, int nn);
+   virtual double GetRP(const edm::Event& iEvent, const edm::EventSetup& iSetup);
    virtual int  GetCentralityBin(const edm::Event& iEvent, const edm::EventSetup& iSetup);
    virtual double GetDeltaEta(double eta_trg, double eta_ass);
    virtual double GetDeltaPhi(double phi_trg, double phi_ass);
@@ -250,6 +266,7 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
    virtual bool   GetPtassBin(double pt, double eta, int jass);
    virtual double GetTrgWeight(double nmult);
    virtual double GetEffWeight(double eta, double phi, double pt, double zvtx, int centbin, double charge);
+   virtual bool IsDSGen(const edm::Event& iEvent, const edm::EventSetup& iSetup);
    virtual ParticleType GetParticleID(TString particleid);
    
  public:
