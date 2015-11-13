@@ -17,6 +17,7 @@
 #include <TObjString.h>
 #include <TVector3.h>
 #include <TLorentzVector.h>
+#include <TGenPhaseSpace.h>
 #include <iostream>
 
 #include "HepMC/GenEvent.h"
@@ -45,7 +46,9 @@ DiHadronCorrelationMultiBase::DiHadronCorrelationMultiBase(const edm::ParameterS
   zVtx(-99999.),	
   xVtxError(99999.),
   yVtxError(99999.),
-  zVtxError(99999.)
+  zVtxError(99999.),
+  psi0_gen(-999.0),
+  pol_lam(0.0)
 {
   TH1::SetDefaultSumw2();
 
@@ -96,6 +99,10 @@ DiHadronCorrelationMultiBase::DiHadronCorrelationMultiBase(const edm::ParameterS
 
   cutPara.mass_trg = iConfig.getParameter<double>("mass_trg");
   cutPara.mass_ass = iConfig.getParameter<double>("mass_ass");
+  cutPara.massmean_trg = iConfig.getParameter< std::vector<double> >("massmean_trg");
+  cutPara.massmean_ass = iConfig.getParameter< std::vector<double> >("massmean_ass");
+  cutPara.masswidth_trg = iConfig.getParameter< std::vector<double> >("masswidth_trg");
+  cutPara.masswidth_ass = iConfig.getParameter< std::vector<double> >("masswidth_ass");
   cutPara.genpdgId_trg = iConfig.getParameter<int>("genpdgId_trg");
   cutPara.genpdgId_ass = iConfig.getParameter<int>("genpdgId_ass");
   cutPara.isstable_trg = iConfig.getParameter<bool>("isstable_trg");
@@ -107,6 +114,10 @@ DiHadronCorrelationMultiBase::DiHadronCorrelationMultiBase(const edm::ParameterS
   cutPara.IsVtxSel = iConfig.getParameter<bool>("IsVtxSel");
   cutPara.IsCorr = iConfig.getParameter<bool>("IsCorr");
   cutPara.IsHI = iConfig.getParameter<bool>("IsHI");
+  cutPara.IsV0SignalTrg = iConfig.getParameter<bool>("IsV0SignalTrg");
+  cutPara.IsV0SignalAss = iConfig.getParameter<bool>("IsV0SignalAss");
+  cutPara.IsV0BkgTrg = iConfig.getParameter<bool>("IsV0BkgTrg");
+  cutPara.IsV0BkgAss = iConfig.getParameter<bool>("IsV0BkgAss");
   cutPara.IsFullMatrix = iConfig.getParameter<bool>("IsFullMatrix");
   cutPara.IsPtWeightTrg = iConfig.getParameter<bool>("IsPtWeightTrg");
   cutPara.IsPtWeightAss = iConfig.getParameter<bool>("IsPtWeightAss");   
@@ -117,7 +128,12 @@ DiHadronCorrelationMultiBase::DiHadronCorrelationMultiBase(const edm::ParameterS
   cutPara.IsDebug = iConfig.getParameter<bool>("IsDebug");
   cutPara.IsInvMass = iConfig.getParameter<bool>("IsInvMass");
   cutPara.IsEventEngineer = iConfig.getParameter<bool>("IsEventEngineer");
-  cutPara.IsCheckV0Dau = iConfig.getParameter<bool>("IsCheckV0Dau");
+  cutPara.IsDSGenEvt = iConfig.getParameter<bool>("IsDSGenEvt");
+  cutPara.IsCheckTrgV0Dau = iConfig.getParameter<bool>("IsCheckTrgV0Dau");
+  cutPara.IsCheckAssV0Dau = iConfig.getParameter<bool>("IsCheckAssV0Dau");
+  cutPara.IsBoostRestFrameGen = 1;
+  cutPara.IsBoostRestFrameV0 = iConfig.getParameter<bool>("IsBoostRestFrameV0");
+  cutPara.IsGenRP = 0;
 
   TString eff_filename(iConfig.getParameter<string>("EffFileName")); 
   hEffWeight = 0;
@@ -200,14 +216,20 @@ void DiHadronCorrelationMultiBase::beginJob()
   hXYVtx = theOutputs->make<TH2D>("xyvtx",";x_{vtx} (cm);y_{vtx} (cm)",100,-0.5,0.5,100,-0.5,0.5);
   hCentrality = theOutputs->make<TH1D>("centrality",";centbin",nCentBins+1,-1,nCentBins);
   
+  hdzVtx = theOutputs->make<TH1D>("dzvtx",";dz_{vtx} (cm)",300,-30,30);
+  hdxyVtx = theOutputs->make<TH2D>("dxyvtx",";dxy_{vtx} (cm)",100,-0.5,0.5,100,-0.5,0.5);
+  hnprivsnsec = theOutputs->make<TH2D>("nprivsnsec",";npri;nsec",300,0,300,300,0,300);
+  hnprivsnsec_dz1 = theOutputs->make<TH2D>("nprivsnsec_dz1",";npri;nsec",300,0,300,300,0,300);
+  hdxyVtx_dz1 = theOutputs->make<TH2D>("dxyvtx_dz1",";dxy_{vtx} (cm)",100,-0.5,0.5,100,-0.5,0.5);
+
 //  if(trgID == kLambda || trgID == kKshort || assID == kLambda || assID == kKshort) 
 //  {
     hThetaV0Plus = theOutputs->make<TH2D>("thetav0plus",";x_{F};cos#theta",200,0,0.2,100,-1,1);
     hThetaV0Minus = theOutputs->make<TH2D>("thetav0minus",";x_{F};cos#theta",200,0,0.2,100,-1,1);
-    hV0InvMassVsP = theOutputs->make<TH2D>("v0invmassvsp",";p (GeV);Invariant Mass (GeV)",1000,0,1000,130,1.7,3.);
+    hV0InvMassVsP = theOutputs->make<TH2D>("v0invmassvsp",";p (GeV);Invariant Mass (GeV)",1000,0,1000,300,0.0,3.);
     hV0InvEtaVsP = theOutputs->make<TH2D>("v0etavsp",";p (GeV);#pseudorapidity",1000,0,1000,48,-2.4,2.4);
-    hV0InvMassVsPt = theOutputs->make<TH2D>("v0invmassvspt",";p_{T}(GeV);Invariant Mass (GeV)",100,0,100,130,1.7,3.);
-    hV0InvEtaVsPt = theOutputs->make<TH2D>("v0etavspt",";p_{T}(GeV);#pseudorapidity",100,0,100,48,-2.4,2.4);
+    hV0InvMassVsPt = theOutputs->make<TH2D>("v0invmassvspt",";p_{T}(GeV);Invariant Mass (GeV)",100,0,10,1500,0.,3.);
+    hV0InvEtaVsPt = theOutputs->make<TH2D>("v0etavspt",";p_{T}(GeV);#pseudorapidity",100,0,10,48,-2.4,2.4);
 //  }
 
   if(cutPara.IsDebug)
@@ -232,6 +254,8 @@ void DiHadronCorrelationMultiBase::beginJob()
     hHFvsNpixel = theOutputs->make<TH2D>("hfvsnpixel",";HF Sum E_{T}; Npixel;",600,0,6000,800,0,80000);
     hHFvsZDC = theOutputs->make<TH2D>("hfvszdc",";HF Sum E_{T}; ZDC Sum E_{T};",600,0,6000,800,0,80000);
 //    hNpart = theOutputs->make<TH1D>("Npart",";N_{part}",500,0,500);
+    trackNtuple = theOutputs->make<TNtuple>("trackntuple","","pt:eta:phi:hit:pterr:d0:d0err:dz:dzerr:chi2:highPurity");
+    hHighPurityFrac = theOutputs->make<TH1D>("hHighPurityFrac",";Fraction of highPurity tracks",100,0,1.0);
   }
   if(cutPara.IsInvMass) hInvMassVsPt_Signal = theOutputs->make<TH2D>("invmassvspt_signal",";p_{T}(GeV);Invariant Mass (GeV)",500,0,50,1500,0,3);
   if(cutPara.IsEventEngineer) hEventEngineer = theOutputs->make<TH2D>("eventengineer",";centrality;q_{2}",200,0,200,1000,0,1.0);
@@ -283,6 +307,12 @@ void DiHadronCorrelationMultiBase::analyze(const edm::Event& iEvent, const edm::
   nMultAll_ass=0;
   nMultAllCorr_ass=0;
 
+  if(cutPara.IsGenRP) 
+  {
+    psi0_gen = GetRP(iEvent,iSetup);
+    if(psi0_gen<-3.15) cout<<"reaction plane outside the range"<<endl;
+  }
+
   eventcorr = new DiHadronCorrelationEvent();
 
   // Select vertex
@@ -290,6 +320,7 @@ void DiHadronCorrelationMultiBase::analyze(const edm::Event& iEvent, const edm::
   if(cutPara.IsVtxSel)
   {
     GetVertices(iEvent,iSetup);
+
     hZVtx->Fill(zVtx);
     hXYVtx->Fill(xVtx,yVtx);
     if(cutPara.IsDebug) hNVtx->Fill(nVertices);
@@ -299,11 +330,11 @@ void DiHadronCorrelationMultiBase::analyze(const edm::Event& iEvent, const edm::
     double zVtxtmp = zVtx-cutPara.zvtxcenter;
     double yVtxtmp = yVtx-cutPara.yvtxcenter;
     double xVtxtmp = xVtx-cutPara.xvtxcenter;
+
     double rhotmp = sqrt(xVtxtmp*xVtxtmp+yVtxtmp*yVtxtmp);
 //    zvtxbincentertmp = (int)((zVtxtmp-cutPara.zvtxmin)/cutPara.zvtxbin)*cutPara.zvtxbin+cutPara.zvtxmin+cutPara.zvtxbin/2;
     if( zVtxtmp<cutPara.zvtxmin || zVtxtmp>cutPara.zvtxmax || rhotmp<cutPara.rhomin || rhotmp>cutPara.rhomax ) return;
   }
-
   hiCentrality=-1;
   if(cutPara.centmin!=-1 && cutPara.centmax!=-1)
   {
@@ -317,6 +348,8 @@ void DiHadronCorrelationMultiBase::analyze(const edm::Event& iEvent, const edm::
     }
   }
   hCentrality->Fill(hiCentrality);
+
+  if(cutPara.IsDSGenEvt && !IsDSGen(iEvent,iSetup)) return;
 
   // Select multiplicity
   GetMult(iEvent,iSetup);
@@ -349,19 +382,19 @@ void DiHadronCorrelationMultiBase::analyze(const edm::Event& iEvent, const edm::
        LoopCaloTower(iEvent,iSetup,1);
        break;
      case kKshort:
-       cutPara.mass_trg=0.498;
+       cutPara.mass_trg=0.4976;
        LoopV0Candidates(iEvent,iSetup, 1, "Kshort",-1);
        break;
      case kLambda:
-       cutPara.mass_trg=1.116;
+       cutPara.mass_trg=1.1159;
        LoopV0Candidates(iEvent,iSetup, 1, "Lambda",-1);
        break;
      case kLambdaP:
-       cutPara.mass_trg=1.116;
+       cutPara.mass_trg=1.1159;
        LoopV0Candidates(iEvent,iSetup, 1, "Lambda",3122);
        break;
      case kLambdaM:
-       cutPara.mass_trg=1.116;
+       cutPara.mass_trg=1.1159;
        LoopV0Candidates(iEvent,iSetup, 1, "Lambda",-3122);
        break;
      case kD0:
@@ -389,19 +422,19 @@ void DiHadronCorrelationMultiBase::analyze(const edm::Event& iEvent, const edm::
        LoopCaloTower(iEvent,iSetup,0);
        break;
      case kKshort:
-       cutPara.mass_ass=0.498;
+       cutPara.mass_ass=0.4976;
        LoopV0Candidates(iEvent,iSetup,0, "Kshort",-1);
        break;
      case kLambda:
-       cutPara.mass_ass=1.116;
+       cutPara.mass_ass=1.1159;
        LoopV0Candidates(iEvent,iSetup,0, "Lambda",-1);
        break;
      case kLambdaP:
-       cutPara.mass_ass=1.116;
+       cutPara.mass_ass=1.1159;
        LoopV0Candidates(iEvent,iSetup, 0, "Lambda",3122);
        break;
      case kLambdaM:
-       cutPara.mass_ass=1.116;
+       cutPara.mass_ass=1.1159;
        LoopV0Candidates(iEvent,iSetup, 0, "Lambda",-3122);
        break;
      case kD0:
@@ -418,6 +451,7 @@ void DiHadronCorrelationMultiBase::analyze(const edm::Event& iEvent, const edm::
 //  eventcorr->nmult=nMult;
 //  eventcorr->centbin=hiCentrality;
   eventcorr->zvtx=zVtx;
+  eventcorr->epangle=psi0_gen;
 
   for(unsigned int itrg=0;itrg<cutPara.pttrgmin.size();itrg++)
   {
@@ -428,7 +462,7 @@ void DiHadronCorrelationMultiBase::analyze(const edm::Event& iEvent, const edm::
     hMultCorr_trg[itrg]->Fill(nMultCorr_trg[itrg]);
     (eventcorr->nMultCorrVect_trg).push_back(nMultCorr_trg[itrg]);
   }
-    
+
   for(unsigned int jass=0;jass<cutPara.ptassmin.size();jass++)
   {
     nMult_ass[jass]=eventcorr->pVect_ass[jass].size();
@@ -450,6 +484,7 @@ void DiHadronCorrelationMultiBase::endJob()
     ptMean_trg[itrg]=hpTCorr_Signal_trg[itrg]->GetMean();
     ptMean2_trg[itrg]=hpTCorr_Signal_trg[itrg]->GetMean()*hpTCorr_Signal_trg[itrg]->GetMean()+hpTCorr_Signal_trg[itrg]->GetRMS()*hpTCorr_Signal_trg[itrg]->GetRMS();
   } 
+
   for(unsigned int jass=0;jass<cutPara.ptassmin.size();jass++)
   {
     ptMean_ass[jass]=hpTCorr_Signal_ass[jass]->GetMean();
@@ -542,6 +577,28 @@ void DiHadronCorrelationMultiBase::GetMult(const edm::Event& iEvent, const edm::
    }
 }
 
+bool DiHadronCorrelationMultiBase::IsDSGen(const edm::Event& iEvent, const edm::EventSetup& iSetup)
+{
+  edm::Handle<reco::GenParticleCollection> genTracks;
+  iEvent.getByLabel(cutPara.genParticleCollection.Data(), genTracks);
+  if( !genTracks->size() ) { cout<<"Invalid or empty genParticle collection!"<<endl; return 0; }
+
+  bool isforward=0;
+  bool isbackward=0;
+  for(unsigned ip=0; ip<genTracks->size(); ++ip){
+    const reco::GenParticle & p = (*genTracks)[ip];
+    if(p.status() != 1) continue;
+//    if(p.charge() == 0) continue;
+
+    double eta = p.eta();
+    double energy = p.energy();
+    if(eta>3.0 && eta<5.0 && energy>3.0) isforward = 1;
+    if(eta>-5.0 && eta<-3.0 && energy>3.0) isbackward = 1;   
+  }
+
+  return (isforward && isbackward);
+}
+
 // ------------- Loop over all the particles ---------------------
 void DiHadronCorrelationMultiBase::LoopParticles(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg, int pdgid, bool isstable, bool ischarge)
 {
@@ -555,7 +612,11 @@ void DiHadronCorrelationMultiBase::LoopParticles(const edm::Event& iEvent, const
 
      if(p.status() != 1 && isstable) continue;
      if(p.charge() == 0 && ischarge) continue;
-     if(fabs(p.pdgId()) != pdgid && pdgid!=-999999) continue;
+     if(p.pdgId() != pdgid && pdgid!=-999999) continue;
+//     if(p.pt()<0.001) continue;
+     if(p.mass()<(0.938272+0.13957)) continue;
+
+//     cout<<"is prompt? "<<p.isPromptFinalState()<<endl;
 
      double eta = p.eta();
      double phi = p.phi();
@@ -563,9 +624,45 @@ void DiHadronCorrelationMultiBase::LoopParticles(const edm::Event& iEvent, const
      double charge = p.charge();
      double mass = p.mass();
 
-     double effweight = 1.0;
-     if(istrg) AssignTrgPtBins(pt,eta,phi,mass,charge,effweight);
-     else AssignAssPtBins(pt,eta,phi,mass,charge,effweight);
+     TLorentzVector p4(p.px(),p.py(),p.pz(),p.energy());
+
+     TLorentzVector *pDau1 = 0;
+     TLorentzVector *pDau2 = 0;
+     if(fabs(p.pdgId())==3122)
+     {
+       double masses_dau[2] = {0.938272,0.13957};
+
+       TGenPhaseSpace event;
+       event.SetDecay(p4,2,masses_dau);
+
+       pDau1 = event.GetDecay(0);
+       pDau2 = event.GetDecay(1);
+
+       double effweight = event.Generate();
+       effweight = 1.0;
+
+       if(cutPara.IsBoostRestFrameGen)
+       {
+         TVector3 boost = -p4.BoostVector();
+         pDau1->Boost(boost);
+         pDau2->Boost(boost);
+
+         TVector3 rp_vector(cos(psi0_gen), sin(psi0_gen), 0);
+         TVector3 beam_vector(0,0,1.0);
+         TVector3 angmom_vector = rp_vector.Cross(beam_vector);
+  
+         double theta_star = (pDau1->Vect()).Angle(angmom_vector);
+
+         effweight = effweight*(1+0.642*pol_lam*cos(theta_star));
+       }
+       if(istrg) AssignTrgPtBins(pt,eta,phi,mass,charge,effweight,cutPara.IsCheckTrgV0Dau,pDau1->Pt(),pDau1->Eta(),pDau1->Phi(),pDau1->M(),pDau2->Pt(),pDau2->Eta(),pDau2->Phi(),pDau2->M());
+       else AssignAssPtBins(pt,eta,phi,mass,charge,effweight,cutPara.IsCheckAssV0Dau,pDau1->Pt(),pDau1->Eta(),pDau1->Phi(),pDau1->M(),pDau2->Pt(),pDau2->Eta(),pDau2->Phi(),pDau2->M());
+     } 
+     else 
+     {
+       if(istrg) AssignTrgPtBins(pt,eta,phi,mass,charge,1.0);
+       else AssignAssPtBins(pt,eta,phi,mass,charge,1.0);
+     }
    }
 }
 
@@ -577,6 +674,8 @@ void DiHadronCorrelationMultiBase::LoopTracks(const edm::Event& iEvent, const ed
    iEvent.getByLabel(cutPara.trgtrackCollection.Data(), tracks);
    if( !tracks->size() ) { cout<<"Invalid or empty track collection!"<<endl; return; }
 
+   int nall=0;
+   int nHP=0;
    for(unsigned it=0; it<tracks->size(); ++it){     
  
      const reco::Track & trk = (*tracks)[it];
@@ -592,18 +691,25 @@ void DiHadronCorrelationMultiBase::LoopTracks(const edm::Event& iEvent, const ed
      double dxyvtx = trk.dxy(bestvtx);
      double dzerror = sqrt(trk.dzError()*trk.dzError()+zVtxError*zVtxError);
      double dxyerror = sqrt(trk.d0Error()*trk.d0Error()+xVtxError*yVtxError);
-/*
      double pterror = trk.ptError();
+     int nhits = trk.numberOfValidHits();
+/*
      double vx = trk.vx();
      double vy = trk.vy();
      double vz = trk.vz();
-     int nhits = trk.numberOfValidHits();
      int algo = trk.algo();
      double chi2 = trk.chi2();
 */
-//     double chi2n = trk.normalizedChi2();
+     double chi2n = trk.normalizedChi2();
 //     int nlayers = trk.hitPattern().trackerLayersWithMeasurement();
      double charge = trk.charge();
+
+     if(cutPara.IsDebug)
+     {
+       trackNtuple->Fill(pt,eta,phi,nhits,pterror,dxyvtx,dxyvtx/dxyerror,dzvtx,dzvtx/dzerror,chi2n,trk.quality(reco::TrackBase::highPurity));
+       nall++;
+       if(trk.quality(reco::TrackBase::highPurity)) nHP++;
+     }
 
      if(cutPara.IsPPTrkQuality)
      {
@@ -621,35 +727,7 @@ void DiHadronCorrelationMultiBase::LoopTracks(const edm::Event& iEvent, const ed
        if(chi2n/nlayers>0.25) continue;
 */
      }
-
      if(cutPara.IsHITrkQuality && !trk.quality(reco::TrackBase::highPurity)) continue;
-
-     if(cutPara.IsCheckV0Dau)
-     {
-       edm::Handle<reco::VertexCompositeCandidateCollection > v0candidates;
-       if(cutPara.v0CandidateCollection.Contains("kshort")) iEvent.getByLabel(cutPara.v0CandidateCollection.Data(), "Kshort", v0candidates);
-       if(cutPara.v0CandidateCollection.Contains("lambda")) iEvent.getByLabel(cutPara.v0CandidateCollection.Data(), "Lambda", v0candidates);
-
-       if(!v0candidates->size()) return;
-       for(unsigned it=0; it<v0candidates->size(); ++it)
-       {
-         const VertexCompositeCandidate& v0candidate = (*v0candidates)[it];
-
-         const reco::Candidate * dau1 = v0candidate.daughter(0);
-         const reco::Candidate * dau2 = v0candidate.daughter(1);       
-
-         double eta_dau1 = dau1->eta();
-         double phi_dau1 = dau1->phi();
-         double pt_dau1 = dau1->pt();
-
-         double eta_dau2 = dau2->eta();
-         double phi_dau2 = dau2->phi();
-         double pt_dau2 = dau2->pt();
-
-         if(fabs(eta-eta_dau1)<0.03 && fabs(phi-phi_dau1)<0.03 && fabs(pt-pt_dau1)<0.01) { cout<<"found a Kshort dau1 match!"<<endl; continue; }
-         if(fabs(eta-eta_dau2)<0.03 && fabs(phi-phi_dau2)<0.03 && fabs(pt-pt_dau2)<0.01) { cout<<"found a Kshort dau2 match!"<<endl; continue; }
-       }
-     }
 
      double effweight = GetEffWeight(eta,phi,pt,0.5*(cutPara.zvtxmax+cutPara.zvtxmin),hiCentrality,charge);
      double trgweight = GetTrgWeight(nMult);
@@ -658,6 +736,7 @@ void DiHadronCorrelationMultiBase::LoopTracks(const edm::Event& iEvent, const ed
      if(istrg) AssignTrgPtBins(pt,eta,phi,cutPara.mass_trg,charge,effweight*trgweight);
      else AssignAssPtBins(pt,eta,phi,cutPara.mass_ass,charge,effweight*trgweight);
    }
+   if(nall) hHighPurityFrac->Fill((double)nHP/(double)nall);
 }
 
 void DiHadronCorrelationMultiBase::LoopCaloTower(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg)
@@ -701,7 +780,7 @@ void DiHadronCorrelationMultiBase::LoopV0Candidates(const edm::Event& iEvent, co
      double phi = v0candidate.phi();
      double pt  = v0candidate.pt();
      double p = v0candidate.p();
-     double pz = v0candidate.pz();
+//     double pz = v0candidate.pz();
      double mass = v0candidate.mass();
      double charge = v0candidate.charge();
      int pdgid = v0candidate.pdgId();
@@ -712,29 +791,32 @@ void DiHadronCorrelationMultiBase::LoopV0Candidates(const edm::Event& iEvent, co
      hV0InvEtaVsP->Fill(p,eta);
 
      if(pdgID!=-1 && pdgid!=pdgID) continue;
- 
-     if(istrg && fabs(mass-cutPara.mass_trg)>0.02) continue;
-     if(!istrg && fabs(mass-cutPara.mass_ass)>0.02) continue;
 
      const reco::Candidate * d1 = v0candidate.daughter(0);
      const reco::Candidate * d2 = v0candidate.daughter(1);
-     
      TLorentzVector dau1vec(d1->px(),d1->py(),d1->pz(), d1->energy());
      TLorentzVector dau2vec(d2->px(),d2->py(),d2->pz(), d2->energy());
 
-     TVector3 boost(-v0candidate.px()/v0candidate.energy(),-v0candidate.py()/v0candidate.energy(),-v0candidate.pz()/v0candidate.energy());
-     dau1vec.Boost(boost);
-     dau2vec.Boost(boost);
+     TLorentzVector p4(v0candidate.px(),v0candidate.py(),v0candidate.pz(),v0candidate.energy());
 
+     if(cutPara.IsBoostRestFrameV0)
+     {
+       TVector3 boost = -p4.BoostVector();
+
+       dau1vec.Boost(boost);
+       dau1vec.Boost(boost);
+     }
+/*
      TVector3 beam(0,0,1);
      TVector3 npol(boost.Cross(beam));
-   
+
      if(d1->charge()>0) hThetaV0Plus->Fill(pz/4000.,cos(dau1vec.Angle(npol)));
      if(d1->charge()<0) hThetaV0Minus->Fill(pz/4000.,cos(dau1vec.Angle(npol)));
-
+*/
      double effweight = 1.0;
-     if(istrg) AssignTrgPtBins(pt,eta,phi,mass,charge,effweight);
-     else AssignAssPtBins(pt,eta,phi,mass,charge,effweight);
+
+     if(istrg) AssignTrgPtBins(pt,eta,phi,mass,charge,effweight,cutPara.IsCheckTrgV0Dau,dau1vec.Pt(),dau1vec.Eta(),dau1vec.Phi(),dau1vec.M(),dau2vec.Pt(),dau2vec.Eta(),dau2vec.Phi(),dau2vec.M());
+     else AssignAssPtBins(pt,eta,phi,mass,charge,effweight,cutPara.IsCheckAssV0Dau,dau1vec.Pt(),dau1vec.Eta(),dau1vec.Phi(),dau1vec.M(),dau2vec.Pt(),dau2vec.Eta(),dau2vec.Phi(),dau2vec.M());
    }
 }
 
@@ -754,11 +836,16 @@ void DiHadronCorrelationMultiBase::GetVertices(const edm::Event& iEvent, const e
     iEvent.getByLabel(cutPara.vertexCollection.Data(), vertices);
     if(!vertices->size()) { cout<<"Invalid or empty vertex collection!"<<endl; return; }
 
+    double ntrkmax = 0;
+    double zvtxmax = -9999.0;
+    double yvtxmax = -9999.0;
+    double xvtxmax = -9999.0;
     for(unsigned int iv=0; iv<vertices->size(); ++iv)
     {
       const reco::Vertex & vtx = (*vertices)[iv];
-      if(!vtx.isFake() && vtx.tracksSize()>=2) 
-      { 
+
+      if(!vtx.isFake() && vtx.tracksSize()>=2)
+      {
         nVertices++;
         if(vtx.tracksSize()>=maxofflinetracks)
         {
@@ -771,11 +858,31 @@ void DiHadronCorrelationMultiBase::GetVertices(const edm::Event& iEvent, const e
 
           maxofflinetracks = vtx.tracksSize();
         }
+        if(iv == 0)
+        {
+          ntrkmax = vtx.tracksSize();
+          zvtxmax = vtx.z();
+          yvtxmax = vtx.y();
+          xvtxmax = vtx.x();
+        }
+        else
+        {
+          hdzVtx->Fill(vtx.z()-zvtxmax);
+          hdxyVtx->Fill(vtx.x()-xvtxmax,vtx.y()-yvtxmax);
+          hnprivsnsec->Fill(ntrkmax,vtx.tracksSize());
+          if(fabs(vtx.z()-zvtxmax)<1.)
+          {
+            hdxyVtx_dz1->Fill(vtx.x()-xvtxmax,vtx.y()-yvtxmax);
+            hnprivsnsec_dz1->Fill(ntrkmax,vtx.tracksSize());
+          }
+        }
       }
     }
 }
 
-void DiHadronCorrelationMultiBase::AssignTrgPtBins(double pt, double eta, double phi, double mass, double charge, double effweight)
+void DiHadronCorrelationMultiBase::AssignTrgPtBins(double pt, double eta, double phi, double mass, double charge, double effweight, bool isv0,
+                                                   double pt_dau1, double eta_dau1, double phi_dau1, double mass_dau1,
+                                                   double pt_dau2, double eta_dau2, double phi_dau2, double mass_dau2 )
 {
    if(cutPara.IsPtWeightTrg) effweight = effweight / pt;
    if(cutPara.IsDebug)
@@ -792,11 +899,21 @@ void DiHadronCorrelationMultiBase::AssignTrgPtBins(double pt, double eta, double
 
    TLorentzVector pvector;
    pvector.SetPtEtaPhiM(pt,eta,phi,mass);
-//   if(pt>0.4 && fabs(eta)<2.4) (eventcorr->pVect_all).push_back(pvector);
+   TLorentzVector pvector_dau1;
+   TLorentzVector pvector_dau2;
+   if(isv0)
+   {
+     pvector_dau1.SetPtEtaPhiM(pt_dau1,eta_dau1,phi_dau1,mass_dau1);
+     pvector_dau2.SetPtEtaPhiM(pt_dau2,eta_dau2,phi_dau2,mass_dau2);
+   }
+
    for(int pttrgbin=0;pttrgbin<(int)(cutPara.pttrgmin.size());pttrgbin++)
    {
      if(GetPttrgBin(pt,eta,pttrgbin))
      {
+       if(cutPara.IsV0SignalTrg && !cutPara.IsV0BkgTrg && fabs(mass-cutPara.massmean_trg[pttrgbin])>2*cutPara.masswidth_trg[pttrgbin]) continue;
+       if(!cutPara.IsV0SignalTrg && cutPara.IsV0BkgTrg && fabs(mass-cutPara.massmean_trg[pttrgbin])<3*cutPara.masswidth_trg[pttrgbin]) continue;
+
        hpT_Signal_trg[pttrgbin]->Fill(pt);
        hpTCorr_Signal_trg[pttrgbin]->Fill(pt,1.0/effweight);
        if(cutPara.IsDebug)
@@ -806,13 +923,20 @@ void DiHadronCorrelationMultiBase::AssignTrgPtBins(double pt, double eta, double
        }
        nMultAll_trg++; nMultAllCorr_trg = nMultAllCorr_trg + 1.0/effweight;
        (eventcorr->pVect_trg[pttrgbin]).push_back(pvector);
+       if(isv0)
+       {
+         (eventcorr->pVect_trg_dau1[pttrgbin]).push_back(pvector_dau1);
+         (eventcorr->pVect_trg_dau2[pttrgbin]).push_back(pvector_dau2);
+       }
        (eventcorr->chgVect_trg[pttrgbin]).push_back(charge);
        (eventcorr->effVect_trg[pttrgbin]).push_back(effweight);
     }
    }
 }
 
-void DiHadronCorrelationMultiBase::AssignAssPtBins(double pt, double eta, double phi, double mass, double charge, double effweight)
+void DiHadronCorrelationMultiBase::AssignAssPtBins(double pt, double eta, double phi, double mass, double charge, double effweight, bool isv0,
+                                                   double pt_dau1, double eta_dau1, double phi_dau1, double mass_dau1,
+                                                   double pt_dau2, double eta_dau2, double phi_dau2, double mass_dau2 )
 {
    if(cutPara.IsPtWeightAss) effweight = effweight / pt;
 
@@ -830,10 +954,21 @@ void DiHadronCorrelationMultiBase::AssignAssPtBins(double pt, double eta, double
 
    TLorentzVector pvector;
    pvector.SetPtEtaPhiM(pt,eta,phi,mass);
+   TLorentzVector pvector_dau1;
+   TLorentzVector pvector_dau2;
+   if(isv0)
+   {
+     pvector_dau1.SetPtEtaPhiM(pt_dau1,eta_dau1,phi_dau1,mass_dau1);
+     pvector_dau2.SetPtEtaPhiM(pt_dau2,eta_dau2,phi_dau2,mass_dau2);
+   }
+
    for(int ptassbin=0;ptassbin<(int)(cutPara.ptassmin.size());ptassbin++)
    {
      if(GetPtassBin(pt,eta,ptassbin))
      {
+       if(cutPara.IsV0SignalAss && !cutPara.IsV0BkgAss && fabs(mass-cutPara.massmean_ass[ptassbin])>2*cutPara.masswidth_ass[ptassbin]) continue;
+       if(!cutPara.IsV0SignalAss && cutPara.IsV0BkgAss && fabs(mass-cutPara.massmean_ass[ptassbin])<3*cutPara.masswidth_ass[ptassbin]) continue;
+
        hpT_Signal_ass[ptassbin]->Fill(pt);
        hpTCorr_Signal_ass[ptassbin]->Fill(pt,1.0/effweight);
        if(cutPara.IsDebug)
@@ -842,7 +977,12 @@ void DiHadronCorrelationMultiBase::AssignAssPtBins(double pt, double eta, double
          hdNdetadphiCorr_ass[ptassbin]->Fill(eta,phi,1.0/effweight);
        }
        nMultAll_ass++; nMultAllCorr_ass = nMultAllCorr_ass + 1.0/effweight;
-       (eventcorr->pVect_ass[ptassbin]).push_back(pvector); 
+       (eventcorr->pVect_ass[ptassbin]).push_back(pvector);
+       if(isv0)
+       {
+         (eventcorr->pVect_ass_dau1[ptassbin]).push_back(pvector_dau1);
+         (eventcorr->pVect_ass_dau2[ptassbin]).push_back(pvector_dau2);
+       }
        (eventcorr->chgVect_ass[ptassbin]).push_back(charge);
        (eventcorr->effVect_ass[ptassbin]).push_back(effweight);
      }
@@ -878,6 +1018,19 @@ double DiHadronCorrelationMultiBase::GetEventEngineer(const edm::Event& iEvent, 
 
    double q2 = sqrt(q2x*q2x+q2y*q2y);
    return q2;
+}
+
+double DiHadronCorrelationMultiBase::GetRP(const edm::Event& iEvent, const edm::EventSetup& iSetup)
+{
+   double phi0 = -999.0;
+   edm::Handle<HepMCProduct> mc;
+   iEvent.getByLabel("generator",mc);
+   const GenEvent* evt = mc->GetEvent();
+   const HeavyIon* hi = evt->heavy_ion();
+   if(!hi) {cout<<"Cannot find HI event information!"<<endl; return phi0;}
+
+   phi0 = hi->event_plane_angle();
+   return phi0;
 }
 
 int DiHadronCorrelationMultiBase::GetCentralityBin(const edm::Event& iEvent, const edm::EventSetup& iSetup)

@@ -184,7 +184,6 @@ void DiHadronCorrelationMultiAnalyzer::NormalizeHists()
 */
 }
 
-//--------------- Calculate signal distributions ----------------------
 void DiHadronCorrelationMultiAnalyzer::FillHistsSignal(const DiHadronCorrelationEvent& eventcorr)
 {
   for(unsigned int itrg=0;itrg<cutPara.pttrgmin.size();itrg++)
@@ -195,11 +194,8 @@ void DiHadronCorrelationMultiAnalyzer::FillHistsSignal(const DiHadronCorrelation
       unsigned int ntrgsize = eventcorr.pVect_trg[itrg].size();
       unsigned int nasssize = eventcorr.pVect_ass[jass].size();
       double nMultCorr_trg = eventcorr.nMultCorrVect_trg[itrg];
-//      double nMultCorr_ass = eventcorr.nMultCorrVect_ass[jass];
 
       double sumcosn[15]={0};
-//      double sumsinn[15]={0};
-//      double sumrhon[15]={0};
       double npairs[15]={0};
       double sumcosn_eta1eta2[16][16][5] = {{{0.0}}};
       double npairs_eta1eta2[16][16][5] = {{{0.0}}};
@@ -207,46 +203,87 @@ void DiHadronCorrelationMultiAnalyzer::FillHistsSignal(const DiHadronCorrelation
       {
         TLorentzVector pvector_trg = (eventcorr.pVect_trg[itrg])[ntrg];	  
         double effweight_trg = (eventcorr.effVect_trg[itrg])[ntrg];
-//        double chg_trg = (eventcorr.chgVect_trg[itrg])[ntrg];
         double eta_trg = pvector_trg.Eta();
         double phi_trg = pvector_trg.Phi();
         double pt_trg = pvector_trg.Pt();
+        double eta_trg_dau1 = -999.9;
+        double phi_trg_dau1 = -999.9;
+//        double pt_trg_dau1 = -999.9;
+        double eta_trg_dau2 = -999.9;
+        double phi_trg_dau2 = -999.9;
+//        double pt_trg_dau2 = -999.9;
+        if(cutPara.IsCheckTrgV0Dau)
+        {
+          TLorentzVector pvector_trg_dau1 = (eventcorr.pVect_trg_dau1[itrg])[ntrg];
+          eta_trg_dau1 = pvector_trg_dau1.Eta();
+          phi_trg_dau1 = pvector_trg_dau1.Phi();
+//          pt_trg_dau1 = pvector_trg_dau1.Pt();
+
+          TLorentzVector pvector_trg_dau2 = (eventcorr.pVect_trg_dau2[itrg])[ntrg];
+          eta_trg_dau2 = pvector_trg_dau2.Eta();
+          phi_trg_dau2 = pvector_trg_dau2.Phi();
+//          pt_trg_dau2 = pvector_trg_dau2.Pt();
+        }
 
         for(unsigned int nass=0;nass<nasssize;nass++)
         {
           TLorentzVector pvector_ass = (eventcorr.pVect_ass[jass])[nass];   
           double effweight_ass = (eventcorr.effVect_ass[jass])[nass];
-//          double chg_ass = (eventcorr.chgVect_ass[jass])[nass];
           double eta_ass = pvector_ass.Eta();
           double phi_ass = pvector_ass.Phi();
           double pt_ass = pvector_ass.Pt();
+          double eta_ass_dau1 = -999.9;
+          double phi_ass_dau1 = -999.9;
+//          double pt_ass_dau1 = -999.9;
+          double eta_ass_dau2 = -999.9;
+          double phi_ass_dau2 = -999.9;
+//          double pt_ass_dau2 = -999.9;
+          if(cutPara.IsCheckAssV0Dau)
+          {
+            TLorentzVector pvector_ass_dau1 = (eventcorr.pVect_ass_dau1[jass])[nass];
+            eta_ass_dau1 = pvector_ass_dau1.Eta();
+            phi_ass_dau1 = pvector_ass_dau1.Phi();
+//            pt_ass_dau1 = pvector_ass_dau1.Pt();
 
-          // check charge sign
-//          if( (checksign == 0) && (chg_trg != chg_ass)) continue;
-//          if( (checksign == 1) && (chg_trg == chg_ass)) continue;
+            TLorentzVector pvector_ass_dau2 = (eventcorr.pVect_ass_dau2[jass])[nass];
+            eta_ass_dau2 = pvector_ass_dau2.Eta();
+            phi_ass_dau2 = pvector_ass_dau2.Phi();
+//            pt_ass_dau2 = pvector_ass_dau2.Pt();
+          }
 
           double deltaPhi=GetDeltaPhi(phi_trg,phi_ass);
           double deltaEta=GetDeltaEta(eta_trg,eta_ass);
 
-          if(deltaEta==0.0 && deltaPhi==0.0 && pt_trg==pt_ass) continue; // two particles are identical
-//          if(fabs(deltaEta)<0.028 && fabs(deltaPhi)<0.02) continue; // two particles are close 
-//          if(fabs(deltaEta)<0.05 && fabs(deltaPhi)<0.05) continue; // two particles are close 
+          if(deltaEta==0.0 && deltaPhi==0.0 && pt_trg==pt_ass) continue; 
 
-          // total weight
+          if(cutPara.IsCheckTrgV0Dau)
+          {
+            double deltaPhi1_dau=GetDeltaPhi(phi_ass,phi_trg_dau1);
+            double deltaEta1_dau=GetDeltaEta(eta_ass,eta_trg_dau1);
+            double deltaPhi2_dau=GetDeltaPhi(phi_ass,phi_trg_dau2);
+            double deltaEta2_dau=GetDeltaEta(eta_ass,eta_trg_dau2);
+
+            if(fabs(deltaEta1_dau)<0.03 && fabs(deltaPhi1_dau)<0.03) {cout<<deltaPhi1_dau<<" "<<deltaEta1_dau<<" ; rejected!"<<endl; continue;}
+            if(fabs(deltaEta2_dau)<0.03 && fabs(deltaPhi2_dau)<0.03) {cout<<deltaPhi2_dau<<" "<<deltaEta2_dau<<" ; rejected!"<<endl; continue;}
+          }
+          if(cutPara.IsCheckAssV0Dau)
+          {
+            double deltaPhi1_dau=GetDeltaPhi(phi_trg,phi_ass_dau1);
+            double deltaEta1_dau=GetDeltaEta(eta_trg,eta_ass_dau1);
+            double deltaPhi2_dau=GetDeltaPhi(phi_trg,phi_ass_dau2);
+            double deltaEta2_dau=GetDeltaEta(eta_trg,eta_ass_dau2);
+
+            if(fabs(deltaEta1_dau)<0.03 && fabs(deltaPhi1_dau)<0.03) {cout<<deltaPhi1_dau<<" "<<deltaEta1_dau<<" ; rejected!"<<endl; continue;}
+            if(fabs(deltaEta2_dau)<0.03 && fabs(deltaPhi2_dau)<0.03) {cout<<deltaPhi2_dau<<" "<<deltaEta2_dau<<" ; rejected!"<<endl; continue;}
+          }
+
           double effweight = effweight_trg * effweight_ass;
-//          if(cutPara.IsPtWeightAss) effweight = effweight / (pt_ass-ptMean2_ass[jass]/ptMean_ass[jass]) / (pt_trg-ptMean2_trg[itrg]/ptMean_trg[itrg]);
-//          if(cutPara.IsPtWeightAss) effweight = effweight / pt_ass;
-//          if(cutPara.IsPtWeightTrg) effweight = effweight / pt_trg;
 
-          // Direct calculation of Fourier harmonics for pairs
           if(cutPara.IsHarmonics && fabs(deltaEta)>2) 
           {
             for(int nn = 1; nn<4; nn++)
             {
-//              if(nn==0) effweight = effweight * pt_ass * pt_trg / (pt_ass-ptMean2_ass[jass]/ptMean_ass[jass]) / (pt_trg-ptMean2_trg[itrg]/ptMean_trg[itrg])
               sumcosn[nn] = sumcosn[nn] + cos((nn+1)*fabs(deltaPhi))/effweight;
-//              sumsinn[nn] = sumsinn[nn] + sin((nn+1)*fabs(deltaPhi))/effweight;
-//              sumrhon[nn] = sumrhon[nn] + sqrt(sin((nn+1)*fabs(deltaPhi))*sin((nn+1)*fabs(deltaPhi))+cos((nn+1)*fabs(deltaPhi))*cos((nn+1)*fabs(deltaPhi)))/effweight;
               npairs[nn] += 1.0/effweight;
             }
           }
@@ -264,11 +301,6 @@ void DiHadronCorrelationMultiAnalyzer::FillHistsSignal(const DiHadronCorrelation
             }
           }
 
-          // three particle correlators
-//          hSignal2PEPCorrelator[itrg][jass]->Fill(TMath::Cos(phi_trg-3*phi_ass+2*EPAngle),1.0/effweight);
-
-//          nMultCorr_trg = 1; // turn off normalization temperorily
-          // Fill dihadron correlation functions
           if(!cutPara.IsSymmetrize)
           {
             hSignal[itrg][jass]->Fill(deltaEta,deltaPhi,1.0/effweight/nMultCorr_trg);
@@ -288,8 +320,6 @@ void DiHadronCorrelationMultiAnalyzer::FillHistsSignal(const DiHadronCorrelation
             hSignal_eta1eta2[itrg][jass]->Fill(eta_ass,eta_trg,1.0/effweight/nMultCorr_trg);
             hSignal_phi1phi2[itrg][jass]->Fill(phi_ass,phi_trg,1.0/effweight/nMultCorr_trg);
           }
-
-//          if(fabs(deltaPhi)<PI/8. && fabs(deltaEta)>2) hSignal_pt1pt2->Fill(pt_trg,pt_ass,1.0/effweight/nMultCorr_trg);
         }
       }
 
@@ -299,10 +329,7 @@ void DiHadronCorrelationMultiAnalyzer::FillHistsSignal(const DiHadronCorrelation
         {
           if(!npairs[nn]) continue;
           sumcosn[nn]=sumcosn[nn]/npairs[nn];
-//          sumsinn[nn]=sumsinn[nn]/npairs[nn];
           hSignalCosn[itrg][jass]->Fill(sumcosn[nn],nn+1);
-//          hSignalSinn[itrg][jass]->Fill(sumsinn[nn],nn+1);
-//          hSignalRhon[itrg][jass]->Fill(sqrt(sumcosn[nn]*sumcosn[nn]+sumsinn[nn]*sumsinn[nn]),nn+1);
         }
       }
 
@@ -312,9 +339,9 @@ void DiHadronCorrelationMultiAnalyzer::FillHistsSignal(const DiHadronCorrelation
           for(int ieta2=0; ieta2<16; ieta2++)
             for(int nn = 1; nn<4; nn++)
             {
-                if(!npairs_eta1eta2[ieta1][ieta2][nn]) continue;
-                sumcosn_eta1eta2[ieta1][ieta2][nn]=sumcosn_eta1eta2[ieta1][ieta2][nn]/npairs_eta1eta2[ieta1][ieta2][nn];
-                hSignalCosn_eta1eta2[ieta1][ieta2]->Fill(sumcosn_eta1eta2[ieta1][ieta2][nn],nn+1);
+              if(!npairs_eta1eta2[ieta1][ieta2][nn]) continue;
+              sumcosn_eta1eta2[ieta1][ieta2][nn]=sumcosn_eta1eta2[ieta1][ieta2][nn]/npairs_eta1eta2[ieta1][ieta2][nn];
+              hSignalCosn_eta1eta2[ieta1][ieta2]->Fill(sumcosn_eta1eta2[ieta1][ieta2][nn],nn+1);
             }
       }
     } 
@@ -330,10 +357,8 @@ void DiHadronCorrelationMultiAnalyzer::FillHistsBackground(const DiHadronCorrela
       unsigned int ntrgsize = eventcorr_trg.pVect_trg[itrg].size();
       unsigned int nasssize = eventcorr_ass.pVect_ass[jass].size();
       double nMultCorr_trg = eventcorr_trg.nMultCorrVect_trg[itrg];
-//      double nMultCorr_ass = eventcorr_ass.nMultCorrVect_ass[jass];
 
       double sumcosn[15]={0};
-//      double sumsinn[15]={0};
       double npairs[15]={0};
       double sumcosn_eta1eta2[16][16][5] = {{{0.0}}};
       double npairs_eta1eta2[16][16][5] = {{{0.0}}};
@@ -341,46 +366,87 @@ void DiHadronCorrelationMultiAnalyzer::FillHistsBackground(const DiHadronCorrela
       {
         TLorentzVector pvector_trg = (eventcorr_trg.pVect_trg[itrg])[ntrg];	  
         double effweight_trg = (eventcorr_trg.effVect_trg[itrg])[ntrg];
-//        double chg_trg = (eventcorr_trg.chgVect_trg[itrg])[ntrg];
         double eta_trg = pvector_trg.Eta();
         double phi_trg = pvector_trg.Phi();
         double pt_trg = pvector_trg.Pt();
+        double eta_trg_dau1 = -999.9;
+        double phi_trg_dau1 = -999.9;
+//        double pt_trg_dau1 = -999.9;
+        double eta_trg_dau2 = -999.9;
+        double phi_trg_dau2 = -999.9;
+//        double pt_trg_dau2 = -999.9;
+        if(cutPara.IsCheckTrgV0Dau)
+        {
+          TLorentzVector pvector_trg_dau1 = (eventcorr_trg.pVect_trg_dau1[itrg])[ntrg];
+          eta_trg_dau1 = pvector_trg_dau1.Eta();
+          phi_trg_dau1 = pvector_trg_dau1.Phi();
+//          pt_trg_dau1 = pvector_trg_dau1.Pt();
+
+          TLorentzVector pvector_trg_dau2 = (eventcorr_trg.pVect_trg_dau2[itrg])[ntrg];
+          eta_trg_dau2 = pvector_trg_dau2.Eta();
+          phi_trg_dau2 = pvector_trg_dau2.Phi();
+//          pt_trg_dau2 = pvector_trg_dau2.Pt();
+        }
 
         for(unsigned int nass=0;nass<nasssize;nass++)
         {
           TLorentzVector pvector_ass = (eventcorr_ass.pVect_ass[jass])[nass];   
           double effweight_ass = (eventcorr_ass.effVect_ass[jass])[nass];
-//          double chg_ass = (eventcorr_ass.chgVect_ass[jass])[nass];
           double eta_ass = pvector_ass.Eta();
           double phi_ass = pvector_ass.Phi();
           double pt_ass = pvector_ass.Pt();
+          double eta_ass_dau1 = -999.9;
+          double phi_ass_dau1 = -999.9;
+//          double pt_ass_dau1 = -999.9;
+          double eta_ass_dau2 = -999.9;
+          double phi_ass_dau2 = -999.9;
+//          double pt_ass_dau2 = -999.9;
+          if(cutPara.IsCheckAssV0Dau)
+          {
+            TLorentzVector pvector_ass_dau1 = (eventcorr_ass.pVect_ass_dau1[jass])[nass];
+            eta_ass_dau1 = pvector_ass_dau1.Eta();
+            phi_ass_dau1 = pvector_ass_dau1.Phi();
+//            pt_ass_dau1 = pvector_ass_dau1.Pt();
 
-          // check charge sign
-//          if( (checksign == 0) && (chg_trg != chg_ass)) continue;
-//          if( (checksign == 1) && (chg_trg == chg_ass)) continue;
+            TLorentzVector pvector_ass_dau2 = (eventcorr_ass.pVect_ass_dau2[jass])[nass];
+            eta_ass_dau2 = pvector_ass_dau2.Eta();
+            phi_ass_dau2 = pvector_ass_dau2.Phi();
+//            pt_ass_dau2 = pvector_ass_dau2.Pt();
+          }
 
           double deltaPhi=GetDeltaPhi(phi_trg,phi_ass);
           double deltaEta=GetDeltaEta(eta_trg,eta_ass);
 
           if(deltaEta==0.0 && deltaPhi==0.0 && pt_trg==pt_ass) continue; // two particles are identical
-//          if(fabs(deltaEta)<0.028 && fabs(deltaPhi)<0.02) continue; // two particles are close 
 
-//          nMultCorr_trg = 1; // turn off normalization temperorily
+          if(cutPara.IsCheckTrgV0Dau)
+          {
+            double deltaPhi1_dau=GetDeltaPhi(phi_ass,phi_trg_dau1);
+            double deltaEta1_dau=GetDeltaEta(eta_ass,eta_trg_dau1);
+            double deltaPhi2_dau=GetDeltaPhi(phi_ass,phi_trg_dau2);
+            double deltaEta2_dau=GetDeltaEta(eta_ass,eta_trg_dau2);
 
-          // total weight
+            if(fabs(deltaEta1_dau)<0.03 && fabs(deltaPhi1_dau)<0.03) {cout<<deltaPhi1_dau<<" "<<deltaEta1_dau<<" ; rejected!"<<endl; continue;}
+            if(fabs(deltaEta2_dau)<0.03 && fabs(deltaPhi2_dau)<0.03) {cout<<deltaPhi2_dau<<" "<<deltaEta2_dau<<" ; rejected!"<<endl; continue;}
+          }
+          if(cutPara.IsCheckAssV0Dau)
+          {
+            double deltaPhi1_dau=GetDeltaPhi(phi_trg,phi_ass_dau1);
+            double deltaEta1_dau=GetDeltaEta(eta_trg,eta_ass_dau1);
+            double deltaPhi2_dau=GetDeltaPhi(phi_trg,phi_ass_dau2);
+            double deltaEta2_dau=GetDeltaEta(eta_trg,eta_ass_dau2);
+
+            if(fabs(deltaEta1_dau)<0.03 && fabs(deltaPhi1_dau)<0.03) {cout<<deltaPhi1_dau<<" "<<deltaEta1_dau<<" ; rejected!"<<endl; continue;}
+            if(fabs(deltaEta2_dau)<0.03 && fabs(deltaPhi2_dau)<0.03) {cout<<deltaPhi2_dau<<" "<<deltaEta2_dau<<" ; rejected!"<<endl; continue;}
+          }
+
           double effweight = effweight_trg * effweight_ass * nMultCorr_trg;
-//          if(cutPara.IsPtWeightAss) effweight = effweight / (pt_ass-ptMean2_ass[jass]/ptMean_ass[jass]) / (pt_trg-ptMean2_trg[itrg]/ptMean_trg[itrg]);
-//          if(cutPara.IsPtWeightAss) effweight = effweight / pt_ass;
-//          if(cutPara.IsPtWeightTrg) effweight = effweight / pt_trg;
 
-          // Direct calculation of Fourier harmonics for pairs
           if(cutPara.IsHarmonics && fabs(deltaEta)>2) 
           {
             for(int nn = 1; nn<4; nn++)
             {
-//              if(nn==0) effweight = effweight * pt_ass * pt_trg / (pt_ass-ptMean2_ass[jass]/ptMean_ass[jass]) / (pt_trg-ptMean2_trg[itrg]/ptMean_trg[itrg]);
               sumcosn[nn] = sumcosn[nn] + cos((nn+1)*fabs(deltaPhi))/effweight;
-//              sumsinn[nn] = sumsinn[nn] + sin((nn+1)*fabs(deltaPhi))/effweight;
               npairs[nn] += 1.0/effweight;
             }
           }
@@ -398,10 +464,6 @@ void DiHadronCorrelationMultiAnalyzer::FillHistsBackground(const DiHadronCorrela
             }
           }
 
-          // three particle correlators
-//          hBackground2PEPCorrelator[itrg][jass]->Fill(TMath::Cos(phi_trg-3*phi_ass+2*EPAngle));
-
-          // Fill dihadron correlation functions
           if(!cutPara.IsSymmetrize)
           {
             hBackground[itrg][jass]->Fill(deltaEta,deltaPhi,1.0/effweight);
@@ -421,8 +483,6 @@ void DiHadronCorrelationMultiAnalyzer::FillHistsBackground(const DiHadronCorrela
             hBackground_eta1eta2[itrg][jass]->Fill(eta_ass,eta_trg,1.0/effweight);
             hBackground_phi1phi2[itrg][jass]->Fill(phi_ass,phi_trg,1.0/effweight);
           }
-
-//          if(fabs(deltaPhi)<PI/8. && fabs(deltaEta)>2) hBackground_pt1pt2->Fill(pt_trg,pt_ass,1.0/effweight);
         }
       }
 
@@ -432,10 +492,7 @@ void DiHadronCorrelationMultiAnalyzer::FillHistsBackground(const DiHadronCorrela
         {
           if(!npairs[nn]) continue;
           sumcosn[nn]=sumcosn[nn]/npairs[nn];
-//          sumsinn[nn]=sumsinn[nn]/npairs[nn];
           hBackgroundCosn[itrg][jass]->Fill(sumcosn[nn],nn+1);
-//          hBackgroundSinn[itrg][jass]->Fill(sumsinn[nn],nn+1);
-//          hBackgroundRhon[itrg][jass]->Fill(sqrt(sumcosn[nn]*sumcosn[nn]+sumsinn[nn]*sumsinn[nn]),nn+1);
         }
       }
 
