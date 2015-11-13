@@ -1,0 +1,2 @@
+150521_150949: /cvmfs/cms.cern.ch/crab/CRAB_2_11_1_patch1/python/crab.py -create -submit -cfg crab_dihadroncorrelation_pp2015_mb.cfg
+150521_154044: /cvmfs/cms.cern.ch/crab/CRAB_2_11_1_patch1/python/crab.py -create -submit -cfg crab_dihadroncorrelation_pp2015_n70.cfg

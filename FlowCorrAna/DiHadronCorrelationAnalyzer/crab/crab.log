@@ -1,0 +1,848 @@
+DEBUG 2015-07-19 17:06:44,213: 	 Executing command: 'submit'
+DEBUG 2015-07-19 17:06:44,213: 	 Found CRAB cache file /net/hisrv0001/home/davidlw/.crab3
+DEBUG 2015-07-19 17:06:44,219: 	 Checking credentials
+DEBUG 2015-07-19 17:06:44,220: 	 Found proxy file /tmp/x509up_u1472
+DEBUG 2015-07-19 17:06:44,220: 	 Getting proxy life time left
+DEBUG 2015-07-19 17:06:44,322: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 57442
+
+ error: 
+ retcode : 0
+DEBUG 2015-07-19 17:06:44,424: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -actimeleft
+ output : 57442
+
+ error: 
+ retcode : 0
+DEBUG 2015-07-19 17:06:44,424: 	 Proxy valid for 15:57:22 hours
+INFO 2015-07-19 17:06:44,425: 	 Will use CRAB configuration file crab3.py
+DEBUG 2015-07-19 17:06:44,425: 	 Loading CRAB configuration file.
+DEBUG 2015-07-19 17:06:45,955: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+ERROR 2015-07-19 17:06:45,956: 	 Working area '/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_2/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/pp2015Ana/crab_mult_mb_v1' already exists 
+Please change the requestName in the config file
+ERROR 2015-07-19 17:06:45,956: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/bin/crab", line 133, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/bin/crab", line 119, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/CRABClient/Commands/submit.py", line 40, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args = True)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 298, in __init__
+    getattr(self.configuration.General, 'requestName', None))
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/CRABClient/ClientUtilities.py", line 387, in createWorkArea
+    raise ConfigException("Working area '%s' already exists \nPlease change the requestName in the config file" % fullpath)
+ConfigException: Working area '/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_2/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/pp2015Ana/crab_mult_mb_v1' already exists 
+Please change the requestName in the config file
+DEBUG 2015-07-19 17:11:36,702: 	 Executing command: 'submit'
+DEBUG 2015-07-19 17:11:36,702: 	 Found CRAB cache file /net/hisrv0001/home/davidlw/.crab3
+DEBUG 2015-07-19 17:11:36,711: 	 Checking credentials
+DEBUG 2015-07-19 17:11:36,711: 	 Found proxy file /tmp/x509up_u1472
+DEBUG 2015-07-19 17:11:36,711: 	 Getting proxy life time left
+DEBUG 2015-07-19 17:11:36,813: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 86260
+
+ error: 
+ retcode : 0
+DEBUG 2015-07-19 17:11:36,915: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -actimeleft
+ output : 86260
+
+ error: 
+ retcode : 0
+DEBUG 2015-07-19 17:11:36,915: 	 Proxy valid for 23:57:40 hours
+INFO 2015-07-19 17:11:36,915: 	 Will use CRAB configuration file crab3.py
+DEBUG 2015-07-19 17:11:36,915: 	 Loading CRAB configuration file.
+DEBUG 2015-07-19 17:11:38,443: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+ERROR 2015-07-19 17:11:38,444: 	 Working area '/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_2/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/pp2015Ana/crab_mult_mb_v1' already exists 
+Please change the requestName in the config file
+ERROR 2015-07-19 17:11:38,444: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/bin/crab", line 133, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/bin/crab", line 119, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/CRABClient/Commands/submit.py", line 40, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args = True)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 298, in __init__
+    getattr(self.configuration.General, 'requestName', None))
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/CRABClient/ClientUtilities.py", line 387, in createWorkArea
+    raise ConfigException("Working area '%s' already exists \nPlease change the requestName in the config file" % fullpath)
+ConfigException: Working area '/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_2/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/pp2015Ana/crab_mult_mb_v1' already exists 
+Please change the requestName in the config file
+DEBUG 2015-07-19 17:18:08,121: 	 Executing command: 'submit'
+DEBUG 2015-07-19 17:18:08,122: 	 Found CRAB cache file /net/hisrv0001/home/davidlw/.crab3
+DEBUG 2015-07-19 17:18:08,128: 	 Checking credentials
+DEBUG 2015-07-19 17:18:08,129: 	 Found proxy file /tmp/x509up_u1472
+DEBUG 2015-07-19 17:18:08,129: 	 Getting proxy life time left
+DEBUG 2015-07-19 17:18:08,732: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 85867
+
+ error: 
+ retcode : 0
+DEBUG 2015-07-19 17:18:09,336: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -actimeleft
+ output : 85866
+
+ error: 
+ retcode : 0
+DEBUG 2015-07-19 17:18:09,336: 	 Proxy valid for 23:51:07 hours
+INFO 2015-07-19 17:18:09,336: 	 Will use CRAB configuration file crab3.py
+DEBUG 2015-07-19 17:18:09,336: 	 Loading CRAB configuration file.
+DEBUG 2015-07-19 17:18:12,651: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+ERROR 2015-07-19 17:18:12,652: 	 Working area '/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_7_patch2/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/pp2015Ana/crab_mult_mb_v1' already exists 
+Please change the requestName in the config file
+ERROR 2015-07-19 17:18:12,652: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/bin/crab", line 133, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/bin/crab", line 119, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/CRABClient/Commands/submit.py", line 40, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args = True)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 298, in __init__
+    getattr(self.configuration.General, 'requestName', None))
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/CRABClient/ClientUtilities.py", line 387, in createWorkArea
+    raise ConfigException("Working area '%s' already exists \nPlease change the requestName in the config file" % fullpath)
+ConfigException: Working area '/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_7_patch2/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/pp2015Ana/crab_mult_mb_v1' already exists 
+Please change the requestName in the config file
+DEBUG 2015-07-21 13:16:50,121: 	 Executing command: 'submit'
+DEBUG 2015-07-21 13:16:50,121: 	 Found CRAB cache file /net/hisrv0001/home/davidlw/.crab3
+DEBUG 2015-07-21 13:16:50,130: 	 Checking credentials
+DEBUG 2015-07-21 13:16:50,130: 	 Found proxy file /tmp/x509up_u1472
+DEBUG 2015-07-21 13:16:50,130: 	 Getting proxy life time left
+DEBUG 2015-07-21 13:16:50,733: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 16846
+
+ error: 
+ retcode : 0
+DEBUG 2015-07-21 13:16:51,336: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -actimeleft
+ output : 16845
+
+ error: 
+ retcode : 0
+DEBUG 2015-07-21 13:16:51,336: 	 Proxy valid for 04:40:46 hours
+INFO 2015-07-21 13:16:51,337: 	 Will use CRAB configuration file crab3.py
+DEBUG 2015-07-21 13:16:51,337: 	 Loading CRAB configuration file.
+DEBUG 2015-07-21 13:16:55,576: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+ERROR 2015-07-21 13:16:55,577: 	 Working area '/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_7_patch2/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/pp2015Ana/crab_mult_hlt110_purej_dz01_v1' already exists 
+Please change the requestName in the config file
+ERROR 2015-07-21 13:16:55,577: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/bin/crab", line 133, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/bin/crab", line 119, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/CRABClient/Commands/submit.py", line 40, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args = True)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 298, in __init__
+    getattr(self.configuration.General, 'requestName', None))
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/CRABClient/ClientUtilities.py", line 387, in createWorkArea
+    raise ConfigException("Working area '%s' already exists \nPlease change the requestName in the config file" % fullpath)
+ConfigException: Working area '/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_7_patch2/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/pp2015Ana/crab_mult_hlt110_purej_dz01_v1' already exists 
+Please change the requestName in the config file
+DEBUG 2015-08-10 19:38:19,538: 	 Executing command: 'submit'
+DEBUG 2015-08-10 19:38:19,539: 	 Found CRAB cache file /net/hisrv0001/home/davidlw/.crab3
+DEBUG 2015-08-10 19:38:19,554: 	 Checking credentials
+DEBUG 2015-08-10 19:38:19,554: 	 Found proxy file /tmp/x509up_u1472
+DEBUG 2015-08-10 19:38:19,554: 	 Getting proxy life time left
+DEBUG 2015-08-10 19:38:23,663: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 0
+
+ error: 
+ retcode : 0
+DEBUG 2015-08-10 19:38:23,663: 	 Proxy valid for 00:00:00 hours
+DEBUG 2015-08-10 19:38:23,663: 	 Creating new proxy for 24:00 hours with VO group '' and VO role 'NULL'.
+ERROR 2015-08-10 19:58:23,769: 	 Timeout in voms-proxy-init -voms cms:/cms -valid 24:00 -rfc execution.
+DEBUG 2015-08-10 19:58:24,677: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 0
+
+ error: 
+ retcode : 0
+DEBUG 2015-08-10 19:58:25,481: 	 Executing : 
+ command : env X509_USER_PROXY=/tmp/x509up_u1472 voms-proxy-info -fqan
+ output : /cms/Role=NULL/Capability=NULL
+
+ error: 
+ retcode : 0
+ERROR 2015-08-10 19:58:25,482: 	 Problems creating proxy.
+ERROR 2015-08-10 19:58:25,507: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/bin/crab", line 133, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/bin/crab", line 119, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/CRABClient/Commands/submit.py", line 40, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args = True)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 288, in __init__
+    self.proxyCreated = self.proxy.createNewVomsProxySimple(timeLeftThreshold = 720)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/CRABClient/CredentialInteractions.py", line 152, in createNewVomsProxySimple
+    raise ProxyCreationException("Problems creating proxy.")
+ProxyCreationException: Problems creating proxy.
+DEBUG 2015-08-17 10:28:32,192: 	 Executing command: 'submit'
+DEBUG 2015-08-17 10:28:32,193: 	 Found CRAB cache file /net/hisrv0001/home/davidlw/.crab3
+DEBUG 2015-08-17 10:28:32,208: 	 Checking credentials
+DEBUG 2015-08-17 10:28:32,209: 	 Found proxy file /tmp/x509up_u1472
+DEBUG 2015-08-17 10:28:32,209: 	 Getting proxy life time left
+DEBUG 2015-08-17 10:28:34,214: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 41519
+
+ error: 
+ retcode : 0
+DEBUG 2015-08-17 10:28:34,718: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -actimeleft
+ output : 
+ error: No VOMS attributes found!
+
+ retcode : 1
+DEBUG 2015-08-17 10:28:34,718: 	 Proxy valid for 00:00:00 hours
+DEBUG 2015-08-17 10:28:34,718: 	 Creating new proxy for 24:00 hours with VO group '' and VO role 'NULL'.
+DEBUG 2015-08-17 10:28:46,745: 	 Executing : 
+ command : voms-proxy-init -voms cms:/cms -valid 24:00 -rfc
+ output : None
+ error: None
+ retcode : 0
+DEBUG 2015-08-17 10:28:47,349: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 86398
+
+ error: 
+ retcode : 0
+DEBUG 2015-08-17 10:28:47,952: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -actimeleft
+ output : 86398
+
+ error: 
+ retcode : 0
+DEBUG 2015-08-17 10:28:48,556: 	 Executing : 
+ command : env X509_USER_PROXY=/tmp/x509up_u1472 voms-proxy-info -fqan
+ output : /cms/Role=NULL/Capability=NULL
+
+ error: 
+ retcode : 0
+DEBUG 2015-08-17 10:28:48,556: 	 Proxy created.
+INFO 2015-08-17 10:28:48,556: 	 Will use CRAB configuration file crab_dihadroncorrelation_pp2015_n035.cfg
+DEBUG 2015-08-17 10:28:48,557: 	 Loading CRAB configuration file.
+ERROR 2015-08-17 10:28:48,568: 	 ERROR: ImportError: No module named crab_dihadroncorrelation_pp2015_n035.cfg
+ERROR: ImportError: No module named crab_dihadroncorrelation_pp2015_n035.cfg
+ERROR 2015-08-17 10:28:48,580: 	 
+	Please email hn-cms-computing-tools@cern.ch for support with the crab.log file or crab.log URL.
+
+	Please email hn-cms-computing-tools@cern.ch for support with the crab.log file or crab.log URL.
+ERROR 2015-08-17 10:28:48,604: 	 	Client Version: 3.3.1507
+	Client Version: 3.3.1507
+ERROR 2015-08-17 10:28:48,628: 	 Unhandled Exception!
+Unhandled Exception!
+ERROR 2015-08-17 10:28:48,652: 	 No module named crab_dihadroncorrelation_pp2015_n035.cfg
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/bin/crab", line 133, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/bin/crab", line 119, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/CRABClient/Commands/submit.py", line 40, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args = True)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 294, in __init__
+    self.loadConfig(self.options.config, self.args)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 51, in loadConfig
+    self.configuration = loadConfigurationFile(os.path.abspath(configname))
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/WMCore/Configuration.py", line 557, in loadConfigurationFile
+    modPath = imp.find_module(cfgBaseName, [cfgDirName])
+ImportError: No module named crab_dihadroncorrelation_pp2015_n035.cfg
+No module named crab_dihadroncorrelation_pp2015_n035.cfg
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/bin/crab", line 133, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/bin/crab", line 119, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/CRABClient/Commands/submit.py", line 40, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args = True)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 294, in __init__
+    self.loadConfig(self.options.config, self.args)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 51, in loadConfig
+    self.configuration = loadConfigurationFile(os.path.abspath(configname))
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/WMCore/Configuration.py", line 557, in loadConfigurationFile
+    modPath = imp.find_module(cfgBaseName, [cfgDirName])
+ImportError: No module named crab_dihadroncorrelation_pp2015_n035.cfg
+ERROR 2015-08-17 10:28:48,678: 	 	Please use crab uploadlog to upload the log file /net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_7_patch2/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/crab.log
+	Please use crab uploadlog to upload the log file /net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_7_patch2/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/crab.log
+DEBUG 2015-08-17 10:29:52,011: 	 Executing command: 'submit'
+DEBUG 2015-08-17 10:29:52,011: 	 Found CRAB cache file /net/hisrv0001/home/davidlw/.crab3
+DEBUG 2015-08-17 10:29:52,023: 	 Checking credentials
+DEBUG 2015-08-17 10:29:52,024: 	 Found proxy file /tmp/x509up_u1472
+DEBUG 2015-08-17 10:29:52,024: 	 Getting proxy life time left
+DEBUG 2015-08-17 10:29:52,627: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 86333
+
+ error: 
+ retcode : 0
+DEBUG 2015-08-17 10:29:53,231: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -actimeleft
+ output : 86332
+
+ error: 
+ retcode : 0
+DEBUG 2015-08-17 10:29:53,231: 	 Proxy valid for 23:58:53 hours
+INFO 2015-08-17 10:29:53,232: 	 Will use CRAB configuration file crab_dihadroncorrelation_pp2015_n035.cfg
+DEBUG 2015-08-17 10:29:53,232: 	 Loading CRAB configuration file.
+ERROR 2015-08-17 10:29:53,236: 	 ERROR: ImportError: No module named crab_dihadroncorrelation_pp2015_n035.cfg
+ERROR: ImportError: No module named crab_dihadroncorrelation_pp2015_n035.cfg
+ERROR 2015-08-17 10:29:53,248: 	 
+	Please email hn-cms-computing-tools@cern.ch for support with the crab.log file or crab.log URL.
+
+	Please email hn-cms-computing-tools@cern.ch for support with the crab.log file or crab.log URL.
+ERROR 2015-08-17 10:29:53,272: 	 	Client Version: 3.3.1507
+	Client Version: 3.3.1507
+ERROR 2015-08-17 10:29:53,296: 	 Unhandled Exception!
+Unhandled Exception!
+ERROR 2015-08-17 10:29:53,320: 	 No module named crab_dihadroncorrelation_pp2015_n035.cfg
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/bin/crab", line 133, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/bin/crab", line 119, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/CRABClient/Commands/submit.py", line 40, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args = True)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 294, in __init__
+    self.loadConfig(self.options.config, self.args)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 51, in loadConfig
+    self.configuration = loadConfigurationFile(os.path.abspath(configname))
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/WMCore/Configuration.py", line 557, in loadConfigurationFile
+    modPath = imp.find_module(cfgBaseName, [cfgDirName])
+ImportError: No module named crab_dihadroncorrelation_pp2015_n035.cfg
+No module named crab_dihadroncorrelation_pp2015_n035.cfg
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/bin/crab", line 133, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/bin/crab", line 119, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/CRABClient/Commands/submit.py", line 40, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args = True)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 294, in __init__
+    self.loadConfig(self.options.config, self.args)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 51, in loadConfig
+    self.configuration = loadConfigurationFile(os.path.abspath(configname))
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1507-comp/lib/python2.6/site-packages/WMCore/Configuration.py", line 557, in loadConfigurationFile
+    modPath = imp.find_module(cfgBaseName, [cfgDirName])
+ImportError: No module named crab_dihadroncorrelation_pp2015_n035.cfg
+ERROR 2015-08-17 10:29:53,346: 	 	Please use crab uploadlog to upload the log file /net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_7_patch2/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/crab.log
+	Please use crab uploadlog to upload the log file /net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_7_patch2/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/crab.log
+DEBUG 2015-11-10 16:44:11,148: 	 Executing command: 'submit'
+DEBUG 2015-11-10 16:44:11,149: 	 Found CRAB cache file /net/hisrv0001/home/davidlw/.crab3
+DEBUG 2015-11-10 16:44:11,162: 	 Checking credentials
+DEBUG 2015-11-10 16:44:11,163: 	 Found proxy file /tmp/x509up_u1472
+DEBUG 2015-11-10 16:44:11,163: 	 Getting proxy life time left
+DEBUG 2015-11-10 16:44:11,766: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 2631
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-10 16:44:12,370: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -actimeleft
+ output : 2629
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-10 16:44:12,370: 	 Proxy valid for 00:43:51 hours
+INFO 2015-11-10 16:44:12,371: 	 Will use CRAB configuration file crab3_amptgenonly_PbPb.py
+DEBUG 2015-11-10 16:44:12,371: 	 Loading CRAB configuration file.
+ERROR 2015-11-10 16:46:04,496: 	 Error while loading CRAB configuration:
+Unable to load Configuration File:
+/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_15_patch1/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/crab3_amptgenonly_PbPb.py
+Due to error:
+Failed to retrieve username from SiteDB. Your DN does not seem to be registered in SiteDB.
+Details follow:
+  Executed command: curl -s --capath /cvmfs/grid.cern.ch/etc/grid-security/certificates --cert /tmp/x509up_u1472 --key /tmp/x509up_u1472 'https://cmsweb.cern.ch/sitedb/data/prod/whoami'
+    Stdout:
+      <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+      <html><head>
+      <title>502 Proxy Error</title>
+      </head><body>
+      <h1>Proxy Error</h1>
+      <p>The proxy server received an invalid
+      response from an upstream server.<br />
+      The proxy server could not handle the request <em><a href="/auth/complete/sitedb/data/prod/whoami">GET&nbsp;/auth/complete/sitedb/data/prod/whoami</a></em>.<p>
+      Reason: <strong>Error reading from remote server</strong></p></p>
+      </body></html>
+      
+    Parsed username: 
+Note: Make sure you have the correct certificate mapped in SiteDB (you can check what is the certificate you currently have mapped in SiteDB by searching for your name in https://cmsweb.cern.ch/sitedb/prod/people). For instructions on how to map a certificate in SiteDB, see https://twiki.cern.ch/twiki/bin/viewauth/CMS/SiteDBForCRAB.Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/WMCore/Configuration.py", line 560, in loadConfigurationFile
+    modPath[1], modPath[2])
+  File "/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_15_patch1/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/crab3_amptgenonly_PbPb.py", line 21, in <module>
+    config.Data.outLFNDirBase = '/store/user/%s/' % (getUsernameFromSiteDB())
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/UserUtilities.py", line 112, in getUsernameFromSiteDB
+    raise UsernameException(msg)
+UsernameException: Failed to retrieve username from SiteDB. Your DN does not seem to be registered in SiteDB.
+Details follow:
+  Executed command: curl -s --capath /cvmfs/grid.cern.ch/etc/grid-security/certificates --cert /tmp/x509up_u1472 --key /tmp/x509up_u1472 'https://cmsweb.cern.ch/sitedb/data/prod/whoami'
+    Stdout:
+      <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+      <html><head>
+      <title>502 Proxy Error</title>
+      </head><body>
+      <h1>Proxy Error</h1>
+      <p>The proxy server received an invalid
+      response from an upstream server.<br />
+      The proxy server could not handle the request <em><a href="/auth/complete/sitedb/data/prod/whoami">GET&nbsp;/auth/complete/sitedb/data/prod/whoami</a></em>.<p>
+      Reason: <strong>Error reading from remote server</strong></p></p>
+      </body></html>
+      
+    Parsed username: 
+Note: Make sure you have the correct certificate mapped in SiteDB (you can check what is the certificate you currently have mapped in SiteDB by searching for your name in https://cmsweb.cern.ch/sitedb/prod/people). For instructions on how to map a certificate in SiteDB, see https://twiki.cern.ch/twiki/bin/viewauth/CMS/SiteDBForCRAB.
+
+Please refer to https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3CommonErrors#Syntax_error_in_CRAB_configurati
+See the ./crab.log file for more details.
+The documentation about the CRAB configuration file can be found in https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3ConfigurationFile
+ERROR 2015-11-10 16:46:04,497: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/bin/crab", line 159, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/bin/crab", line 145, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/Commands/submit.py", line 32, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args=True)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 295, in __init__
+    self.loadConfig(self.options.config, self.args)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 84, in loadConfig
+    raise ConfigurationException(configmsg)
+ConfigurationException: Error while loading CRAB configuration:
+Unable to load Configuration File:
+/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_15_patch1/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/crab3_amptgenonly_PbPb.py
+Due to error:
+Failed to retrieve username from SiteDB. Your DN does not seem to be registered in SiteDB.
+Details follow:
+  Executed command: curl -s --capath /cvmfs/grid.cern.ch/etc/grid-security/certificates --cert /tmp/x509up_u1472 --key /tmp/x509up_u1472 'https://cmsweb.cern.ch/sitedb/data/prod/whoami'
+    Stdout:
+      <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+      <html><head>
+      <title>502 Proxy Error</title>
+      </head><body>
+      <h1>Proxy Error</h1>
+      <p>The proxy server received an invalid
+      response from an upstream server.<br />
+      The proxy server could not handle the request <em><a href="/auth/complete/sitedb/data/prod/whoami">GET&nbsp;/auth/complete/sitedb/data/prod/whoami</a></em>.<p>
+      Reason: <strong>Error reading from remote server</strong></p></p>
+      </body></html>
+      
+    Parsed username: 
+[1mNote[0m: Make sure you have the correct certificate mapped in SiteDB (you can check what is the certificate you currently have mapped in SiteDB by searching for your name in https://cmsweb.cern.ch/sitedb/prod/people). For instructions on how to map a certificate in SiteDB, see https://twiki.cern.ch/twiki/bin/viewauth/CMS/SiteDBForCRAB.Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/WMCore/Configuration.py", line 560, in loadConfigurationFile
+    modPath[1], modPath[2])
+  File "/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_15_patch1/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/crab3_amptgenonly_PbPb.py", line 21, in <module>
+    config.Data.outLFNDirBase = '/store/user/%s/' % (getUsernameFromSiteDB())
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/UserUtilities.py", line 112, in getUsernameFromSiteDB
+    raise UsernameException(msg)
+UsernameException: Failed to retrieve username from SiteDB. Your DN does not seem to be registered in SiteDB.
+Details follow:
+  Executed command: curl -s --capath /cvmfs/grid.cern.ch/etc/grid-security/certificates --cert /tmp/x509up_u1472 --key /tmp/x509up_u1472 'https://cmsweb.cern.ch/sitedb/data/prod/whoami'
+    Stdout:
+      <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+      <html><head>
+      <title>502 Proxy Error</title>
+      </head><body>
+      <h1>Proxy Error</h1>
+      <p>The proxy server received an invalid
+      response from an upstream server.<br />
+      The proxy server could not handle the request <em><a href="/auth/complete/sitedb/data/prod/whoami">GET&nbsp;/auth/complete/sitedb/data/prod/whoami</a></em>.<p>
+      Reason: <strong>Error reading from remote server</strong></p></p>
+      </body></html>
+      
+    Parsed username: 
+[1mNote[0m: Make sure you have the correct certificate mapped in SiteDB (you can check what is the certificate you currently have mapped in SiteDB by searching for your name in https://cmsweb.cern.ch/sitedb/prod/people). For instructions on how to map a certificate in SiteDB, see https://twiki.cern.ch/twiki/bin/viewauth/CMS/SiteDBForCRAB.
+
+Please refer to https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3CommonErrors#Syntax_error_in_CRAB_configurati
+See the ./crab.log file for more details.
+The documentation about the CRAB configuration file can be found in https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3ConfigurationFile
+DEBUG 2015-11-10 18:11:31,039: 	 Executing command: 'submit'
+DEBUG 2015-11-10 18:11:31,040: 	 Found CRAB cache file /net/hisrv0001/home/davidlw/.crab3
+DEBUG 2015-11-10 18:11:31,055: 	 Checking credentials
+DEBUG 2015-11-10 18:11:31,055: 	 Found proxy file /tmp/x509up_u1472
+DEBUG 2015-11-10 18:11:31,055: 	 Getting proxy life time left
+DEBUG 2015-11-10 18:11:31,759: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 81553
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-10 18:11:32,362: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -actimeleft
+ output : 81551
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-10 18:11:32,362: 	 Proxy valid for 22:39:13 hours
+INFO 2015-11-10 18:11:32,363: 	 Will use CRAB configuration file crab3_amptgenonly_PbPb.py
+DEBUG 2015-11-10 18:11:32,363: 	 Loading CRAB configuration file.
+ERROR 2015-11-10 18:13:25,697: 	 Error while loading CRAB configuration:
+Unable to load Configuration File:
+/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_15_patch1/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/crab3_amptgenonly_PbPb.py
+Due to error:
+Failed to retrieve username from SiteDB. Your DN does not seem to be registered in SiteDB.
+Details follow:
+  Executed command: curl -s --capath /cvmfs/grid.cern.ch/etc/grid-security/certificates --cert /tmp/x509up_u1472 --key /tmp/x509up_u1472 'https://cmsweb.cern.ch/sitedb/data/prod/whoami'
+    Stdout:
+      <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+      <html><head>
+      <title>502 Proxy Error</title>
+      </head><body>
+      <h1>Proxy Error</h1>
+      <p>The proxy server received an invalid
+      response from an upstream server.<br />
+      The proxy server could not handle the request <em><a href="/auth/complete/sitedb/data/prod/whoami">GET&nbsp;/auth/complete/sitedb/data/prod/whoami</a></em>.<p>
+      Reason: <strong>Error reading from remote server</strong></p></p>
+      </body></html>
+      
+    Parsed username: 
+Note: Make sure you have the correct certificate mapped in SiteDB (you can check what is the certificate you currently have mapped in SiteDB by searching for your name in https://cmsweb.cern.ch/sitedb/prod/people). For instructions on how to map a certificate in SiteDB, see https://twiki.cern.ch/twiki/bin/viewauth/CMS/SiteDBForCRAB.Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/WMCore/Configuration.py", line 560, in loadConfigurationFile
+    modPath[1], modPath[2])
+  File "/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_15_patch1/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/crab3_amptgenonly_PbPb.py", line 21, in <module>
+    config.Data.outLFNDirBase = '/store/user/%s/' % (getUsernameFromSiteDB())
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/UserUtilities.py", line 112, in getUsernameFromSiteDB
+    raise UsernameException(msg)
+UsernameException: Failed to retrieve username from SiteDB. Your DN does not seem to be registered in SiteDB.
+Details follow:
+  Executed command: curl -s --capath /cvmfs/grid.cern.ch/etc/grid-security/certificates --cert /tmp/x509up_u1472 --key /tmp/x509up_u1472 'https://cmsweb.cern.ch/sitedb/data/prod/whoami'
+    Stdout:
+      <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+      <html><head>
+      <title>502 Proxy Error</title>
+      </head><body>
+      <h1>Proxy Error</h1>
+      <p>The proxy server received an invalid
+      response from an upstream server.<br />
+      The proxy server could not handle the request <em><a href="/auth/complete/sitedb/data/prod/whoami">GET&nbsp;/auth/complete/sitedb/data/prod/whoami</a></em>.<p>
+      Reason: <strong>Error reading from remote server</strong></p></p>
+      </body></html>
+      
+    Parsed username: 
+Note: Make sure you have the correct certificate mapped in SiteDB (you can check what is the certificate you currently have mapped in SiteDB by searching for your name in https://cmsweb.cern.ch/sitedb/prod/people). For instructions on how to map a certificate in SiteDB, see https://twiki.cern.ch/twiki/bin/viewauth/CMS/SiteDBForCRAB.
+
+Please refer to https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3CommonErrors#Syntax_error_in_CRAB_configurati
+See the ./crab.log file for more details.
+The documentation about the CRAB configuration file can be found in https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3ConfigurationFile
+ERROR 2015-11-10 18:13:25,698: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/bin/crab", line 159, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/bin/crab", line 145, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/Commands/submit.py", line 32, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args=True)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 295, in __init__
+    self.loadConfig(self.options.config, self.args)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 84, in loadConfig
+    raise ConfigurationException(configmsg)
+ConfigurationException: Error while loading CRAB configuration:
+Unable to load Configuration File:
+/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_15_patch1/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/crab3_amptgenonly_PbPb.py
+Due to error:
+Failed to retrieve username from SiteDB. Your DN does not seem to be registered in SiteDB.
+Details follow:
+  Executed command: curl -s --capath /cvmfs/grid.cern.ch/etc/grid-security/certificates --cert /tmp/x509up_u1472 --key /tmp/x509up_u1472 'https://cmsweb.cern.ch/sitedb/data/prod/whoami'
+    Stdout:
+      <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+      <html><head>
+      <title>502 Proxy Error</title>
+      </head><body>
+      <h1>Proxy Error</h1>
+      <p>The proxy server received an invalid
+      response from an upstream server.<br />
+      The proxy server could not handle the request <em><a href="/auth/complete/sitedb/data/prod/whoami">GET&nbsp;/auth/complete/sitedb/data/prod/whoami</a></em>.<p>
+      Reason: <strong>Error reading from remote server</strong></p></p>
+      </body></html>
+      
+    Parsed username: 
+[1mNote[0m: Make sure you have the correct certificate mapped in SiteDB (you can check what is the certificate you currently have mapped in SiteDB by searching for your name in https://cmsweb.cern.ch/sitedb/prod/people). For instructions on how to map a certificate in SiteDB, see https://twiki.cern.ch/twiki/bin/viewauth/CMS/SiteDBForCRAB.Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/WMCore/Configuration.py", line 560, in loadConfigurationFile
+    modPath[1], modPath[2])
+  File "/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_15_patch1/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/crab3_amptgenonly_PbPb.py", line 21, in <module>
+    config.Data.outLFNDirBase = '/store/user/%s/' % (getUsernameFromSiteDB())
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/UserUtilities.py", line 112, in getUsernameFromSiteDB
+    raise UsernameException(msg)
+UsernameException: Failed to retrieve username from SiteDB. Your DN does not seem to be registered in SiteDB.
+Details follow:
+  Executed command: curl -s --capath /cvmfs/grid.cern.ch/etc/grid-security/certificates --cert /tmp/x509up_u1472 --key /tmp/x509up_u1472 'https://cmsweb.cern.ch/sitedb/data/prod/whoami'
+    Stdout:
+      <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+      <html><head>
+      <title>502 Proxy Error</title>
+      </head><body>
+      <h1>Proxy Error</h1>
+      <p>The proxy server received an invalid
+      response from an upstream server.<br />
+      The proxy server could not handle the request <em><a href="/auth/complete/sitedb/data/prod/whoami">GET&nbsp;/auth/complete/sitedb/data/prod/whoami</a></em>.<p>
+      Reason: <strong>Error reading from remote server</strong></p></p>
+      </body></html>
+      
+    Parsed username: 
+[1mNote[0m: Make sure you have the correct certificate mapped in SiteDB (you can check what is the certificate you currently have mapped in SiteDB by searching for your name in https://cmsweb.cern.ch/sitedb/prod/people). For instructions on how to map a certificate in SiteDB, see https://twiki.cern.ch/twiki/bin/viewauth/CMS/SiteDBForCRAB.
+
+Please refer to https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3CommonErrors#Syntax_error_in_CRAB_configurati
+See the ./crab.log file for more details.
+The documentation about the CRAB configuration file can be found in https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3ConfigurationFile
+DEBUG 2015-11-10 21:52:27,210: 	 Executing command: 'submit'
+DEBUG 2015-11-10 21:52:27,212: 	 Found CRAB cache file /net/hisrv0001/home/davidlw/.crab3
+DEBUG 2015-11-10 21:52:27,297: 	 Checking credentials
+DEBUG 2015-11-10 21:52:27,297: 	 Found proxy file /tmp/x509up_u1472
+DEBUG 2015-11-10 21:52:27,297: 	 Getting proxy life time left
+DEBUG 2015-11-10 21:52:29,003: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 68296
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-10 21:52:30,609: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -actimeleft
+ output : 68293
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-10 21:52:30,609: 	 Proxy valid for 18:58:16 hours
+INFO 2015-11-10 21:52:30,609: 	 Will use CRAB configuration file crab3_amptgenonly_PbPb.py
+DEBUG 2015-11-10 21:52:30,609: 	 Loading CRAB configuration file.
+DEBUG 2015-11-10 21:52:40,291: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+ERROR 2015-11-10 21:52:40,292: 	 Working area '/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_15_patch1/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/Gen/crab_task_v7' already exists 
+Please change the requestName in the config file
+ERROR 2015-11-10 21:52:40,292: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/bin/crab", line 159, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/bin/crab", line 145, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/Commands/submit.py", line 32, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args=True)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 299, in __init__
+    getattr(self.configuration.General, 'requestName', None))
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/ClientUtilities.py", line 393, in createWorkArea
+    raise ConfigException("Working area '%s' already exists \nPlease change the requestName in the config file" % fullpath)
+ConfigException: Working area '/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_15_patch1/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/Gen/crab_task_v7' already exists 
+Please change the requestName in the config file
+DEBUG 2015-11-11 15:49:04,969: 	 Executing command: 'submit'
+DEBUG 2015-11-11 15:49:04,970: 	 Found CRAB cache file /net/hisrv0001/home/davidlw/.crab3
+DEBUG 2015-11-11 15:49:04,979: 	 Checking credentials
+DEBUG 2015-11-11 15:49:04,979: 	 Found proxy file /tmp/x509up_u1472
+DEBUG 2015-11-11 15:49:04,979: 	 Getting proxy life time left
+DEBUG 2015-11-11 15:49:05,682: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 3699
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-11 15:49:06,387: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -actimeleft
+ output : 3697
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-11 15:49:06,387: 	 Proxy valid for 01:01:39 hours
+INFO 2015-11-11 15:49:06,387: 	 Will use CRAB configuration file crab3_amptgenonly_PbPb.py
+DEBUG 2015-11-11 15:49:06,387: 	 Loading CRAB configuration file.
+DEBUG 2015-11-11 15:49:10,245: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+ERROR 2015-11-11 15:49:10,247: 	 Working area '/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_15_patch1/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/Gen/crab_task_v8' already exists 
+Please change the requestName in the config file
+ERROR 2015-11-11 15:49:10,247: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/bin/crab", line 159, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/bin/crab", line 145, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/Commands/submit.py", line 32, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args=True)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 299, in __init__
+    getattr(self.configuration.General, 'requestName', None))
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/ClientUtilities.py", line 393, in createWorkArea
+    raise ConfigException("Working area '%s' already exists \nPlease change the requestName in the config file" % fullpath)
+ConfigException: Working area '/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_15_patch1/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/Gen/crab_task_v8' already exists 
+Please change the requestName in the config file
+DEBUG 2015-11-12 15:45:03,695: 	 Executing command: 'submit'
+DEBUG 2015-11-12 15:45:03,696: 	 Found CRAB cache file /net/hisrv0001/home/davidlw/.crab3
+DEBUG 2015-11-12 15:45:03,703: 	 Checking credentials
+DEBUG 2015-11-12 15:45:03,703: 	 Found proxy file /tmp/x509up_u1472
+DEBUG 2015-11-12 15:45:03,703: 	 Getting proxy life time left
+DEBUG 2015-11-12 15:45:04,506: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 14840
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-12 15:45:05,113: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -actimeleft
+ output : 14839
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-12 15:45:05,113: 	 Proxy valid for 04:07:20 hours
+INFO 2015-11-12 15:45:05,113: 	 Will use CRAB configuration file crab3_amptgenonly_PbPb.py
+DEBUG 2015-11-12 15:45:05,114: 	 Loading CRAB configuration file.
+DEBUG 2015-11-12 15:45:08,947: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+ERROR 2015-11-12 15:45:08,948: 	 Working area '/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_15_patch1/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/Gen/crab_task_v1_pol030_n5001500' already exists 
+Please change the requestName in the config file
+ERROR 2015-11-12 15:45:08,948: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/bin/crab", line 159, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/bin/crab", line 145, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/Commands/submit.py", line 32, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args=True)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 299, in __init__
+    getattr(self.configuration.General, 'requestName', None))
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/ClientUtilities.py", line 393, in createWorkArea
+    raise ConfigException("Working area '%s' already exists \nPlease change the requestName in the config file" % fullpath)
+ConfigException: Working area '/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_15_patch1/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/Gen/crab_task_v1_pol030_n5001500' already exists 
+Please change the requestName in the config file
+DEBUG 2015-11-12 21:58:37,722: 	 Executing command: 'submit'
+DEBUG 2015-11-12 21:58:37,722: 	 Found CRAB cache file /net/hisrv0001/home/davidlw/.crab3
+DEBUG 2015-11-12 21:58:37,730: 	 Checking credentials
+DEBUG 2015-11-12 21:58:37,730: 	 Found proxy file /tmp/x509up_u1472
+DEBUG 2015-11-12 21:58:37,730: 	 Getting proxy life time left
+DEBUG 2015-11-12 21:58:38,634: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 0
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-12 21:58:38,635: 	 Proxy valid for 00:00:00 hours
+DEBUG 2015-11-12 21:58:38,635: 	 Creating new proxy for 24:00 hours with VO group '' and VO role 'NULL'.
+DEBUG 2015-11-12 21:58:53,468: 	 Executing : 
+ command : voms-proxy-init -voms cms:/cms -valid 24:00 -rfc
+ output : None
+ error: None
+ retcode : 1
+DEBUG 2015-11-12 21:58:54,172: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 0
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-12 21:58:54,776: 	 Executing : 
+ command : env X509_USER_PROXY=/tmp/x509up_u1472 voms-proxy-info -fqan
+ output : /cms/Role=NULL/Capability=NULL
+
+ error: 
+ retcode : 0
+ERROR 2015-11-12 21:58:54,777: 	 Problems creating proxy.
+ERROR 2015-11-12 21:58:54,777: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/bin/crab", line 159, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/bin/crab", line 145, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/Commands/submit.py", line 32, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args=True)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 289, in __init__
+    self.proxyCreated = self.proxy.createNewVomsProxySimple(timeLeftThreshold = 720)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/CredentialInteractions.py", line 152, in createNewVomsProxySimple
+    raise ProxyCreationException("Problems creating proxy.")
+ProxyCreationException: Problems creating proxy.
+DEBUG 2015-11-12 21:59:28,837: 	 Executing command: 'submit'
+DEBUG 2015-11-12 21:59:28,837: 	 Found CRAB cache file /net/hisrv0001/home/davidlw/.crab3
+DEBUG 2015-11-12 21:59:28,843: 	 Checking credentials
+DEBUG 2015-11-12 21:59:28,843: 	 Found proxy file /tmp/x509up_u1472
+DEBUG 2015-11-12 21:59:28,843: 	 Getting proxy life time left
+DEBUG 2015-11-12 21:59:29,446: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 0
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-12 21:59:29,446: 	 Proxy valid for 00:00:00 hours
+DEBUG 2015-11-12 21:59:29,446: 	 Creating new proxy for 24:00 hours with VO group '' and VO role 'NULL'.
+DEBUG 2015-11-12 21:59:42,977: 	 Executing : 
+ command : voms-proxy-init -voms cms:/cms -valid 24:00 -rfc
+ output : None
+ error: None
+ retcode : 1
+DEBUG 2015-11-12 21:59:43,582: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 0
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-12 21:59:44,286: 	 Executing : 
+ command : env X509_USER_PROXY=/tmp/x509up_u1472 voms-proxy-info -fqan
+ output : /cms/Role=NULL/Capability=NULL
+
+ error: 
+ retcode : 0
+ERROR 2015-11-12 21:59:44,286: 	 Problems creating proxy.
+ERROR 2015-11-12 21:59:44,286: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/bin/crab", line 159, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/bin/crab", line 145, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/Commands/submit.py", line 32, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args=True)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 289, in __init__
+    self.proxyCreated = self.proxy.createNewVomsProxySimple(timeLeftThreshold = 720)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/CredentialInteractions.py", line 152, in createNewVomsProxySimple
+    raise ProxyCreationException("Problems creating proxy.")
+ProxyCreationException: Problems creating proxy.
+DEBUG 2015-11-12 22:00:03,139: 	 Executing command: 'submit'
+DEBUG 2015-11-12 22:00:03,140: 	 Found CRAB cache file /net/hisrv0001/home/davidlw/.crab3
+DEBUG 2015-11-12 22:00:03,149: 	 Checking credentials
+DEBUG 2015-11-12 22:00:03,149: 	 Found proxy file /tmp/x509up_u1472
+DEBUG 2015-11-12 22:00:03,149: 	 Getting proxy life time left
+DEBUG 2015-11-12 22:00:03,652: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 43193
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-12 22:00:04,156: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -actimeleft
+ output : 
+ error: No VOMS attributes found!
+
+ retcode : 1
+DEBUG 2015-11-12 22:00:04,156: 	 Proxy valid for 00:00:00 hours
+DEBUG 2015-11-12 22:00:04,157: 	 Creating new proxy for 24:00 hours with VO group '' and VO role 'NULL'.
+DEBUG 2015-11-12 22:00:20,890: 	 Executing : 
+ command : voms-proxy-init -voms cms:/cms -valid 24:00 -rfc
+ output : None
+ error: None
+ retcode : 1
+DEBUG 2015-11-12 22:00:21,394: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 43175
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-12 22:00:21,897: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -actimeleft
+ output : 
+ error: No VOMS attributes found!
+
+ retcode : 1
+DEBUG 2015-11-12 22:00:22,401: 	 Executing : 
+ command : env X509_USER_PROXY=/tmp/x509up_u1472 voms-proxy-info -fqan
+ output : 
+ error: No VOMS attributes found!
+
+ retcode : 1
+ERROR 2015-11-12 22:00:22,401: 	 Problems creating proxy.
+ERROR 2015-11-12 22:00:22,401: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/bin/crab", line 159, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/bin/crab", line 145, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/Commands/submit.py", line 32, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args=True)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 289, in __init__
+    self.proxyCreated = self.proxy.createNewVomsProxySimple(timeLeftThreshold = 720)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/CredentialInteractions.py", line 152, in createNewVomsProxySimple
+    raise ProxyCreationException("Problems creating proxy.")
+ProxyCreationException: Problems creating proxy.
