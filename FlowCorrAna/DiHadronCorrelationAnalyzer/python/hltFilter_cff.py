@@ -31,3 +31,28 @@ hltHM160On.HLTPaths = ['HLT_PAPixelTracks_Multiplicity160_v*']
 
 hltHM190On = hltHM220.clone()
 hltHM190On.HLTPaths = ['HLT_PAPixelTracks_Multiplicity190_v*']
+
+hltZBPP13TeV = hltHM220.clone()
+hltZBPP13TeV.HLTPaths = ['HLT_ZeroBias_part*_v*']
+
+hltMBPP13TeV = hltHM220.clone()
+hltMBPP13TeV.HLTPaths = ['HLT_L1MinimumBiasHF1OR_part*_v*']
+
+hltHM60OnPP13TeV = hltHM220.clone()
+hltHM60OnPP13TeV.HLTPaths = ['HLT_PixelTracks_Multiplicity60*_v*']
+
+hltHM85OnPP13TeV = hltHM220.clone()
+hltHM85OnPP13TeV.HLTPaths = ['HLT_PixelTracks_Multiplicity85*_v*']
+
+hltHM110OnPP13TeV = hltHM220.clone()
+hltHM110OnPP13TeV.HLTPaths = ['HLT_PixelTracks_Multiplicity110*_v*']
+
+hltHM80105PP13TeV = hltHM220.clone()
+hltHM80105PP13TeV.HLTPaths = ['HLT_PixelTracks_Multiplicity60*_v*']
+
+hltHM105135PP13TeV60On = hltHM220.clone()
+hltHM105135PP13TeV60On.HLTPaths = ['HLT_PixelTracks_Multiplicity60*_v*','!HLT_PixelTracks_Multiplicity85*_v*']
+hltHM105135PP13TeV60On.andOr = cms.bool(False)
+
+hltHM105135PP13TeV85On = hltHM220.clone()
+hltHM105135PP13TeV85On.HLTPaths = ['HLT_PixelTracks_Multiplicity85*_v*']

@@ -1,8 +1,8 @@
 import FWCore.ParameterSet.Config as cms
 
-epetadeco_ana = cms.EDAnalyzer('EPEtaDecoAnalyzerSP',
+epetadecomatrix_ana = cms.EDAnalyzer('EPEtaDecoAnalyzerSPMatrix',
 
-  centralityBinLabel = cms.InputTag("centralityBin","HFtowers"), 
+  centralityBinLabel = cms.InputTag("centralityBin","HFtowers"),
 
   TrgTrackCollection = cms.string('generalTracks'),
   VertexCollection = cms.string('offlinePrimaryVertices'),
@@ -10,7 +10,7 @@ epetadeco_ana = cms.EDAnalyzer('EPEtaDecoAnalyzerSP',
   V0CandidateCollection = cms.string('generalV0CandidatesNew'),
 
   TriggerID = cms.string('Track'),
-  AssociateID = cms.string('CaloTower'),
+  AssociateID = cms.string('Track'),
 
   NEtaBins = cms.int32(40),
   NPhiBins = cms.int32(36),
@@ -30,12 +30,12 @@ epetadeco_ana = cms.EDAnalyzer('EPEtaDecoAnalyzerSP',
   zvtxcenter = cms.double(-0.54),
   etatrgmin = cms.double(-2.4),
   etatrgmax = cms.double(2.4),
-  etaassmin = cms.double(4.0),
-  etaassmax = cms.double(5.0),
+  etaassmin = cms.double(-2.4),
+  etaassmax = cms.double(2.4),
   pttrgmin = cms.vdouble(0.3),
   pttrgmax = cms.vdouble(3.0),
-  ptassmin = cms.vdouble(0.0),
-  ptassmax = cms.vdouble(10000.0),
+  ptassmin = cms.vdouble(0.3),
+  ptassmax = cms.vdouble(3.0),
   etamultmin = cms.double(-2.4),
   etamultmax = cms.double(2.4),
   chargeasymmin = cms.double(-9999.9),

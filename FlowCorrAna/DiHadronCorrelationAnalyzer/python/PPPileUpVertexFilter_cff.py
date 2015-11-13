@@ -217,3 +217,6 @@ pileupVertexFilterCut_vtx1 = pileupVertexFilterCutG.clone(
                                                                   dzTolerance = cms.double(9999.),
                                                                   )
 
+#pileupVertexFilterCut_pp = cms.Sequence( pileupVertexFilterCut_dz10_GplusPP )
+pileupVertexFilterCut_pp = cms.Sequence( pileupVertexFilterCut_vtx1 )
+#pileupVertexFilterCut_pp = cms.Sequence()
