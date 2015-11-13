@@ -1,5 +1,5 @@
 #include "/net/hisrv0001/home/davidlw/useful_macros/CF.C"
-#include "/net/hisrv0001/home/davidlw/useful_macros/GetMultiJetCorrFunc.C"
+##include "/net/hisrv0001/home/davidlw/useful_macros/GetMultiJetCorrFunc.C"
 
 void drawCorr_2D_test()
 {
@@ -65,9 +65,11 @@ return;
 
 void drawCorr_dphi(TString eventtype1="PPData_Minbias_7TeV", TString tag1="TRIGGER85_All_INCLEFF1TRG1v6", int nmin=110, int nmax=1000, int centmin=-1, int centmax=-1, int ptmin=2, int ptmax=1, double detamin=2.0, double detamax=4.0, double ymin=0.95, double ymax=1.05, double etatrgmin=-2.4, double etatrgmax=2.4, double etaassmin=-2.4, double etaassmax=2.4)
 { 
-  TString filename = Form("/net/hisrv0001/home/davidlw/scratch1/DiHadronCorrelations/outputs_312/%s/merged/%s_%s_nmin%d_nmax%d_etatrg%.1f-%.1f_etaass%.1f-%.1f_centmin%d_centmax%d.root",eventtype1.Data(),eventtype1.Data(),tag1.Data(),nmin,nmax,etatrgmin,etatrgmax,etaassmin,etaassmax,centmin,centmax);
-  TH1D* h = (TH1D*)Get1DCFdPhiv3(filename.Data(),ptmin,ptmax,detamin,detamax);
+//  TString filename = Form("/net/hisrv0001/home/davidlw/scratch1/DiHadronCorrelations/outputs_312/%s/merged/%s_%s_nmin%d_nmax%d_etatrg%.1f-%.1f_etaass%.1f-%.1f_centmin%d_centmax%d.root",eventtype1.Data(),eventtype1.Data(),tag1.Data(),nmin,nmax,etatrgmin,etatrgmax,etaassmin,etaassmax,centmin,centmax);
+  TString filename = Form("/net/hisrv0001/home/davidlw/scratch1/DiHadronCorrelations/outputs_312/PPData_Minbias_13TeV/merged/dihadroncorrelation_n035_std_v1_seq1.root");  
+  TH1D* h = (TH1D*)Get1DCFdPhiv3(filename.Data(),"corr_ana",ptmin,ptmax,detamin,detamax);
 
+  h->Scale(1.67);
 /*  
   h->GetYaxis()->SetTitleSize(h->GetYaxis()->GetTitleSize()*0.6);
   h->GetYaxis()->SetLabelSize(h->GetYaxis()->GetLabelSize()*0.6);
