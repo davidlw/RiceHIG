@@ -22,12 +22,11 @@ process.maxEvents = cms.untracked.PSet(
 
 process.source = cms.Source("PoolSource",
                                 fileNames = cms.untracked.vstring(
-#'file:/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_7_patch2_AMPT/src/MinBias_TuneZ2_7TeV_pythia6_cff_py_GEN.root'
-'/store/user/davidlw/MinBias_TuneZ2_7TeV_pythia6/HM85_batch1/150825_015323/0000/MinBias_TuneZ2_7TeV_pythia6_cff_py_GEN_382.root'
-#'/store/user/davidlw/AMPT_pp_Gen/HM95_string_v2/150808_041857/0000/amptDefault_cfi_py_GEN_834.root',
-#'/store/user/davidlw/AMPT_pp_Gen/HM95_string_v2/150808_041857/0000/amptDefault_cfi_py_GEN_836.root',
-#'/store/user/davidlw/AMPT_pp_Gen/HM95_string_v2/150808_041857/0000/amptDefault_cfi_py_GEN_846.root',
-#'/store/user/davidlw/AMPT_pp_Gen/HM95_string_v2/150808_041857/0000/amptDefault_cfi_py_GEN_849.root'
+'/store/user/davidlw/AMPT_pp_Gen/HM95_string_v2/150808_041857/0000/amptDefault_cfi_py_GEN_830.root',
+'/store/user/davidlw/AMPT_pp_Gen/HM95_string_v2/150808_041857/0000/amptDefault_cfi_py_GEN_834.root',
+'/store/user/davidlw/AMPT_pp_Gen/HM95_string_v2/150808_041857/0000/amptDefault_cfi_py_GEN_836.root',
+'/store/user/davidlw/AMPT_pp_Gen/HM95_string_v2/150808_041857/0000/amptDefault_cfi_py_GEN_846.root',
+'/store/user/davidlw/AMPT_pp_Gen/HM95_string_v2/150808_041857/0000/amptDefault_cfi_py_GEN_849.root'
                 )
                             )
 process.load("FlowCorrAna.DiHadronCorrelationAnalyzer.dihadroncorrelation_cff")
@@ -50,7 +49,9 @@ process.corr_ana.etatrgmin = cms.double(-2.4)
 process.corr_ana.etatrgmax = cms.double(2.4)
 process.corr_ana.etaassmin = cms.double(-2.4)
 process.corr_ana.etaassmax = cms.double(2.4)
-process.corr_ana.pttrgmin = cms.vdouble(1.0)
-process.corr_ana.pttrgmax = cms.vdouble(3.0)
-process.corr_ana.ptassmin = cms.vdouble(1.0)
-process.corr_ana.ptassmax = cms.vdouble(3.0)
+process.corr_ana.pttrgmin = cms.vdouble(0.1, 1.0, 2.0, 3.0)
+process.corr_ana.pttrgmax = cms.vdouble(1.0, 2.0, 3.0, 4.0)
+process.corr_ana.ptassmin = cms.vdouble(0.1, 1.0, 2.0, 3.0)
+process.corr_ana.ptassmax = cms.vdouble(1.0, 2.0, 3.0, 4.0)
+process.corr_ana.nmin = cms.int32(125)
+process.corr_ana.nmax = cms.int32(1000)

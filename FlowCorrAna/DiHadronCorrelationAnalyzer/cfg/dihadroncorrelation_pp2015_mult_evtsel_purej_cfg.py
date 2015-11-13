@@ -16,7 +16,7 @@ process.source = cms.Source("PoolSource",
 #'file:/mnt/hadoop/cms/store/user/davidlw/MinBias_TuneMonash13_13TeV-pythia8/RecoSkim_batch4_v1/00b3bbd68a41a1bc2b98cf5da8508e09/pPb_HM_35_1_qTo.root'
 #'file:/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_2/src/RiceHIG/Skim2013/test/pPb_HM.root'
 #'/store/user/mguilbau/ZeroBias4/ZeroBias4_RecoSkim2015_v1/150717_161343/0000/pp_MB_lowPU_5.root'
-'file:/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_5_2/src/RiceHIG/Skim2013/test/pPb_HM.root'
+'/store/user/davidlw/HighMultiplicity85/PromptReco2015_v2/150719_200405/0000/anOutputFileName_100.root'
                 )
 #                                secondaryFileNames = cms.untracked.vstring('')
                             )
@@ -31,10 +31,33 @@ process.TFileService = cms.Service("TFileService",
                                    fileName = cms.string('dihadroncorrelation.root')
                                    )
 
-process.ana = cms.Path(process.corr_ana)
-process.corr_ana.TriggerID = cms.string('Kshort')
-#process.corr_ana.pttrgmin = cms.vdouble(0.1, 1.0, 2.0, 3.0)
-#process.corr_ana.pttrgmax = cms.vdouble(1.0, 2.0, 3.0, 4.0)
-#process.corr_ana.ptassmin = cms.vdouble(0.1, 1.0, 2.0, 3.0)
-#process.corr_ana.ptassmax = cms.vdouble(1.0, 2.0, 3.0, 4.0)
+process.load("FlowCorrAna.DiHadronCorrelationAnalyzer.PPPileUpVertexFilter_cff")
+
+process.load('HeavyIonsAnalysis.Configuration.collisionEventSelection_cff')
+process.PAprimaryVertexFilter = cms.EDFilter("VertexSelector",
+    src = cms.InputTag("offlinePrimaryVertices"),
+    cut = cms.string("!isFake && abs(z) <= 25 && position.Rho <= 2 && tracksSize >= 2"),
+    filter = cms.bool(True),   # otherwise it won't filter the events
+)
+
+#Reject beam scraping events standard pp configuration
+process.NoScraping = cms.EDFilter("FilterOutScraping",
+    applyfilter = cms.untracked.bool(True),
+    debugOn = cms.untracked.bool(False),
+    numtrack = cms.untracked.uint32(10),
+    thresh = cms.untracked.double(0.25)
+)
+
+process.PAcollisionEventSelection = cms.Sequence(process.hfCoincFilter *
+                                         process.PAprimaryVertexFilter *
+                                         process.NoScraping
+                                         )
+
+#process.ana = cms.Path(process.hltHM110OnPP13TeV*process.pileupVertexFilterCut_pp*process.corr_ana)
+process.ana = cms.Path(process.PAcollisionEventSelection*process.pileupVertexFilterCut_pp*process.corr_ana)
 process.corr_ana.IsCorr = cms.bool(False)
+process.corr_ana.IsDebug = cms.bool(True)
+process.corr_ana.rhomin = cms.double(0.0)
+process.corr_ana.rhomax = cms.double(0.05)
+process.corr_ana.xvtxcenter = cms.double(0.1)
+process.corr_ana.yvtxcenter = cms.double(0.1)
