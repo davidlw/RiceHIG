@@ -3,7 +3,8 @@ void eff_count()
   using namespace RooFit;
 
   TFile* f;
-  f = new TFile("/net/hisrv0001/home/davidlw/scratch1/v0validation/v0validation_V0EffCountAnav1_10M_v12.root");
+  f = new TFile("/net/hisrv0001/home/davidlw/scratch1/v0validation/v0validation_V0EffCountAna_25M_v1.root");
+//  f = new TFile("/net/hisrv0001/home/davidlw/scratch1/v0validation/v0validation_V0EffCountAna_PbPbPeri_v3.root");
 //  f = new TFile("/net/hisrv0001/home/davidlw/scratch1/v0validation_V0EffMatchAna_EPOSall_v14.root");
 //  f = new TFile("/net/hisrv0001/home/davidlw/scratch1/v0validation_V0EffMatchAna_v12.root");
 /*
@@ -306,7 +307,8 @@ void eff_count()
   c6->cd(2);
   hEffvsPt_la[5]->Draw("PE");
 
-  TFile* fout = new TFile("V0Eff_counting_10M.root","recreate");
+  TFile* fout = new TFile("V0Eff_counting_PbPbPeri.root","recreate");
+//  TFile* fout = new TFile("V0Eff_counting_10M.root","recreate");
   hYieldReco_la_ratio->Write();
   hYieldReco_ks_ratio->Write();
   for(int i=0;i<7;i++)

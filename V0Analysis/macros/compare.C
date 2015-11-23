@@ -1,7 +1,7 @@
 void compare()
 {
-  TFile* f = new TFile("V0Eff_counting_all.root");
-  TFile* f1 = new TFile("V0Eff_matching.root");
+  TFile* f = new TFile("V0Eff_counting_PbPbPeri.root");
+  TFile* f1 = new TFile("V0Eff_counting_10M.root");
 
   TH2D* ks2D = (TH2D*)f->Get("EffCountEtaPt_ks");
   TH2D* la2D = (TH2D*)f->Get("EffCountEtaPt_la");
@@ -34,7 +34,7 @@ void compare()
   la2D->GetZaxis()->CenterTitle();
   la2D->SetTitle("Efficiency of #Lambda;#eta;p_{T} (GeV/c);");
   la2D->Draw("lego2");
-  SaveCanvas(aa,"HI/V0","EfficiencyVsEtaPt_V0");
+//  SaveCanvas(aa,"HI/V0","EfficiencyVsEtaPt_V0");
 
   TCanvas* a = new TCanvas("a","a",900,900);
   a->Divide(2,2);
@@ -82,15 +82,21 @@ void compare()
     hEffvsPt_ks[i]->GetXaxis()->CenterTitle();
     hEffvsPt_ks[i]->GetYaxis()->CenterTitle();
     hEffvsPt_ks[i]->SetAxisRange(0.0,0.3,"Y");
+    hEffvsPt_ks[i]->SetMarkerStyle(20);
     hEffvsPt_ks[i]->SetMarkerColor(2);
 //    hEffvsPt_ks[i]->Scale(1.0/0.692);
     hEffvsPt_ks[i]->SetTitle(Form("%s;p_{T} (GeV/c);Efficiency of K^{0}_{short}",string_eta[i].Data())); 
     hEffvsPt_ks[i]->Draw("PE");
+    hEffvsPt1_ks[i] = (TH1D*)f1->Get(Form("EffCountPt_ks_%d",i+1));
+    hEffvsPt1_ks[i]->SetMarkerStyle(21);
+    hEffvsPt1_ks[i]->SetMarkerColor(4);
+    hEffvsPt1_ks[i]->Draw("PESAME");
 
     c11->cd(i+1);
 //    hEffvsPt1_la[i] = (TH1D*)f1->Get(Form("EffCountPt_la_%d",i+1)); 
 //    hEffvsPt1_la[i]->Draw("PE");
     hEffvsPt_la[i] = (TH1D*)f->Get(Form("EffCountPt_la_%d",i+1)); 
+    hEffvsPt_la[i]->SetMarkerStyle(20);
     hEffvsPt_la[i]->SetMarkerColor(2);
 //    hEffvsPt_la[i]->Scale(1.0/0.639);
     hEffvsPt_la[i]->GetXaxis()->CenterTitle();
@@ -98,6 +104,10 @@ void compare()
     hEffvsPt_la[i]->SetAxisRange(0.0,0.3,"Y");
     hEffvsPt_la[i]->SetTitle(Form("%s;p_{T} (GeV/c);Efficiency of #Lambda",string_eta[i].Data()));
     hEffvsPt_la[i]->Draw("PE");
+    hEffvsPt1_la[i] = (TH1D*)f1->Get(Form("EffCountPt_la_%d",i+1));
+    hEffvsPt1_la[i]->SetMarkerStyle(21);
+    hEffvsPt1_la[i]->SetMarkerColor(4);
+    hEffvsPt1_la[i]->Draw("PESAME");
   }
  
   c10->cd(1);
@@ -109,7 +119,7 @@ void compare()
   TLatex* latex1 = new TLatex();
   latex1->SetNDC();
   latex1->DrawLatex(0.3,0.8,"HIJING pPb MC 5.02 TeV");
- 
+return; 
   SaveCanvas(c10,"HI/V0","EfficiencyVsPt_Ks");
   SaveCanvas(c11,"HI/V0","EfficiencyVsPt_Lambda");
  /* 
