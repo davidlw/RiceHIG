@@ -16,7 +16,9 @@ process.MessageLogger.cerr.FwkReport.reportEvery = 200
 process.source = cms.Source("PoolSource",
    fileNames = cms.untracked.vstring(
 #'/store/mc/RunIISpring15DR74/MinBias_TuneCUETP8M1_13TeV-pythia8/AODSIM/NoPU_MCRUN2_74_V8-v1/00000/06432DAC-33FA-E411-9A02-002590AC4CC8.root'
-'/store/user/azsigmon/MinBias_TuneMonash13_13TeV-pythia8/MCRUN2_74_V7-v2-GEN-SIM-RAW-RECO/150506_174107/0000/step3_RAW2DIGI_L1Reco_RECO_1.root'
+#'/store/user/azsigmon/MinBias_TuneMonash13_13TeV-pythia8/MCRUN2_74_V7-v2-GEN-SIM-RAW-RECO/150506_174107/0000/step3_RAW2DIGI_L1Reco_RECO_1.root'
+'/store/mc/RunIISpring15DR74/MinBias_TuneCUETP8M1_13TeV-pythia8/GEN-SIM-DIGI-RECO/NoPURecodebug_TrackingParticle_MCRUN2_74_V8B-v2/30000/0040AEE8-4B2D-E511-89B5-0025905C2C86.root'
+#'/store/mc/RunIISpring15DR74/ReggeGribovPartonMC_13TeV-EPOS/GEN-SIM-RECO/NoPURawReco_castor_MCRUN2_74_V8B-v1/10000/027FF525-3A06-E511-8B80-003048FFD752.root'
 )
 )
 

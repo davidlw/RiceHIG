@@ -846,3 +846,42 @@ Traceback (most recent call last):
   File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/CredentialInteractions.py", line 152, in createNewVomsProxySimple
     raise ProxyCreationException("Problems creating proxy.")
 ProxyCreationException: Problems creating proxy.
+DEBUG 2015-11-14 11:52:10,005: 	 Executing command: 'submit'
+DEBUG 2015-11-14 11:52:10,006: 	 Found CRAB cache file /net/hisrv0001/home/davidlw/.crab3
+DEBUG 2015-11-14 11:52:10,020: 	 Checking credentials
+DEBUG 2015-11-14 11:52:10,020: 	 Found proxy file /tmp/x509up_u1472
+DEBUG 2015-11-14 11:52:10,020: 	 Getting proxy life time left
+DEBUG 2015-11-14 11:52:10,623: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 627969
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-14 11:52:11,227: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -actimeleft
+ output : 627967
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-14 11:52:11,227: 	 Proxy valid for 174:26:09 hours
+INFO 2015-11-14 11:52:11,228: 	 Will use CRAB configuration file crab3_dihadroncorrelation_pp2015_v0.py
+DEBUG 2015-11-14 11:52:11,228: 	 Loading CRAB configuration file.
+DEBUG 2015-11-14 11:52:14,668: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+ERROR 2015-11-14 11:52:14,669: 	 Working area '/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_15_patch1/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/pp2015Ana/crab_task_v1C' already exists 
+Please change the requestName in the config file
+ERROR 2015-11-14 11:52:14,669: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/bin/crab", line 159, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/bin/crab", line 145, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/Commands/submit.py", line 32, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args=True)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 299, in __init__
+    getattr(self.configuration.General, 'requestName', None))
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511/lib/python2.6/site-packages/CRABClient/ClientUtilities.py", line 393, in createWorkArea
+    raise ConfigException("Working area '%s' already exists \nPlease change the requestName in the config file" % fullpath)
+ConfigException: Working area '/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_15_patch1/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/pp2015Ana/crab_task_v1C' already exists 
+Please change the requestName in the config file
+DEBUG 2015-11-22 13:01:02,478: 	 Executing command: 'status'
+DEBUG 2015-11-22 13:01:02,479: 	 Found CRAB cache file /net/hisrv0001/home/davidlw/.crab3

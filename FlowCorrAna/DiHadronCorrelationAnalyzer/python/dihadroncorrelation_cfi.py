@@ -8,6 +8,7 @@ corr_ana = cms.EDAnalyzer('DiHadronCorrelationMultiAnalyzer',
   VertexCollection = cms.string('offlinePrimaryVertices'),
   GenParticleCollection = cms.string('genParticles'),
   V0CandidateCollection = cms.string('generalV0CandidatesNew'),
+  pfCandidateCollection = cms.string('particleFlowTmp'),
 
   TriggerID = cms.string('Track'),
   AssociateID = cms.string('Track'),

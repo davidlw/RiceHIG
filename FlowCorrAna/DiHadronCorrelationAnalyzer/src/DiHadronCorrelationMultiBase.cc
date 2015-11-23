@@ -58,6 +58,7 @@ DiHadronCorrelationMultiBase::DiHadronCorrelationMultiBase(const edm::ParameterS
   cutPara.genParticleCollection = iConfig.getParameter<string>("GenParticleCollection");
   cutPara.vertexCollection = iConfig.getParameter<string>("VertexCollection");
   cutPara.v0CandidateCollection = iConfig.getParameter<string>("V0CandidateCollection");
+  cutPara.pfCandidateCollection = iConfig.getParameter<string>("pfCandidateCollection");
 
   trgID = GetParticleID(iConfig.getParameter<string>("TriggerID"));
   assID = GetParticleID(iConfig.getParameter<string>("AssociateID"));
@@ -228,7 +229,7 @@ void DiHadronCorrelationMultiBase::beginJob()
     hThetaV0Minus = theOutputs->make<TH2D>("thetav0minus",";x_{F};cos#theta",200,0,0.2,100,-1,1);
     hV0InvMassVsP = theOutputs->make<TH2D>("v0invmassvsp",";p (GeV);Invariant Mass (GeV)",1000,0,1000,300,0.0,3.);
     hV0InvEtaVsP = theOutputs->make<TH2D>("v0etavsp",";p (GeV);#pseudorapidity",1000,0,1000,48,-2.4,2.4);
-    hV0InvMassVsPt = theOutputs->make<TH2D>("v0invmassvspt",";p_{T}(GeV);Invariant Mass (GeV)",100,0,10,1500,0.,3.);
+    hV0InvMassVsPt = theOutputs->make<TH2D>("v0invmassvspt",";p_{T}(GeV);Invariant Mass (GeV)",300,0,30,3000,0.,3.);
     hV0InvEtaVsPt = theOutputs->make<TH2D>("v0etavspt",";p_{T}(GeV);#pseudorapidity",100,0,10,48,-2.4,2.4);
 //  }
 
@@ -381,6 +382,30 @@ void DiHadronCorrelationMultiBase::analyze(const edm::Event& iEvent, const edm::
      case kCaloTower:
        LoopCaloTower(iEvent,iSetup,1);
        break;
+     case kPFHadron:
+       LoopPFCandidates(iEvent,iSetup,1,reco::PFCandidate::h);
+       break;
+     case kPFPhoton:
+       cutPara.mass_trg=0.0;
+       LoopPFCandidates(iEvent,iSetup,1,reco::PFCandidate::gamma);
+       break;
+     case kPFElectron:
+       cutPara.mass_trg=0.000511;
+       LoopPFCandidates(iEvent,iSetup,1,reco::PFCandidate::e);
+       break;
+     case kPFMuon:
+       cutPara.mass_trg=0.1057;
+       LoopPFCandidates(iEvent,iSetup,1,reco::PFCandidate::mu);
+       break;
+     case kPFNeutral:
+       LoopPFCandidates(iEvent,iSetup,1,reco::PFCandidate::h0);
+       break;
+     case kPFHadronHF:
+       LoopPFCandidates(iEvent,iSetup,1,reco::PFCandidate::h_HF);
+       break;
+     case kPFEgammaHF:
+       LoopPFCandidates(iEvent,iSetup,1,reco::PFCandidate::egamma_HF);
+       break;
      case kKshort:
        cutPara.mass_trg=0.4976;
        LoopV0Candidates(iEvent,iSetup, 1, "Kshort",-1);
@@ -420,6 +445,30 @@ void DiHadronCorrelationMultiBase::analyze(const edm::Event& iEvent, const edm::
        break;
      case kCaloTower:
        LoopCaloTower(iEvent,iSetup,0);
+       break;
+     case kPFHadron:
+       LoopPFCandidates(iEvent,iSetup,0,reco::PFCandidate::h);
+       break;
+     case kPFPhoton:
+       cutPara.mass_trg=0.0;
+       LoopPFCandidates(iEvent,iSetup,0,reco::PFCandidate::gamma);
+       break;
+     case kPFElectron:
+       cutPara.mass_trg=0.000511;
+       LoopPFCandidates(iEvent,iSetup,0,reco::PFCandidate::e);
+       break;
+     case kPFMuon:
+       cutPara.mass_trg=0.1057;
+       LoopPFCandidates(iEvent,iSetup,0,reco::PFCandidate::mu);
+       break;
+     case kPFNeutral:
+       LoopPFCandidates(iEvent,iSetup,0,reco::PFCandidate::h0);
+       break;
+     case kPFHadronHF:
+       LoopPFCandidates(iEvent,iSetup,0,reco::PFCandidate::h_HF);
+       break;
+     case kPFEgammaHF:
+       LoopPFCandidates(iEvent,iSetup,0,reco::PFCandidate::egamma_HF);
        break;
      case kKshort:
        cutPara.mass_ass=0.4976;
@@ -804,7 +853,7 @@ void DiHadronCorrelationMultiBase::LoopV0Candidates(const edm::Event& iEvent, co
        TVector3 boost = -p4.BoostVector();
 
        dau1vec.Boost(boost);
-       dau1vec.Boost(boost);
+       dau2vec.Boost(boost);
      }
 /*
      TVector3 beam(0,0,1);
@@ -817,6 +866,35 @@ void DiHadronCorrelationMultiBase::LoopV0Candidates(const edm::Event& iEvent, co
 
      if(istrg) AssignTrgPtBins(pt,eta,phi,mass,charge,effweight,cutPara.IsCheckTrgV0Dau,dau1vec.Pt(),dau1vec.Eta(),dau1vec.Phi(),dau1vec.M(),dau2vec.Pt(),dau2vec.Eta(),dau2vec.Phi(),dau2vec.M());
      else AssignAssPtBins(pt,eta,phi,mass,charge,effweight,cutPara.IsCheckAssV0Dau,dau1vec.Pt(),dau1vec.Eta(),dau1vec.Phi(),dau1vec.M(),dau2vec.Pt(),dau2vec.Eta(),dau2vec.Phi(),dau2vec.M());
+   }
+}
+
+void DiHadronCorrelationMultiBase::LoopPFCandidates(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg, reco::PFCandidate::ParticleType pfID)
+{
+   edm::Handle<reco::PFCandidateCollection > pfcandidates;
+   iEvent.getByLabel(cutPara.pfCandidateCollection.Data(),pfcandidates);
+   if(!pfcandidates->size()) return;
+
+   for(unsigned it=0; it<pfcandidates->size(); ++it){
+
+     const reco::PFCandidate & pfCand = (*pfcandidates)[it];
+     double eta = pfCand.eta();
+     double phi = pfCand.phi();
+     double pt  = pfCand.pt();
+//     double p   = pfCand.p();
+//     double etot = pfCand.ecalEnergy()+pfCand.hcalEnergy();
+//     double etot = pfCand.hcalEnergy();
+     double charge = pfCand.charge();
+     double mass = pfCand.mass();
+
+     if(reco::PFCandidate::ParticleType(pfCand.particleId())!=pfID) continue;
+
+     // PID via velocity
+//     hBetaVsP->Fill(p,p/etot);
+
+     double effweight = 1.0;
+     if(istrg) AssignTrgPtBins(pt,eta,phi,mass,charge,effweight);
+     else AssignAssPtBins(pt,eta,phi,mass,charge,effweight);
    }
 }
 

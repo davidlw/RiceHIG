@@ -84,7 +84,7 @@ using namespace HepMC;
 class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
    
  protected:
-   
+  
    // particle types
    enum ParticleType {
      kGenParticle=0,
@@ -249,6 +249,7 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
    virtual void LoopTracks(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg, int icharge=999);
    virtual void LoopCaloTower(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg);
    virtual void LoopV0Candidates(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg, TString candtype, int pdgID);
+   virtual void LoopPFCandidates(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg, reco::PFCandidate::ParticleType pfID);
    virtual void GetVertices(const edm::Event& iEvent, const edm::EventSetup& iSetup);
    virtual void NormalizeHists() {};
    virtual void AssignTrgPtBins(double pt, double eta, double phi, double mass, double charge, double effweight, bool isv0 = false,
