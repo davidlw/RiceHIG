@@ -1,7 +1,7 @@
 void scalarprod()
 {
-  TFile* f = new TFile("/net/hisrv0001/home/davidlw/scratch1/DiHadronCorrelations/outputs_312/HydjetReco_Minbias_5TeV/merged/scalarprod_gen_v8.root");
-  TFile* f_hf = new TFile("/net/hisrv0001/home/davidlw/scratch1/DiHadronCorrelations/outputs_312/HydjetReco_Minbias_5TeV/merged/scalarprod_gen_hf_v8.root");
+  TFile* f = new TFile("/net/hisrv0001/home/davidlw/scratch1/DiHadronCorrelations/outputs_312/HydjetReco_Minbias_5TeV/merged/scalarprod_v9.root");
+  TFile* f_hf = new TFile("/net/hisrv0001/home/davidlw/scratch1/DiHadronCorrelations/outputs_312/HydjetReco_Minbias_5TeV/merged/scalarprod_v9_hf.root");
 
   TH2D* hsignal_hf = (TH2D*)f_hf->Get("scalarprod_ana_HI_hf/signalcosnsame_pm_trg0_ass0");
   TH2D* hbackground_hf = (TH2D*)f_hf->Get("scalarprod_ana_HI_hf/backgroundcosnsame_pm_trg0_ass0");

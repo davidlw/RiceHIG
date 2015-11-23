@@ -25,13 +25,26 @@ class ScalarProdVnAnalyzer : public DiHadronCorrelationMultiBase {
    TH2D* hSignalCosnSame_mp[MAXPTTRGBINS][MAXPTASSBINS];
    TH2D* hBackgroundCosnSame_mp[MAXPTTRGBINS][MAXPTASSBINS];
 
+   TH1D* hCosnCenter_trg_p[MAXPTTRGBINS][5];
+   TH1D* hCosnCenter_trg_m[MAXPTTRGBINS][5];
+   TH1D* hSinnCenter_trg_p[MAXPTTRGBINS][5];
+   TH1D* hSinnCenter_trg_m[MAXPTTRGBINS][5];
+   TH1D* hCosnCenter_ass_p[MAXPTASSBINS][5];
+   TH1D* hCosnCenter_ass_m[MAXPTASSBINS][5];
+   TH1D* hSinnCenter_ass_p[MAXPTASSBINS][5];
+   TH1D* hSinnCenter_ass_m[MAXPTASSBINS][5];
+
    // parameters
    int    bkgFactor;
+   bool   IsReCenterTrg;
+   bool   IsReCenterAss;
 
    virtual void beginJob();
    virtual void endJob();
 
    virtual void NormalizeHists();
+   virtual void ReCenterTrg(const DiHadronCorrelationEvent& eventcorr_trg);
+   virtual void ReCenterAss(const DiHadronCorrelationEvent& eventcorr_ass);
    virtual void FillHistsBackground(const DiHadronCorrelationEvent& eventcorr_trg, const DiHadronCorrelationEvent& eventcorr_ass);
    
  public:

@@ -86,6 +86,9 @@ scalarprod_ana = cms.EDAnalyzer('ScalarProdVnAnalyzer',
   IsCheckAssV0Dau = cms.bool(False),
   IsBoostRestFrameV0 = cms.bool(False),
 
+  IsReCenterTrg = cms.bool(False),
+  IsReCenterAss = cms.bool(False),
+
 #  EffFileName = cms.string('TrackCorrections_HIJING_538_OFFICIAL_Mar24.root'),
   EffFileName = cms.string(''),
   EtaPhiFileName = cms.string('')
