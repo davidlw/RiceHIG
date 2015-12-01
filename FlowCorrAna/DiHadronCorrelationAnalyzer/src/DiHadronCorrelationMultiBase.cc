@@ -562,17 +562,16 @@ void DiHadronCorrelationMultiBase::GetMult(const edm::Event& iEvent, const edm::
        // select tracks based on proximity to best vertex 
        math::XYZPoint bestvtx(xVtx,yVtx,zVtx);
 
+//       int algo = trk.algo();
        double dzvtx = trk.dz(bestvtx);
        double dxyvtx = trk.dxy(bestvtx);      
        double dzerror = sqrt(trk.dzError()*trk.dzError()+zVtxError*zVtxError);
        double dxyerror = sqrt(trk.d0Error()*trk.d0Error()+xVtxError*yVtxError);
        double charge = trk.charge();
+//       int nhits = trk.numberOfValidHits();
+//       double chi2n = trk.normalizedChi2();
+//       int nlayers = trk.hitPattern().trackerLayersWithMeasurement();
 
-/*
-       int nhits = trk.numberOfValidHits();
-       double chi2n = trk.normalizedChi2();
-       int nlayers = trk.hitPattern().trackerLayersWithMeasurement();
-*/
        // standard quality cuts
 
        if(cutPara.IsPPTrkQuality)
@@ -584,7 +583,18 @@ void DiHadronCorrelationMultiBase::GetMult(const edm::Event& iEvent, const edm::
        }
 
        if(cutPara.IsHITrkQuality && !trk.quality(reco::TrackBase::highPurity)) continue;
-
+ /*
+       if(cutPara.IsHITrkQuality)
+       {
+         if(!trk.quality(reco::TrackBase::highPurity)) continue;
+         if(fabs(trk.ptError())/trk.pt()>0.05) continue; //{ cout<<"filtered by pterr"<<endl; continue;}
+         if(fabs(dzvtx/dzerror) > 3.0) continue; //{ cout<<"filtered by dz"<<endl; continue;}
+         if(fabs(dxyvtx/dxyerror) > 3.0) continue; //{ cout<<"filtered by dxy"<<endl; continue;}
+         if(nhits<11) continue; //{ cout<<"filtered by nhits"<<endl; continue;}
+         if(chi2n/nlayers>0.15) continue; //{ cout<<" filtered by chi2"<<endl; continue;}      
+         if(algo!=4 && algo!=6 && algo!=7) continue;
+       }
+*/
        double eta = trk.eta();
        double phi = trk.phi();
        double pt  = trk.pt();
@@ -746,12 +756,12 @@ void DiHadronCorrelationMultiBase::LoopTracks(const edm::Event& iEvent, const ed
      double vx = trk.vx();
      double vy = trk.vy();
      double vz = trk.vz();
-     int algo = trk.algo();
      double chi2 = trk.chi2();
 */
      double chi2n = trk.normalizedChi2();
-//     int nlayers = trk.hitPattern().trackerLayersWithMeasurement();
+     int nlayers = trk.hitPattern().trackerLayersWithMeasurement();
      double charge = trk.charge();
+     int algo = trk.algo();
 
      if(cutPara.IsDebug)
      {
@@ -776,7 +786,18 @@ void DiHadronCorrelationMultiBase::LoopTracks(const edm::Event& iEvent, const ed
        if(chi2n/nlayers>0.25) continue;
 */
      }
-     if(cutPara.IsHITrkQuality && !trk.quality(reco::TrackBase::highPurity)) continue;
+
+     if(cutPara.IsHITrkQuality)
+     {
+       if(!trk.quality(reco::TrackBase::highPurity)) continue;
+       if(fabs(trk.ptError())/trk.pt()>0.05) continue; //{ cout<<"filtered by pterr"<<endl; continue;}
+       if(fabs(dzvtx/dzerror) > 3.0) continue; //{ cout<<"filtered by dz"<<endl; continue;}
+       if(fabs(dxyvtx/dxyerror) > 3.0) continue; //{ cout<<"filtered by dxy"<<endl; continue;}
+       if(nhits<10) continue; //{ cout<<"filtered by nhits"<<endl; continue;}
+       if(chi2n/nlayers>0.15) continue; //{ cout<<" filtered by chi2"<<endl; continue;}      
+       if(algo!=4 && algo!=5 && algo!=6 && algo!=7) continue;
+     }
+//     if(cutPara.IsHITrkQuality && !trk.quality(reco::TrackBase::highPurity)) continue;
 
      double effweight = GetEffWeight(eta,phi,pt,0.5*(cutPara.zvtxmax+cutPara.zvtxmin),hiCentrality,charge);
      double trgweight = GetTrgWeight(nMult);

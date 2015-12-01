@@ -36,28 +36,28 @@ void ScalarProdVnAnalyzer::beginJob()
   for(unsigned int itrg=0;itrg<cutPara.pttrgmin.size();itrg++)
     for(unsigned int jass=0;jass<cutPara.ptassmin.size();jass++)
     {
-      hSignalCosnSame_pm[itrg][jass] = theOutputs->make<TH2D>(Form("signalcosnsame_pm_trg%d_ass%d",itrg,jass),";cos(n#Delta#phi);n",20000,-1.0,1.0,3,1.5,4.5);
-      hBackgroundCosnSame_pm[itrg][jass]= theOutputs->make<TH2D>(Form("backgroundcosnsame_pm_trg%d_ass%d",itrg,jass),";cos(n#Delta#phi);n",20000,-1.0,1.0,3,1.5,4.5);
-      hSignalCosnSame_mp[itrg][jass] = theOutputs->make<TH2D>(Form("signalcosnsame_mp_trg%d_ass%d",itrg,jass),";cos(n#Delta#phi);n",20000,-1.0,1.0,3,1.5,4.5);
-      hBackgroundCosnSame_mp[itrg][jass]= theOutputs->make<TH2D>(Form("backgroundcosnsame_mp_trg%d_ass%d",itrg,jass),";cos(n#Delta#phi);n",20000,-1.0,1.0,3,1.5,4.5);
+      hSignalCosnSame_pm[itrg][jass] = theOutputs->make<TH2D>(Form("signalcosnsame_pm_trg%d_ass%d",itrg,jass),";cos(n#Delta#phi);n",5000,-1.0,1.0,3,1.5,4.5);
+      hBackgroundCosnSame_pm[itrg][jass]= theOutputs->make<TH2D>(Form("backgroundcosnsame_pm_trg%d_ass%d",itrg,jass),";cos(n#Delta#phi);n",5000,-1.0,1.0,3,1.5,4.5);
+      hSignalCosnSame_mp[itrg][jass] = theOutputs->make<TH2D>(Form("signalcosnsame_mp_trg%d_ass%d",itrg,jass),";cos(n#Delta#phi);n",5000,-1.0,1.0,3,1.5,4.5);
+      hBackgroundCosnSame_mp[itrg][jass]= theOutputs->make<TH2D>(Form("backgroundcosnsame_mp_trg%d_ass%d",itrg,jass),";cos(n#Delta#phi);n",5000,-1.0,1.0,3,1.5,4.5);
     }
 
   for(int nn=0;nn<5;nn++)
     for(unsigned int itrg=0;itrg<cutPara.pttrgmin.size();itrg++)
     {
-      hCosnCenter_trg_p[itrg][nn] = new TH1D(Form("cosncenter_p_n%d_trg%d",nn,itrg),";cos(n#Delta#phi)",20000,-1.0,1.0);
-      hCosnCenter_trg_m[itrg][nn] = new TH1D(Form("cosncenter_m_n%d_trg%d",nn,itrg),";cos(n#Delta#phi)",20000,-1.0,1.0);
-      hSinnCenter_trg_p[itrg][nn] = new TH1D(Form("sinncenter_p_n%d_trg%d",nn,itrg),";cos(n#Delta#phi)",20000,-1.0,1.0);
-      hSinnCenter_trg_m[itrg][nn] = new TH1D(Form("sinncenter_m_n%d_trg%d",nn,itrg),";cos(n#Delta#phi)",20000,-1.0,1.0);
+      hCosnCenter_trg_p[itrg][nn] = new TH1D(Form("cosncenter_p_n%d_trg%d",nn,itrg),";cos(n#Delta#phi)",5000,-1.0,1.0);
+      hCosnCenter_trg_m[itrg][nn] = new TH1D(Form("cosncenter_m_n%d_trg%d",nn,itrg),";cos(n#Delta#phi)",5000,-1.0,1.0);
+      hSinnCenter_trg_p[itrg][nn] = new TH1D(Form("sinncenter_p_n%d_trg%d",nn,itrg),";cos(n#Delta#phi)",5000,-1.0,1.0);
+      hSinnCenter_trg_m[itrg][nn] = new TH1D(Form("sinncenter_m_n%d_trg%d",nn,itrg),";cos(n#Delta#phi)",5000,-1.0,1.0);
     }
 
   for(int nn=0;nn<5;nn++)
     for(unsigned int jass=0;jass<cutPara.ptassmin.size();jass++)
     {
-      hCosnCenter_ass_p[jass][nn] = new TH1D(Form("cosncenter_p_n%d_ass%d",nn,jass),";cos(n#Delta#phi)",20000,-1.0,1.0);
-      hCosnCenter_ass_m[jass][nn] = new TH1D(Form("cosncenter_m_n%d_ass%d",nn,jass),";cos(n#Delta#phi)",20000,-1.0,1.0);
-      hSinnCenter_ass_p[jass][nn] = new TH1D(Form("sinncenter_p_n%d_ass%d",nn,jass),";cos(n#Delta#phi)",20000,-1.0,1.0);
-      hSinnCenter_ass_m[jass][nn] = new TH1D(Form("sinncenter_m_n%d_ass%d",nn,jass),";cos(n#Delta#phi)",20000,-1.0,1.0);
+      hCosnCenter_ass_p[jass][nn] = new TH1D(Form("cosncenter_p_n%d_ass%d",nn,jass),";cos(n#Delta#phi)",5000,-1.0,1.0);
+      hCosnCenter_ass_m[jass][nn] = new TH1D(Form("cosncenter_m_n%d_ass%d",nn,jass),";cos(n#Delta#phi)",5000,-1.0,1.0);
+      hSinnCenter_ass_p[jass][nn] = new TH1D(Form("sinncenter_p_n%d_ass%d",nn,jass),";cos(n#Delta#phi)",5000,-1.0,1.0);
+      hSinnCenter_ass_m[jass][nn] = new TH1D(Form("sinncenter_m_n%d_ass%d",nn,jass),";cos(n#Delta#phi)",5000,-1.0,1.0);
     }
 
   DiHadronCorrelationMultiBase::beginJob();
@@ -90,7 +90,7 @@ void ScalarProdVnAnalyzer::endJob()
     if( i % 100 == 0 ) cout << "Processing " << i << "th event" << endl;
 
     FillHistsBackground(eventcorrArray[i],eventcorrArray[i]);
-
+/*
     unsigned int mixstart = i+1;
     unsigned int mixend = i+1+bkgFactor;
 
@@ -103,6 +103,7 @@ void ScalarProdVnAnalyzer::endJob()
 
       FillHistsBackground(eventcorrArray[i],eventcorrArray[j]);
     }
+*/
   }
   cout<< "Finish running scalar product analysis!" << endl;
 }
@@ -253,10 +254,10 @@ void ScalarProdVnAnalyzer::FillHistsBackground(const DiHadronCorrelationEvent& e
      {
        for(int nn = 1; nn<4; nn++)
        {
-         sumcosn_trg_p[itrg][nn] = sumcosn_trg_p[itrg][nn]-hCosnCenter_trg_p[itrg][nn]->GetMean()*npairs_trg_p[itrg][nn];
-         sumsinn_trg_p[itrg][nn] = sumsinn_trg_p[itrg][nn]-hSinnCenter_trg_p[itrg][nn]->GetMean()*npairs_trg_p[itrg][nn];
-         sumcosn_trg_m[itrg][nn] = sumcosn_trg_m[itrg][nn]-hCosnCenter_trg_m[itrg][nn]->GetMean()*npairs_trg_m[itrg][nn];
-         sumsinn_trg_m[itrg][nn] = sumsinn_trg_m[itrg][nn]-hSinnCenter_trg_m[itrg][nn]->GetMean()*npairs_trg_m[itrg][nn];
+         if(npairs_trg_p[itrg][nn]) sumcosn_trg_p[itrg][nn] = sumcosn_trg_p[itrg][nn]-hCosnCenter_trg_p[itrg][nn]->GetMean()*npairs_trg_p[itrg][nn];
+         if(npairs_trg_p[itrg][nn]) sumsinn_trg_p[itrg][nn] = sumsinn_trg_p[itrg][nn]-hSinnCenter_trg_p[itrg][nn]->GetMean()*npairs_trg_p[itrg][nn];
+         if(npairs_trg_m[itrg][nn]) sumcosn_trg_m[itrg][nn] = sumcosn_trg_m[itrg][nn]-hCosnCenter_trg_m[itrg][nn]->GetMean()*npairs_trg_m[itrg][nn];
+         if(npairs_trg_m[itrg][nn]) sumsinn_trg_m[itrg][nn] = sumsinn_trg_m[itrg][nn]-hSinnCenter_trg_m[itrg][nn]->GetMean()*npairs_trg_m[itrg][nn];
        }
      }
    }
@@ -293,10 +294,10 @@ void ScalarProdVnAnalyzer::FillHistsBackground(const DiHadronCorrelationEvent& e
      {
        for(int nn = 1; nn<4; nn++)
        {
-         sumcosn_ass_p[jass][nn] = sumcosn_ass_p[jass][nn]-hCosnCenter_ass_p[jass][nn]->GetMean()*npairs_ass_p[jass][nn];
-         sumsinn_ass_p[jass][nn] = sumsinn_ass_p[jass][nn]-hSinnCenter_ass_p[jass][nn]->GetMean()*npairs_ass_p[jass][nn];
-         sumcosn_ass_m[jass][nn] = sumcosn_ass_m[jass][nn]-hCosnCenter_ass_m[jass][nn]->GetMean()*npairs_ass_m[jass][nn];
-         sumsinn_ass_m[jass][nn] = sumsinn_ass_m[jass][nn]-hSinnCenter_ass_m[jass][nn]->GetMean()*npairs_ass_m[jass][nn];
+         if(npairs_ass_p[jass][nn]) sumcosn_ass_p[jass][nn] = sumcosn_ass_p[jass][nn]-hCosnCenter_ass_p[jass][nn]->GetMean()*npairs_ass_p[jass][nn];
+         if(npairs_ass_p[jass][nn]) sumsinn_ass_p[jass][nn] = sumsinn_ass_p[jass][nn]-hSinnCenter_ass_p[jass][nn]->GetMean()*npairs_ass_p[jass][nn];
+         if(npairs_ass_m[jass][nn]) sumcosn_ass_m[jass][nn] = sumcosn_ass_m[jass][nn]-hCosnCenter_ass_m[jass][nn]->GetMean()*npairs_ass_m[jass][nn];
+         if(npairs_ass_m[jass][nn]) sumsinn_ass_m[jass][nn] = sumsinn_ass_m[jass][nn]-hSinnCenter_ass_m[jass][nn]->GetMean()*npairs_ass_m[jass][nn];
        }
      }
    }
@@ -316,13 +317,13 @@ void ScalarProdVnAnalyzer::FillHistsBackground(const DiHadronCorrelationEvent& e
 
          if(eventcorr_trg.run==eventcorr_ass.run && eventcorr_trg.event==eventcorr_ass.event) 
          {
-           hSignalCosnSame_pm[itrg][jass]->Fill(Qx2same_pm,nn+1);
-           hSignalCosnSame_mp[itrg][jass]->Fill(Qx2same_mp,nn+1);
+           if(Qx2same_pm) hSignalCosnSame_pm[itrg][jass]->Fill(Qx2same_pm,nn+1);
+           if(Qx2same_mp) hSignalCosnSame_mp[itrg][jass]->Fill(Qx2same_mp,nn+1);
          }
          else
          {
-           hBackgroundCosnSame_pm[itrg][jass]->Fill(Qx2same_pm,nn+1);
-           hBackgroundCosnSame_mp[itrg][jass]->Fill(Qx2same_mp,nn+1);
+           if(Qx2same_pm) hBackgroundCosnSame_pm[itrg][jass]->Fill(Qx2same_pm,nn+1);
+           if(Qx2same_mp) hBackgroundCosnSame_mp[itrg][jass]->Fill(Qx2same_mp,nn+1);
          } 
        }
      }

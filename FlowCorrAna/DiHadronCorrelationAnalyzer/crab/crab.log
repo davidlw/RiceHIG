@@ -885,3 +885,177 @@ ConfigException: Working area '/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_1
 Please change the requestName in the config file
 DEBUG 2015-11-22 13:01:02,478: 	 Executing command: 'status'
 DEBUG 2015-11-22 13:01:02,479: 	 Found CRAB cache file /net/hisrv0001/home/davidlw/.crab3
+DEBUG 2015-11-24 04:21:42,861: 	 Executing command: 'submit'
+DEBUG 2015-11-24 04:21:42,862: 	 Found CRAB cache file /net/hisrv0001/home/davidlw/.crab3
+DEBUG 2015-11-24 04:21:42,876: 	 Checking credentials
+DEBUG 2015-11-24 04:21:42,876: 	 Found proxy file /tmp/x509up_u1472
+DEBUG 2015-11-24 04:21:42,877: 	 Getting proxy life time left
+DEBUG 2015-11-24 04:21:44,482: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 0
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-24 04:21:44,483: 	 Proxy valid for 00:00:00 hours
+DEBUG 2015-11-24 04:21:44,483: 	 Creating new proxy for 24:00 hours with VO group '' and VO role 'NULL'.
+ERROR 2015-11-24 04:21:51,323: 	 Keyboard Interrupted
+DEBUG 2015-11-29 09:01:01,466: 	 Executing command: 'submit'
+DEBUG 2015-11-29 09:01:01,467: 	 Found CRAB cache file /net/hisrv0001/home/davidlw/.crab3
+DEBUG 2015-11-29 09:01:01,482: 	 Checking credentials
+DEBUG 2015-11-29 09:01:01,483: 	 Found proxy file /tmp/x509up_u1472
+DEBUG 2015-11-29 09:01:01,483: 	 Getting proxy life time left
+DEBUG 2015-11-29 09:01:02,186: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 70542
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-29 09:01:02,790: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -actimeleft
+ output : 70541
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-29 09:01:02,790: 	 Proxy valid for 19:35:42 hours
+INFO 2015-11-29 09:01:02,791: 	 Will use CRAB configuration file multicrab3_scalarprod.py
+DEBUG 2015-11-29 09:01:02,791: 	 Loading CRAB configuration file.
+ERROR 2015-11-29 09:01:02,796: 	 Error while loading CRAB configuration:
+Unable to find a Configuration object instance in file:
+/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_5_5_patch3/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/multicrab3_scalarprod.py
+
+Please refer to https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3CommonErrors#Syntax_error_in_CRAB_configurati
+See the ./crab.log file for more details.
+The documentation about the CRAB configuration file can be found in https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3ConfigurationFile
+ERROR 2015-11-29 09:01:02,796: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511-comp2/bin/crab", line 159, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511-comp2/bin/crab", line 145, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511-comp2/lib/python2.6/site-packages/CRABClient/Commands/submit.py", line 32, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args=True)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511-comp2/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 295, in __init__
+    self.loadConfig(self.options.config, self.args)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1511-comp2/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 84, in loadConfig
+    raise ConfigurationException(configmsg)
+ConfigurationException: Error while loading CRAB configuration:
+Unable to find a Configuration object instance in file:
+/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_5_5_patch3/src/FlowCorrAna/DiHadronCorrelationAnalyzer/crab/multicrab3_scalarprod.py
+
+Please refer to https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3CommonErrors#Syntax_error_in_CRAB_configurati
+See the ./crab.log file for more details.
+The documentation about the CRAB configuration file can be found in https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3ConfigurationFile
+DEBUG 2015-11-30 11:05:46,655: 	 Executing command: 'submit'
+DEBUG 2015-11-30 11:05:46,752: 	 Found CRAB cache file /net/hisrv0001/home/davidlw/.crab3
+DEBUG 2015-11-30 11:05:46,760: 	 Checking credentials
+DEBUG 2015-11-30 11:05:46,760: 	 Found proxy file /tmp/x509up_u1472
+DEBUG 2015-11-30 11:05:46,760: 	 Getting proxy life time left
+DEBUG 2015-11-30 11:05:47,363: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 66419
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-30 11:05:47,967: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -actimeleft
+ output : 66419
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-30 11:05:47,967: 	 Proxy valid for 18:26:59 hours
+DEBUG 2015-11-30 11:05:47,968: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+DEBUG 2015-11-30 11:06:48,677: 	 Executing command: 'submit'
+DEBUG 2015-11-30 11:06:48,677: 	 Found CRAB cache file /net/hisrv0001/home/davidlw/.crab3
+DEBUG 2015-11-30 11:06:48,689: 	 Checking credentials
+DEBUG 2015-11-30 11:06:48,689: 	 Found proxy file /tmp/x509up_u1472
+DEBUG 2015-11-30 11:06:48,689: 	 Getting proxy life time left
+DEBUG 2015-11-30 11:06:49,393: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 66357
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-30 11:06:49,997: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -actimeleft
+ output : 66357
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-30 11:06:49,998: 	 Proxy valid for 18:25:57 hours
+DEBUG 2015-11-30 11:06:49,998: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+DEBUG 2015-11-30 11:06:50,001: 	 Executing command: 'submit'
+DEBUG 2015-11-30 11:06:50,001: 	 Found CRAB cache file /net/hisrv0001/home/davidlw/.crab3
+DEBUG 2015-11-30 11:06:50,007: 	 Checking credentials
+DEBUG 2015-11-30 11:06:50,008: 	 Found proxy file /tmp/x509up_u1472
+DEBUG 2015-11-30 11:06:50,008: 	 Getting proxy life time left
+DEBUG 2015-11-30 11:06:50,611: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 66356
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-30 11:06:51,215: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -actimeleft
+ output : 66355
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-30 11:06:51,216: 	 Proxy valid for 18:25:56 hours
+DEBUG 2015-11-30 11:06:51,217: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+DEBUG 2015-11-30 11:06:51,220: 	 Executing command: 'submit'
+DEBUG 2015-11-30 11:06:51,220: 	 Found CRAB cache file /net/hisrv0001/home/davidlw/.crab3
+DEBUG 2015-11-30 11:06:51,227: 	 Checking credentials
+DEBUG 2015-11-30 11:06:51,227: 	 Found proxy file /tmp/x509up_u1472
+DEBUG 2015-11-30 11:06:51,227: 	 Getting proxy life time left
+DEBUG 2015-11-30 11:06:51,831: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 66355
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-30 11:06:52,435: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -actimeleft
+ output : 66354
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-30 11:06:52,436: 	 Proxy valid for 18:25:55 hours
+DEBUG 2015-11-30 11:06:52,436: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+DEBUG 2015-11-30 11:08:16,607: 	 Executing command: 'submit'
+DEBUG 2015-11-30 11:08:16,608: 	 Found CRAB cache file /net/hisrv0001/home/davidlw/.crab3
+DEBUG 2015-11-30 11:08:16,614: 	 Checking credentials
+DEBUG 2015-11-30 11:08:16,614: 	 Found proxy file /tmp/x509up_u1472
+DEBUG 2015-11-30 11:08:16,614: 	 Getting proxy life time left
+DEBUG 2015-11-30 11:08:17,218: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 66269
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-30 11:08:17,822: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -actimeleft
+ output : 66269
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-30 11:08:17,822: 	 Proxy valid for 18:24:29 hours
+DEBUG 2015-11-30 11:08:17,823: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+DEBUG 2015-11-30 11:08:17,827: 	 Executing command: 'submit'
+DEBUG 2015-11-30 11:08:17,827: 	 Found CRAB cache file /net/hisrv0001/home/davidlw/.crab3
+DEBUG 2015-11-30 11:08:17,833: 	 Checking credentials
+DEBUG 2015-11-30 11:08:17,834: 	 Found proxy file /tmp/x509up_u1472
+DEBUG 2015-11-30 11:08:17,834: 	 Getting proxy life time left
+DEBUG 2015-11-30 11:08:18,437: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -timeleft
+ output : 66268
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-30 11:08:19,041: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u1472 -actimeleft
+ output : 66268
+
+ error: 
+ retcode : 0
+DEBUG 2015-11-30 11:08:19,041: 	 Proxy valid for 18:24:28 hours
+DEBUG 2015-11-30 11:08:19,042: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).

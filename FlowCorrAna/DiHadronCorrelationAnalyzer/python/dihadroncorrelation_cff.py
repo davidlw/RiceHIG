@@ -103,9 +103,9 @@ corr_ana_HI = corr_ana.clone(
 #  ptassmax = cms.vdouble(0.5, 0.75, 1.0, 1.5, 2.0, 2.5, 3.0),
 
   pttrgmin = cms.vdouble(0.0),
-  pttrgmax = cms.vdouble(20.0),
+  pttrgmax = cms.vdouble(10000.0),
   ptassmin = cms.vdouble(0.0),
-  ptassmax = cms.vdouble(20.0),
+  ptassmax = cms.vdouble(10000.0),
 
   IsHarmonics = cms.bool(False),
   IsHarmonicsEta1Eta2 = cms.bool(False),
