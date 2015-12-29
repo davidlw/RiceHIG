@@ -46,6 +46,7 @@
 #include "SimTracker/VertexAssociation/interface/VertexAssociatorBase.h"
 #include "SimDataFormats/TrackingAnalysis/interface/TrackingParticle.h"
 #include "SimDataFormats/TrackingAnalysis/interface/TrackingVertex.h"
+#include "SimDataFormats/Associations/interface/TrackToTrackingParticleAssociator.h"
 #include "TrackingTools/TrajectoryState/interface/FreeTrajectoryState.h"
 #include "TrackingTools/PatternTools/interface/TrajectoryStateClosestToBeamLineBuilder.h"
 #include "TrackingTools/PatternTools/interface/ClosestApproachInRPhi.h"
@@ -81,6 +82,8 @@
 #include "TH1F.h"
 #include "TH1I.h"
 #include "TH2F.h"
+#include "TH1D.h"
+#include "TH2D.h"
 
 class V0Validator : public edm::EDAnalyzer {
 
@@ -90,11 +93,9 @@ public:
 
 
 private:
-  //virtual void beginJob(const edm::EventSetup&) ;
   virtual void analyze(const edm::Event&, const edm::EventSetup&);
-  //virtual void endJob() ;
-  virtual void beginRun(const edm::Run&, const edm::EventSetup&);
-  virtual void endRun(const edm::Run&, const edm::EventSetup&);
+  virtual void beginJob();
+  virtual void endJob();
 
   //Quantities that are to be histogrammed
   float K0sGenEta, LamGenEta, K0sGenpT, LamGenpT, K0sGenR, LamGenR;
@@ -235,11 +236,16 @@ private:
   TH2D* ksResolutionPt;
   TH2D* lamResolutionPt;
 
+  TH1D* hVz;
+  TH2D* hVxVy;
+
   edm::InputTag trackCollectionTag;
   edm::InputTag vertexCollectionTag;
   edm::InputTag genParticleCollectionTag;
   edm::InputTag k0sCollectionTag;
   edm::InputTag lamCollectionTag;
+//  edm::InputTag recoRecoToSimCollectionTag;
+//  edm::InputTag recoSimToRecoCollectionTag;
 
   bool isMatchByHitsOrChi2_;
   bool isMergedTruth_;
