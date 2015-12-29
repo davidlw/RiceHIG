@@ -36,10 +36,13 @@ V0Selector::V0Selector(const edm::ParameterSet& iConfig)
   using std::string;
 
   vertexCollName_ = iConfig.getParameter<edm::InputTag>("vertexCollName");
+  beamSpotCollName_ = iConfig.getParameter<edm::InputTag>("beamSpotCollName_");
   v0CollName_     = iConfig.getParameter<string>("v0CollName");
   v0IDName_       = iConfig.getParameter<string>("v0IDName");
   etaCutMin_      = iConfig.getParameter<double>("etaCutMin");
   etaCutMax_      = iConfig.getParameter<double>("etaCutMax");
+  ptCut1_         = iConfig.getParameter<double>("ptCut1");
+  ptCut2_         = iConfig.getParameter<double>("ptCut2");
   nHitCut1_       = iConfig.getParameter<int>("nHitCut1");
   nHitCut2_       = iConfig.getParameter<int>("nHitCut2");
   dxySigCut1_     = iConfig.getParameter<double>("dxySigCut1");
@@ -51,6 +54,7 @@ V0Selector::V0Selector(const edm::ParameterSet& iConfig)
   decayLSigCut_   = iConfig.getParameter<double>("decayLSigCut");
   misIDMassCut_   = iConfig.getParameter<double>("misIDMassCut");
   misIDMassCutEE_ = iConfig.getParameter<double>("misIDMassCutEE");
+  isUseVertex_    = iConfig.getParameter<bool>("isUseVertex");
   // Trying this with Candidates instead of the simple reco::Vertex
   produces< reco::VertexCompositeCandidateCollection >(v0IDName_);
 
@@ -72,14 +76,24 @@ void V0Selector::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
    using namespace edm;
 //   using namespace reco;
     
+   edm::Handle<reco::BeamSpot> theBeamSpotHandle;
+   iEvent.getByLabel(beamSpotCollName_, theBeamSpotHandle);
+   const reco::BeamSpot* theBeamSpot = theBeamSpotHandle.product();
+   math::XYZPoint referencePos(theBeamSpot->position());
+
     // select on requirement of valid vertex
    edm::Handle<reco::VertexCollection> vertices;
    iEvent.getByLabel(vertexCollName_,vertices);
-   double bestvz=-999.9, bestvx=-999.9, bestvy=-999.9;
-   double bestvzError=-999.9, bestvxError=-999.9, bestvyError=-999.9;
    const reco::Vertex & vtx = (*vertices)[0];
-   bestvz = vtx.z(); bestvx = vtx.x(); bestvy = vtx.y();
-   bestvzError = vtx.zError(); bestvxError = vtx.xError(); bestvyError = vtx.yError();
+   if (isUseVertex_) referencePos = vtx.position();
+
+   double bestvz=0.0, bestvx=referencePos.x(), bestvy=referencePos.y();
+   double bestvzError=0.0, bestvxError=0.0, bestvyError=0.0;
+   if(isUseVertex_)
+   {
+     bestvz=referencePos.z();
+     bestvzError = vtx.zError(); bestvxError = vtx.xError(); bestvyError = vtx.yError();
+   }
 //   if(bestvz < -15.0 || bestvz>15.0) return;
 
    edm::Handle<reco::VertexCompositeCandidateCollection> v0candidates;
@@ -94,6 +108,10 @@ void V0Selector::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
          v0cand != v0candidates->end();
          v0cand++) {
 
+       //vtxChi2
+       double vtxChi2 = v0cand->vertexChi2();
+       if(vtxChi2 > vtxChi2Cut_ ) continue;
+       
        double secvz=-999.9, secvx=-999.9, secvy=-999.9;
 
        const reco::Candidate * d1 = v0cand->daughter(0);
@@ -119,6 +137,11 @@ void V0Selector::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
        int nhit2 = dau2->numberOfValidHits();
 
        if(nhit1 <= nHitCut1_ || nhit2 <= nHitCut2_) continue;
+
+       double pt1 = d1->pt();
+       double pt2 = d2->pt();
+
+       if(pt1 <= ptCut1_ || pt2 <= ptCut2_) continue;
 
        //algo
 //       double algo1 = dau1->algo();
@@ -146,21 +169,23 @@ void V0Selector::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
        double dxyos2 = dxybest2/dxyerror2;
        if(fabs(dzos2) < dzSigCut2_ || fabs(dxyos2) < dxySigCut2_) continue;
 
-       //vtxChi2
-       double vtxChi2 = v0cand->vertexChi2();
-       if(vtxChi2 > vtxChi2Cut_ ) continue;
-
        //PAngle
        TVector3 ptosvec(secvx-bestvx,secvy-bestvy,secvz-bestvz);
        TVector3 secvec(px,py,pz);
-       double agl = cos(secvec.Angle(ptosvec));
+       double agl = cos(secvec.DeltaPhi(ptosvec));
+       if(isUseVertex_) agl = cos(secvec.Angle(ptosvec));
        if(agl < cosThetaCut_) continue;
 
        //Decay length
        typedef ROOT::Math::SMatrix<double, 3, 3, ROOT::Math::MatRepSym<double, 3> > SMatrixSym3D;
        typedef ROOT::Math::SVector<double, 3> SVector3;
-       SMatrixSym3D totalCov = vtx.covariance() + v0cand->vertexCovariance();
-       SVector3 distanceVector(secvx-bestvx,secvy-bestvy,secvz-bestvz);
+       SMatrixSym3D totalCov = theBeamSpot->rotatedCovariance3D() + v0cand->vertexCovariance();
+       SVector3 distanceVector(secvx-bestvx,secvy-bestvy, 0.0 );
+       if (isUseVertex_) 
+       {
+         totalCov = vtx.covariance() + v0cand->vertexCovariance();
+         distanceVector.At(2) = secvz-bestvz;
+       }
        double dl = ROOT::Math::Mag(distanceVector);
        double dlerror = sqrt(ROOT::Math::Similarity(totalCov, distanceVector))/dl;
        double dlos = dl/dlerror;
@@ -212,6 +237,7 @@ void V0Selector::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
 
    // Write the collections to the Event
    iEvent.put( theNewV0Cands, std::string(v0IDName_) );
+//   iEvent.put( theNewV0Cands, std::string("") );
 }
 
 
