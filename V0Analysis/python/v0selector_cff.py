@@ -9,14 +9,14 @@ selectV0CandidatesNewlambda = selectV0CandidatesNew.clone(
 
 selectV0CandidatesNewlambdaBS = selectV0CandidatesNewlambda.clone(
   isUseVertex     = cms.bool(False),
-  dzSigCut1       = cms.double(9999.0),
-  dzSigCut2       = cms.double(9999.0)
+  dzSigCut1       = cms.double(0.0),
+  dzSigCut2       = cms.double(0.0)
 )
 
 selectV0CandidatesNewkshortBS = selectV0CandidatesNewkshort.clone(
-  isUseVertex     = cms.bool(False)
-  dzSigCut1       = cms.double(9999.0),
-  dzSigCut2       = cms.double(9999.0)
+  isUseVertex     = cms.bool(False),
+  dzSigCut1       = cms.double(0.0),
+  dzSigCut2       = cms.double(0.0)
 )
 
 selectV0CandidatesNewlambdatight = selectV0CandidatesNewlambda.clone(

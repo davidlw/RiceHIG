@@ -36,13 +36,15 @@ V0Selector::V0Selector(const edm::ParameterSet& iConfig)
   using std::string;
 
   vertexCollName_ = iConfig.getParameter<edm::InputTag>("vertexCollName");
-  beamSpotCollName_ = iConfig.getParameter<edm::InputTag>("beamSpotCollName_");
+  beamSpotCollName_ = iConfig.getParameter<edm::InputTag>("beamSpotCollName");
   v0CollName_     = iConfig.getParameter<string>("v0CollName");
   v0IDName_       = iConfig.getParameter<string>("v0IDName");
   etaCutMin_      = iConfig.getParameter<double>("etaCutMin");
   etaCutMax_      = iConfig.getParameter<double>("etaCutMax");
   ptCut1_         = iConfig.getParameter<double>("ptCut1");
   ptCut2_         = iConfig.getParameter<double>("ptCut2");
+  pTRatioMin_     = iConfig.getParameter<double>("pTRatioMin");
+  pTRatioMax_     = iConfig.getParameter<double>("pTRatioMax");
   nHitCut1_       = iConfig.getParameter<int>("nHitCut1");
   nHitCut2_       = iConfig.getParameter<int>("nHitCut2");
   dxySigCut1_     = iConfig.getParameter<double>("dxySigCut1");
@@ -111,7 +113,7 @@ void V0Selector::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
        //vtxChi2
        double vtxChi2 = v0cand->vertexChi2();
        if(vtxChi2 > vtxChi2Cut_ ) continue;
-       
+
        double secvz=-999.9, secvx=-999.9, secvy=-999.9;
 
        const reco::Candidate * d1 = v0cand->daughter(0);
@@ -142,6 +144,7 @@ void V0Selector::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
        double pt2 = d2->pt();
 
        if(pt1 <= ptCut1_ || pt2 <= ptCut2_) continue;
+       if( (pt2/pt1) < pTRatioMin_ || (pt2/pt1) > pTRatioMax_) continue;
 
        //algo
 //       double algo1 = dau1->algo();
@@ -159,7 +162,8 @@ void V0Selector::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
        double dxyerror1 = sqrt(dau1->d0Error()*dau1->d0Error()+bestvxError*bestvyError);
        double dzos1 = dzbest1/dzerror1;
        double dxyos1 = dxybest1/dxyerror1;
-       if(fabs(dzos1) < dzSigCut1_ || fabs(dxyos1) < dxySigCut1_) continue;
+
+      if(fabs(dzos1) < dzSigCut1_ || fabs(dxyos1) < dxySigCut1_) continue;
 
        double dzbest2 = dau2->dz(bestvtx);
        double dxybest2 = dau2->dxy(bestvtx);

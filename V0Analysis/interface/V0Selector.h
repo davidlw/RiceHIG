@@ -71,6 +71,7 @@ private:
   std::string v0CollName_;
   std::string v0IDName_;
   double ptCut1_,ptCut2_;
+  double pTRatioMin_,pTRatioMax_;
   int nHitCut1_,nHitCut2_;
   double etaCutMin_,etaCutMax_;
   double dxySigCut1_,dxySigCut2_,dzSigCut1_,dzSigCut2_;
