@@ -58,8 +58,8 @@ process.dEdx_step = cms.Path( process.eventFilter_HM *
 process.generalV0CandidatesNew = process.generalV0Candidates.clone (
     tkNhitsCut = cms.int32(0),
     tkChi2Cut = cms.double(7.0),
-    dauTransImpactSigCut = cms.double(0.5),
-    dauLongImpactSigCut = cms.double(0.5),
+    dauTransImpactSigCut = cms.double(1.0),
+    dauLongImpactSigCut = cms.double(1.0),
     xiVtxSignificance3DCut = cms.double(0.0),
     xiVtxSignificance2DCut = cms.double(0.0),
     vtxSignificance2DCut = cms.double(0.0),
@@ -86,6 +86,49 @@ process.generalV0CandidatesNew = process.generalV0Candidates.clone (
 
 process.v0rereco_step = cms.Path( process.eventFilter_HM * process.generalV0CandidatesNew )
 
+########## ReTracking #########################################################################
+process.generalTracksLowPt = process.generalTracks.clone()
+process.iterTracking.replace(process.generalTracks,process.generalTracksLowPt)
+process.offlinePrimaryVerticesLowPt = process.offlinePrimaryVertices.clone( TrackLabel = cms.InputTag("generalTracksLowPt") )
+process.generalV0CandidatesLowPt = process.generalV0CandidatesNew.clone( 
+  trackRecoAlgorithm = cms.InputTag('generalTracksLowPt'), 
+  vertexRecoAlgorithm = cms.InputTag('offlinePrimaryVerticesLowPt')
+)
+
+process.lowPtTripletStepSeeds.RegionFactoryPSet.RegionPSet.ptMin = 0.1
+process.detachedTripletStepSeeds.RegionFactoryPSet.RegionPSet.ptMin = 0.1
+process.mixedTripletStepSeedsA.RegionFactoryPSet.RegionPSet.ptMin = 0.25
+process.mixedTripletStepSeedsB.RegionFactoryPSet.RegionPSet.ptMin = 0.35
+process.pixelLessStepSeeds.RegionFactoryPSet.RegionPSet.ptMin = 0.5
+process.pixelPairStepSeeds.RegionFactoryPSet.RegionPSet.ptMin = 0.3
+
+process.dedxTruncated40LowPt = process.dedxTruncated40.clone( 
+    tracks                     = cms.InputTag("generalTracksLowPt"),
+    trajectoryTrackAssociation = cms.InputTag("generalTracksLowPt")
+)
+process.dedxHarmonic2LowPt = process.dedxHarmonic2.clone( 
+    tracks                     = cms.InputTag("generalTracksLowPt"),
+    trajectoryTrackAssociation = cms.InputTag("generalTracksLowPt")
+)
+process.dedxDiscrimASmiLowPt = process.dedxDiscrimASmi.clone( 
+    tracks                     = cms.InputTag("generalTracksLowPt"),
+    trajectoryTrackAssociation = cms.InputTag("generalTracksLowPt")
+)
+process.trackingGlobalReco.replace(process.dedxTruncated40,process.dedxTruncated40LowPt)
+process.trackingGlobalReco.replace(process.dedxHarmonic2,process.dedxHarmonic2LowPt)
+process.trackingGlobalReco.replace(process.dedxDiscrimASmi,process.dedxDiscrimASmiLowPt)
+
+process.reTracking = cms.Sequence(
+   process.siPixelRecHits *
+   process.siStripMatchedRecHits *
+   process.recopixelvertexing *      
+   process.trackingGlobalReco *
+   process.offlinePrimaryVerticesLowPt *
+   process.generalV0CandidatesLowPt
+) 
+
+process.reTracking_step = cms.Path( process.eventFilter_HM * process.reTracking )
+
 ###############################################################################################
 
 process.load("RiceHIG.Skim2013.ppanalysisSkimContentFull_cff")
@@ -104,6 +147,7 @@ process.schedule = cms.Schedule(
     process.eventFilter_HM_step,
     process.pACentrality_step,
 #    process.dEdx_step,
+    process.reTracking_step,
     process.v0rereco_step,
     process.output_HM_step
 )

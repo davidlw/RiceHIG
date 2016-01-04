@@ -8,6 +8,7 @@ process.load('FWCore.MessageService.MessageLogger_cfi')
 #process.load('Configuration.StandardSequences.EndOfProcess_cff')
 #process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 process.load('Configuration.EventContent.EventContentHeavyIons_cff')
+process.MessageLogger.cerr.FwkReport.reportEvery = 200
 
 process.source = cms.Source("PoolSource",
    fileNames = cms.untracked.vstring(
@@ -17,7 +18,7 @@ process.source = cms.Source("PoolSource",
 )
 
 # =============== Other Statements =====================
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100))
 process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
 #process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 #process.GlobalTag.globaltag = 'GR_P_V41::All'
@@ -26,13 +27,13 @@ process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
 ### Comment out for the timing being assuming running on secondary dataset with trigger bit selected already
 import HLTrigger.HLTfilters.hltHighLevel_cfi
 process.hltHIMB = HLTrigger.HLTfilters.hltHighLevel_cfi.hltHighLevel.clone()
-process.hltHIMB.HLTPaths = ['HLT_HIFullTrack14_*'] # for allphysics
+process.hltHIMB.HLTPaths = ['HLT_HIFullTrack*_*'] # for allphysics
 process.hltHIMB.andOr = cms.bool(True)
 process.hltHIMB.throw = cms.bool(False)
 
 process.mb_step = cms.Path(process.hltHIMB)
 
-process.load("davidlw.HighPtFlow2011.hianalysisSkimContent_cff")
+process.load("RiceHIG.Skim2013.hianalysisSkimContent_cff")
 process.output_mb = cms.OutputModule("PoolOutputModule",
    outputCommands = process.analysisSkimContent.outputCommands,
    fileName = cms.untracked.string('hiMB.root'),
