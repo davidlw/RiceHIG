@@ -35,8 +35,10 @@ void EPEtaDecoAnalyzerSPMatrix::beginJob()
   {
     for(int jass=itrg;jass<MAXETATRGBINSMATRIX;jass++)
     {
-      hSignalCosn[itrg][jass] = theOutputs->make<TH2D>(Form("signalcosn_trg%d_ass%d",itrg,jass),";cos(n#Delta#phi);n",10000,-0.5,0.5,3,1.5,4.5);
-      hBackgroundCosn[itrg][jass]= theOutputs->make<TH2D>(Form("backgroundcosn_trg%d_ass%d",itrg,jass),";cos(n#Delta#phi);n",10000,-0.5,0.5,3,1.5,4.5);
+      hSignalCosn[itrg][jass] = theOutputs->make<TH2D>(Form("signalcosn_trg%d_ass%d",itrg,jass),";cos(n#Delta#phi);n",1000,-0.5,0.5,14,1.5,15.5);
+      hBackgroundCosn[itrg][jass]= theOutputs->make<TH2D>(Form("backgroundcosn_trg%d_ass%d",itrg,jass),";cos(n#Delta#phi);n",1000,-0.5,0.5,14,1.5,15.5);
+      hSignalNPairs[itrg][jass] = theOutputs->make<TH1D>(Form("signalnpairs_trg%d_ass%d",itrg,jass),";N_{pair}",3000,0.,600000);
+      hBackgroundNPairs[itrg][jass] = theOutputs->make<TH1D>(Form("backgroundnpairs_trg%d_ass%d",itrg,jass),";N_{pair}",3000,0.,600000);
     }
   }
 
@@ -96,12 +98,12 @@ void EPEtaDecoAnalyzerSPMatrix::FillHistsBackground(const DiHadronCorrelationEve
 //      double nMultCorr_trg = eventcorr_trg.nMultCorrVect_trg[0];
 //      double nMultCorr_ass = eventcorr_ass.nMultCorrVect_ass[0];
 
-    double sumcosn_trg[MAXETATRGBINSMATRIX][5]={{0.0}};
-    double sumsinn_trg[MAXETATRGBINSMATRIX][5]={{0.0}};
-    double npairs_trg[MAXETATRGBINSMATRIX][5]={{0.0}};
-    double sumcosn_ass[MAXETATRGBINSMATRIX][5]={{0.0}};
-    double sumsinn_ass[MAXETATRGBINSMATRIX][5]={{0.0}};
-    double npairs_ass[MAXETATRGBINSMATRIX][5]={{0.0}};
+    double sumcosn_trg[MAXETATRGBINSMATRIX][15]={{0.0}};
+    double sumsinn_trg[MAXETATRGBINSMATRIX][15]={{0.0}};
+    double npairs_trg[MAXETATRGBINSMATRIX][15]={{0.0}};
+    double sumcosn_ass[MAXETATRGBINSMATRIX][15]={{0.0}};
+    double sumsinn_ass[MAXETATRGBINSMATRIX][15]={{0.0}};
+    double npairs_ass[MAXETATRGBINSMATRIX][15]={{0.0}};
 
     for(unsigned int ntrg=0;ntrg<ntrgsize;ntrg++)
     {
@@ -112,7 +114,7 @@ void EPEtaDecoAnalyzerSPMatrix::FillHistsBackground(const DiHadronCorrelationEve
 
       int ietabin = (int)((eta_trg+2.4)/ETATRGBINWIDTHMATRIX);
 
-      for(int nn = 1; nn<4; nn++)
+      for(int nn = 1; nn<15; nn++)
       {
         sumcosn_trg[ietabin][nn] = sumcosn_trg[ietabin][nn] + cos((nn+1)*phi_trg)/effweight_trg;
         sumsinn_trg[ietabin][nn] = sumsinn_trg[ietabin][nn] + sin((nn+1)*phi_trg)/effweight_trg;
@@ -129,7 +131,7 @@ void EPEtaDecoAnalyzerSPMatrix::FillHistsBackground(const DiHadronCorrelationEve
 
       int ietabin = (int)((eta_ass+2.4)/ETATRGBINWIDTHMATRIX);
 
-      for(int nn = 1; nn<4; nn++)
+      for(int nn = 1; nn<15; nn++)
       {
         sumcosn_ass[ietabin][nn] = sumcosn_ass[ietabin][nn] + cos((nn+1)*phi_ass)/effweight_ass;
         sumsinn_ass[ietabin][nn] = sumsinn_ass[ietabin][nn] + sin((nn+1)*phi_ass)/effweight_ass;
@@ -140,7 +142,7 @@ void EPEtaDecoAnalyzerSPMatrix::FillHistsBackground(const DiHadronCorrelationEve
    for(int i=0;i<MAXETATRGBINSMATRIX;i++)
      for(int j=i;j<MAXETATRGBINSMATRIX;j++)
      {
-       for(int nn = 1; nn<4; nn++)
+       for(int nn = 1; nn<15; nn++)
        {
          if(npairs_trg[i][nn]==0.0 || npairs_ass[j][nn]==0.0) continue;
          double Qx2 = sumcosn_trg[i][nn]*sumcosn_ass[j][nn]+sumsinn_trg[i][nn]*sumsinn_ass[j][nn];
@@ -150,17 +152,20 @@ void EPEtaDecoAnalyzerSPMatrix::FillHistsBackground(const DiHadronCorrelationEve
            if(i==j)
            {
              Qx2 = (Qx2-npairs_trg[i][nn])/npairs_trg[i][nn]/(npairs_ass[j][nn]-1);
+             hSignalCosn[i][j]->Fill(Qx2,nn+1,npairs_trg[i][nn]*(npairs_ass[j][nn]-1));
            }
            else 
            {
              Qx2 = Qx2/npairs_trg[i][nn]/npairs_ass[j][nn];
+             hSignalCosn[i][j]->Fill(Qx2,nn+1,npairs_trg[i][nn]*npairs_ass[j][nn]);
            }
-           hSignalCosn[i][j]->Fill(Qx2,nn+1);
+           if(nn==1) hSignalNPairs[i][j]->Fill(npairs_trg[i][nn]*npairs_ass[j][nn]);
          }
          else
          {
            Qx2 = Qx2/npairs_trg[i][nn]/npairs_ass[j][nn];
-           hBackgroundCosn[i][j]->Fill(Qx2,nn+1);
+           hBackgroundCosn[i][j]->Fill(Qx2,nn+1,npairs_trg[i][nn]*npairs_ass[j][nn]);
+           if(nn==1) hBackgroundNPairs[i][j]->Fill(npairs_trg[i][nn]*npairs_ass[j][nn]);
          }
        }
      }

@@ -1,16 +1,21 @@
 import FWCore.ParameterSet.Config as cms
 
-corr_ana = cms.EDAnalyzer('LamPolGenAnalyzer',
+lampolgen = cms.EDAnalyzer('LamPolGenAnalyzerSP',
 
   centralityBinLabel = cms.InputTag("centralityBin","HFtowers"), 
+  centralitySrc = cms.InputTag("hiCentrality"),
 
   TrgTrackCollection = cms.string('generalTracks'),
   VertexCollection = cms.string('offlinePrimaryVertices'),
   GenParticleCollection = cms.string('genParticles'),
   V0CandidateCollection = cms.string('generalV0CandidatesNew'),
+  pfCandidateCollection = cms.string('particleFlowTmp'),
 
-  TriggerID = cms.string('GenParticle'),
-  AssociateID = cms.string('GenParticle'),
+#  TriggerID = cms.string('GenParticle'),
+#  AssociateID = cms.string('GenParticle'),
+
+  TriggerID = cms.string('Generator'),
+  AssociateID = cms.string('Generator'),
 
   NEtaBins = cms.int32(32),
   NPhiBins = cms.int32(32),
@@ -32,8 +37,8 @@ corr_ana = cms.EDAnalyzer('LamPolGenAnalyzer',
   etatrgmax = cms.double(2.4),
   etaassmin = cms.double(3),
   etaassmax = cms.double(5),
-  pttrgmin = cms.vdouble(1.0),
-  pttrgmax = cms.vdouble(10.0),
+  pttrgmin = cms.vdouble(0.6),
+  pttrgmax = cms.vdouble(5.0),
   ptassmin = cms.vdouble(0.3),
   ptassmax = cms.vdouble(10.0),
   etamultmin = cms.double(-2.4),
@@ -55,10 +60,10 @@ corr_ana = cms.EDAnalyzer('LamPolGenAnalyzer',
   masswidth_ass = cms.vdouble(99999.0),
   genpdgId_trg = cms.int32(3122),
   genpdgId_ass = cms.int32(-999999),
-  isstable_trg = cms.bool(False),
+  isstable_trg = cms.bool(True),
   isstable_ass = cms.bool(True),
   ischarge_trg = cms.bool(False),
-  ischarge_ass = cms.bool(True),
+  ischarge_ass = cms.bool(False),
 
   IsGenMult = cms.bool(True),
   IsVtxSel = cms.bool(False),
@@ -84,10 +89,17 @@ corr_ana = cms.EDAnalyzer('LamPolGenAnalyzer',
   IsCheckTrgV0Dau = cms.bool(True),
   IsCheckAssV0Dau = cms.bool(False),
   IsBoostRestFrameGen = cms.bool(True),
+  IsBoostRestFrameV0 = cms.bool(False),
   IsGenRP = cms.bool(True),
- 
-  pol_lam = cms.double(0.5),
+  IsGenB = cms.bool(True),
+  IsGenAcc = cms.bool(True),
 
-  EffFileName = cms.string('TrackCorrections_HIJING_538_OFFICIAL_Mar24.root'),
+  b_genmin = cms.double(-999.0),
+  b_genmax = cms.double(999.0),
+  pol_lam_mean = cms.double(0.5),
+  pol_lam_sigma = cms.double(0.0),
+
+  EffFileName = cms.string(''),
+#  EffFileName = cms.string('TrackCorrections_HIJING_538_OFFICIAL_Mar24.root'),
   EtaPhiFileName = cms.string('')
 )

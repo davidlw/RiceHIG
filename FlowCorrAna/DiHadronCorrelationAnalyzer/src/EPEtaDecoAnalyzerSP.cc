@@ -36,15 +36,19 @@ void EPEtaDecoAnalyzerSP::beginJob()
 //    hSignalCosn[itrg] = theOutputs->make<TH2D>(Form("signalcosn_trg%d",itrg),";cos(n#Delta#phi);n",30000,-0.3,0.3,3,1.5,4.5);
 //    hBackgroundCosn[itrg]= theOutputs->make<TH2D>(Form("backgroundcosn_trg%d",itrg),";cos(n#Delta#phi);n",30000,-0.3,0.3,3,1.5,4.5);
 
+    hSignalCosn[itrg] = theOutputs->make<TH2D>(Form("signalcosn_trg%d",itrg),";cos(n#Delta#phi);n",5000,-0.5,0.5,3,1.5,4.5);
+    hBackgroundCosn[itrg]= theOutputs->make<TH2D>(Form("backgroundcosn_trg%d",itrg),";cos(n#Delta#phi);n",5000,-0.5,0.5,3,1.5,4.5);
+    hSignalNPairs[itrg] = theOutputs->make<TH1D>(Form("signalnpairs_trg%d",itrg),";N_{pair}",12000,0.,120000);
+    hBackgroundNPairs[itrg] = theOutputs->make<TH1D>(Form("backgroundnpairs_trg%d",itrg),";N_{pair}",12000,0.,120000);
 
-    hSignalCosn[itrg] = theOutputs->make<TH2D>(Form("signalcosn_trg%d",itrg),";cos(n#Delta#phi);n",10000,-0.5,0.5,3,1.5,4.5);
-    hBackgroundCosn[itrg]= theOutputs->make<TH2D>(Form("backgroundcosn_trg%d",itrg),";cos(n#Delta#phi);n",10000,-0.5,0.5,3,1.5,4.5);
-//    hSignalSinn[itrg] = theOutputs->make<TH2D>(Form("signalsinn_trg%d",itrg),";sin(n#Delta#phi);n",10000,-0.5,0.5,3,1.5,4.5);
-//    hBackgroundSinn[itrg]= theOutputs->make<TH2D>(Form("backgroundsinn_trg%d",itrg),";sin(n#Delta#phi);n",10000,-0.5,0.5,3,1.5,4.5);
+//    hSignalSinn[itrg] = theOutputs->make<TH2D>(Form("signalsinn_trg%d",itrg),";sin(n#Delta#phi);n",5000,-0.5,0.5,3,1.5,4.5);
+//    hBackgroundSinn[itrg]= theOutputs->make<TH2D>(Form("backgroundsinn_trg%d",itrg),";sin(n#Delta#phi);n",5000,-0.5,0.5,3,1.5,4.5);
+/*
     hSignalCosnSame[itrg] = theOutputs->make<TH2D>(Form("signalcosnsame_trg%d",itrg),";cos(n#Delta#phi);n",10000,-0.5,0.5,3,1.5,4.5);
     hBackgroundCosnSame[itrg]= theOutputs->make<TH2D>(Form("backgroundcosnsame_trg%d",itrg),";cos(n#Delta#phi);n",10000,-0.5,0.5,3,1.5,4.5);
     hSignalCosnDiff[itrg] = theOutputs->make<TH2D>(Form("signalcosndiff_trg%d",itrg),";cos(n#Delta#phi);n",10000,-0.5,0.5,3,1.5,4.5);
     hBackgroundCosnDiff[itrg]= theOutputs->make<TH2D>(Form("backgroundcosndiff_trg%d",itrg),";cos(n#Delta#phi);n",10000,-0.5,0.5,3,1.5,4.5);
+*/
   }
 /*
   for(int i=1;i<4;i++)
@@ -160,8 +164,9 @@ void EPEtaDecoAnalyzerSP::FillHistsSignal(const DiHadronCorrelationEvent& eventc
         Qy = Qy/npairs_trg[i][nn]/npairs_ass[nn];
 
         hSignalCosn[i]->Fill(Qx,nn+1);
+        if(nn==1) hSignalNPairs[i]->Fill(npairs_trg[i][nn]*npairs_ass[nn]);
 //        hSignalSinn[i]->Fill(Qy,nn+1);
-
+/*
 	double Qx2same = sumcosn_trg[i][nn]*sumcosn_trg[i][nn]+sumsinn_trg[i][nn]*sumsinn_trg[i][nn];
         double Qx2diff = sumcosn_trg[i][nn]*sumcosn_trg[MAXETATRGBINS-1-i][nn]+sumsinn_trg[i][nn]*sumsinn_trg[MAXETATRGBINS-1-i][nn];
         Qx2same = (Qx2same-npairs_trg[i][nn])/npairs_trg[i][nn]/(npairs_trg[i][nn]-1);
@@ -169,6 +174,7 @@ void EPEtaDecoAnalyzerSP::FillHistsSignal(const DiHadronCorrelationEvent& eventc
 
         hSignalCosnSame[i]->Fill(Qx2same,nn+1);
         hSignalCosnDiff[i]->Fill(Qx2diff,nn+1);
+*/
       }
 }
 
@@ -229,8 +235,9 @@ void EPEtaDecoAnalyzerSP::FillHistsBackground(const DiHadronCorrelationEvent& ev
         Qy = Qy/npairs_trg[i][nn]/npairs_ass[nn];
 
         hBackgroundCosn[i]->Fill(Qx,nn+1);
+        if(nn==1) hBackgroundNPairs[i]->Fill(npairs_trg[i][nn]*npairs_ass[nn]);
 //        hBackgroundSinn[i]->Fill(Qy,nn+1);
-
+/*
         double Qx2same = sumcosn_trg[i][nn]*sumcosn_trg[i][nn]+sumsinn_trg[i][nn]*sumsinn_trg[i][nn];
         double Qx2diff = sumcosn_trg[i][nn]*sumcosn_trg[MAXETATRGBINS-1-i][nn]+sumsinn_trg[i][nn]*sumsinn_trg[MAXETATRGBINS-1-i][nn];
         Qx2same = (Qx2same-npairs_trg[i][nn])/npairs_trg[i][nn]/(npairs_trg[i][nn]-1);
@@ -238,5 +245,6 @@ void EPEtaDecoAnalyzerSP::FillHistsBackground(const DiHadronCorrelationEvent& ev
 
         hBackgroundCosnSame[i]->Fill(Qx2same,nn+1);
         hBackgroundCosnDiff[i]->Fill(Qx2diff,nn+1);
+*/
       }
 }

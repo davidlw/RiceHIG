@@ -16,7 +16,7 @@ analysisSkimContent = cms.PSet(
       'keep L1GlobalTriggerReadoutRecord_gtDigis_*_*',
 #      'keep *_l1extraParticles_*_*',
       # jet
-#      'keep *_towerMaker_*_*',
+      'keep *_towerMaker_*_*',
 #      'keep *patJet*_selectedPatJets*_*_*',
 #      'keep *PFJet*_ak5PFJets_*_*',
       # photons
@@ -27,7 +27,11 @@ analysisSkimContent = cms.PSet(
       # muon
 #      'keep recoMuons_muons_*_*',      
       # V0
-      'keep *_generalV0Candidates*_*_*',
+      'keep *_generalV0Candidates*_Lambda_*',
+      'keep *_generalV0Candidates*_Kshort_*',
+      'keep *_generalCascadeCandidates*_Xi_*',
+      'keep *_generalCascadeCandidates*_Omega_*',
+      'keep *_generalD0Candidates*_D0_*',
       # tracks
       'keep recoTracks_generalTracks*_*_*',  
 #      'keep recoTracks_pixelTracks_*_*',
@@ -36,12 +40,12 @@ analysisSkimContent = cms.PSet(
 #      'keep recoTracks_allTracks*_*_*',
 #      'keep recoTracks_allVertices*_*_*',
 #      'keep recoRecoChargedCandidates_allTracks*_*_*',
-#      'keep *_dedx*_*_*',
+      'keep *_dedx*_*_*',
 #      'keep *DeDx*_*_*_*',
 #      'keep *_pACentrality_*_*',
       # clusters
 #      'keep *_siPixelClusters_*_*',       
-      # PFCandidate
+#      # PFCandidate
 #      'keep *_particleFlow_*_*',
       # mc (if present)
       'keep GenEventInfoProduct_*_*_*',

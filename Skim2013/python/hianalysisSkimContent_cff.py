@@ -13,7 +13,7 @@ analysisSkimContent = cms.PSet(
         'keep *_hiEvtPlane_*_*',        
         
         # jet
-#        'keep *_towerMaker_*_*',
+        'keep *_towerMaker_*_*',
 
         # vertex
         'keep *_hiSelectedVertex_*_*',

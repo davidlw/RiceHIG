@@ -22,6 +22,7 @@ TPhICM::TPhICM(Int_t nevents, Int_t seed, Int_t multiplicity, Int_t modelnum):
    fNevents(nevents),
    fMultiplicity(multiplicity),
    fInitMultiplicity(multiplicity),
+   fNparticle(0),
    fNuclR(8.0),
    fB(0.0), 
    fEccA(0),
@@ -51,7 +52,9 @@ void TPhICM::FixModelParameters(Int_t modelnum) {
 //      fClusPtDist[model] = new TF1("ptdist","x*exp(-x/0.45)",0,10);
       fClusPtDist[model] = 0; 
       fClusMf[model]=0;
-      fClusEtaBroad[model]=0;
+      fClusEtaBroad[model] = 0;
+      fClusPtPhiDist[model] = new TF2("ptphidist","y*exp(-y/[0])*(1+2*[1]*y/[0]*cos(x)+2*[2]*y/[0]*cos(2*x)+2*[3]*y/[0]*cos(3*x)+2*[4]*y/[0]*cos(4*x))",-3.1416,3.1416,0,5);
+      fClusPtPhiDist[model]->SetParameters(0.5,0,0,0,0);
    }
    if(modelnum==0) {
       fConserveMom=0;      
@@ -179,6 +182,7 @@ void TPhICM::FixModelParameters(Int_t modelnum) {
       fConserveMom=1;
       fClusPtDist[0] = new TF1("ptdist","x*exp(-x/0.550)",0,10);
       fClusPzDist[0] = new TF1("pzdist","3.5/cosh(x/1.3)+2.5/cosh(x/5.5)+0.4/cosh(x/40.0)",-200,200);
+      fClusPtPhiDist[0]->SetParameters(0.550,0.15,0.05,0);
       fClusProb[0] = 1.0;
       fClusNchild[0] = 3;
       fClusM[0] = 1.05;
@@ -186,12 +190,13 @@ void TPhICM::FixModelParameters(Int_t modelnum) {
    }  
    else if(modelnum==15) {   
       fConserveMom=1;
-      fClusPtDist[0] = new TF1("ptdist","x*exp(-x/0.750)",0,10);
-      fClusPzDist[0] = new TF1("pzdist","2.0/cosh(x/1.3)+1.5/cosh(x/5.5)+0.4/cosh(x/40.0)",-200,200);
+      fClusPtDist[0] = new TF1("ptdist","x*exp(-x/1.550)",0,10);
+      fClusPzDist[0] = new TF1("pzdist","3.5/cosh(x/1.3)+2.5/cosh(x/5.5)+0.4/cosh(x/40.0)",-200,200);
+      fClusPtPhiDist[0]->SetParameters(0.5,0.0,0.1,0.0,0.,0);
       fClusProb[0] = 1.0;
-      fClusNchild[0] = 4;
-      fClusM[0] = 1.4;
-      fEtaBroaden = 0.5;
+      fClusNchild[0] = 2;
+      fClusM[0] = 0.5;
+      fEtaBroaden = 0.0;
    }  
    else if(modelnum==16) {      
       fConserveMom=1;
@@ -630,7 +635,7 @@ void TPhICM::RunEvent(Int_t evtno) {
    vector<Cluster_t> clusterList;
 
    EventKind=1;
-   Int_t nparticles=0;
+   fNparticle=0;
    Int_t iMonteCarlo=0;
    fMultiplicity=fInitMultiplicity;
 
@@ -639,21 +644,27 @@ void TPhICM::RunEvent(Int_t evtno) {
 //     fClusPzDist[0]->SetParameter(1,gRandom->Gaus(4.3,1.5));
 // --------------------------------------------------------
 
-   while(nparticles<fMultiplicity) {
+   while(fNparticle<fMultiplicity) {
       Int_t clustype=GenClusType();
       Int_t nchild=GenClusNChild(clustype);
-      nparticles+=nchild;
+      fNparticle+=nchild;
       Double_t clusmass=GenClusMass(clustype);  
-      Double_t cluspt=fClusPtDist[clustype]->GetRandom();
+      Double_t cluspt=0; //=fClusPtDist[clustype]->GetRandom();
       Double_t cluspz=fClusPzDist[clustype]->GetRandom();
 //Wei's
+
       Double_t clusX=0;
       Double_t clusY=0;
       Double_t clusZ=0;
       if(fNuclR!=0 && fB<=2*fNuclR) GenClusPos(clusX,clusY); 
       TVector3 dummyV(cluspt,0,cluspz);
-      Double_t cluspx=cluspt*clusX/TMath::Sqrt(clusX*clusX+clusY*clusY);
-      Double_t cluspy=cluspt*clusY/TMath::Sqrt(clusX*clusX+clusY*clusY);
+
+      Double_t clusphi=0;// = fClusPhiDist[clustype]->GetRandom();
+      fClusPtPhiDist[clustype]->GetRandom2(clusphi,cluspt);
+//      Double_t cluspx=cluspt*clusX/TMath::Sqrt(clusX*clusX+clusY*clusY);
+//      Double_t cluspy=cluspt*clusY/TMath::Sqrt(clusX*clusX+clusY*clusY);
+      Double_t cluspx = cluspt*cos(clusphi);
+      Double_t cluspy = cluspt*sin(clusphi);
 
       Cluster_t cluster={clusX,clusY,clusZ,cluspx,cluspy,cluspz,clusmass,nchild};
       clusterList.push_back(cluster);
@@ -680,6 +691,7 @@ void TPhICM::RunEvent(Int_t evtno) {
       Int_t nchild=cluster.n;
       if(nchild==1) {
          new((*MonteCarlo)[iMonteCarlo]) TLorentzVector(*V);
+         fCharge[iMonteCarlo] = 0;
          iMonteCarlo++;
 	 continue;
       }
@@ -699,6 +711,15 @@ void TPhICM::RunEvent(Int_t evtno) {
       }
      
       Double_t etasum=0;
+/*
+      Int_t charge[100];
+      Int_t charge_tot=0;
+      for(Int_t ipart=0;ipart<nchild;ipart++) {
+         charge[ipart] = gRandom->Integer(3)-1;
+         charge_tot =+ charge[ipart];
+      }
+*/
+      Int_t flag_charge=1;
       for(Int_t ipart=0;ipart<nchild;ipart++) {
 	 TLorentzVector *particle = (TLorentzVector*)clusterDecayer->GetDecay(ipart)->Clone();
 	 if(fEtaBroaden) {
@@ -737,6 +758,10 @@ void TPhICM::RunEvent(Int_t evtno) {
            if(gRandom->Rndm()>ProbPathLength(PathLength)) {fMultiplicity--; continue;}   
          }
          new((*MonteCarlo)[iMonteCarlo]) TLorentzVector(*particle);
+         fCharge[iMonteCarlo] = flag_charge;
+         flag_charge *= -1;
+         if((nchild % 2) && ipart==(nchild-1)) fCharge[iMonteCarlo]=0; 
+//         fCharge[iMonteCarlo] = (int)(charge[ipart]-(Double_t)charge_tot/ipart); 
          iMonteCarlo++;
       }
       delete clusterDecayer;
@@ -802,6 +827,8 @@ void TPhICM::SetWriteTree(TString outfname) {
 
    MonteCarlo = new TClonesArray("TLorentzVector", 10000);
    fOutTree->Branch("MonteCarlo", "TClonesArray", &MonteCarlo, 128000, 0);
+   fOutTree->Branch("fNparticle",&fNparticle,"fNparticle/I");
+   fOutTree->Branch("fCharge",fCharge,"charge[fNparticle]/I");
 }
 
 void TPhICM::WriteTreeEvent() {

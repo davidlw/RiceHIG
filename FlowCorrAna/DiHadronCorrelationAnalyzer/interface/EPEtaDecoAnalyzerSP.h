@@ -25,6 +25,8 @@ class EPEtaDecoAnalyzerSP : public DiHadronCorrelationMultiBase {
    TH1D* hDeltaZvtx;
    TH2D* hSignalCosn[MAXETATRGBINS];
    TH2D* hBackgroundCosn[MAXETATRGBINS];
+   TH1D* hSignalNPairs[MAXETATRGBINS];
+   TH1D* hBackgroundNPairs[MAXETATRGBINS];
    TH2D* hSignalCosnSame[MAXETATRGBINS];
    TH2D* hBackgroundCosnSame[MAXETATRGBINS];
    TH2D* hSignalCosnDiff[MAXETATRGBINS];

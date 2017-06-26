@@ -30,7 +30,8 @@ epetadecomatrix_ana_HI = epetadecomatrix_ana.clone(
   IsHITrkQuality = cms.bool(True),
   IsPPTrkQuality = cms.bool(False),
 
-  EffFileName = cms.string('')
+  EffFileName = cms.string('EffCorrectionsPixel_NTT_pt_0_10_v2.root'),
+  EffHistName = cms.string('Eff_0_5')
 )
 
 #epetadeco_ana_seq = cms.Sequence(epetadeco_ana_pPb_hfp*epetadeco_ana_pPb_hfm)

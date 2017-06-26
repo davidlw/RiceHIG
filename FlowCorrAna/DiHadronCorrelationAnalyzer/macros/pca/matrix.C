@@ -38,16 +38,16 @@ double PCA_full(double *x, double *par){
 
 void matrix()
 {
-//  TFile* f = new TFile("/net/hisrv0001/home/davidlw/scratch1/DiHadronCorrelations/outputs_312/AMPTGen_Minbias_2760GeV/merged/epetadecomatrix_PbPb_mb.root");
-//  TFile* f = new TFile("/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_5_3_20/src/FlowCorrAna/DiHadronCorrelationAnalyzer/cfg/epetadecomatrix.root");
+  TFile* f = new TFile("/net/hisrv0001/home/davidlw/scratch1/DiHadronCorrelations/outputs_312/HIData_Minbias_5TeV/merged/epetadecomatrix_ucc_pttrg033_ptass033_eff1_etabin02_golden_v5.root");
+//  TFile* f = new TFile("/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_5_5_patch3/src/FlowCorrAna/DiHadronCorrelationAnalyzer/cfg/epetadecomatrix.root");
 
-  TFile* f = new TFile("/net/hisrv0001/home/davidlw/scratch1/DiHadronCorrelations/outputs_312/HIData_Minbias_2760GeV/merged/epetadecomatrix_cent5060_pttrg033_ptass033_eff1_v2.root");
+//  TFile* f = new TFile("/net/hisrv0001/home/davidlw/scratch1/DiHadronCorrelations/outputs_312/HIData_Minbias_2760GeV/merged/epetadecomatrix_cent5060_pttrg033_ptass033_eff1_v2.root");
 
-  const int ntrgbins = 8;
+  const int ntrgbins = 24;
   TH2D* hsignal[ntrgbins][ntrgbins];
   TH2D* hbackground[ntrgbins][ntrgbins];
 
-  TH2D* hMatrix = new TH2D("matrix",";#eta_{1};#eta_{2}",8,-2.4,2.4,8,-2.4,2.4);
+  TH2D* hMatrix = new TH2D("matrix",";#eta_{1};#eta_{2}",24,-2.4,2.4,24,-2.4,2.4);
   TH2D* hMatrix_fit = (TH2D*)hMatrix->Clone("matrix_fit");
   TH1D* hp1 = (TH1D*)hMatrix->ProjectionX("hp1",-1,-1,"e");
   TH1D* hp2 = (TH1D*)hMatrix->ProjectionX("hp2",-1,-1,"e");
@@ -61,8 +61,8 @@ void matrix()
       hsignal[i][j] = (TH2D*)f->Get(Form("epetadecomatrix_ana_HI/signalcosn_trg%d_ass%d",i,j));      
       hbackground[i][j] = (TH2D*)f->Get(Form("epetadecomatrix_ana_HI/backgroundcosn_trg%d_ass%d",i,j));
 
-      TH1D* hsignal_1D = (TH1D*)hsignal[i][j]->ProjectionX("signal_1D",3,3,"i");
-      TH1D* hbackground_1D = (TH1D*)hbackground[i][j]->ProjectionX("background_1D",3,3,"i");
+      TH1D* hsignal_1D = (TH1D*)hsignal[i][j]->ProjectionX("signal_1D",2,2,"i");
+      TH1D* hbackground_1D = (TH1D*)hbackground[i][j]->ProjectionX("background_1D",2,2,"i");
 
       hMatrix->SetBinContent(i+1,j+1,hsignal_1D->GetMean()-hbackground_1D->GetMean());
       hMatrix->SetBinError(i+1,j+1,sqrt(hsignal_1D->GetMeanError()*hsignal_1D->GetMeanError()+hbackground_1D->GetMeanError()*hbackground_1D->GetMeanError()));

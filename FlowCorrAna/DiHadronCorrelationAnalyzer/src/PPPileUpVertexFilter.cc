@@ -1,4 +1,4 @@
-/** \class PPPileUpVertexFilter
+/** \class PPPileUpVertexFilterLowPU
  *
  *
  * This class is an EDFilter for rejecting pp events with multiple collisions
@@ -26,10 +26,10 @@
 #include <DataFormats/VertexReco/interface/Vertex.h>
 #include <DataFormats/VertexReco/interface/VertexFwd.h>
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
-class PPPileUpVertexFilter : public edm::EDFilter {
+class PPPileUpVertexFilterLowPU : public edm::EDFilter {
 public:
-    explicit PPPileUpVertexFilter(const edm::ParameterSet&);
-    ~PPPileUpVertexFilter();
+    explicit PPPileUpVertexFilterLowPU(const edm::ParameterSet&);
+    ~PPPileUpVertexFilterLowPU();
     virtual void endJob() ;
     virtual bool filter(edm::Event&, const edm::EventSetup&);
 private:
@@ -48,7 +48,7 @@ private:
     std::vector<double> surfaceCutParameters_;
     TF2* func2D_;
 };
-PPPileUpVertexFilter::PPPileUpVertexFilter(const edm::ParameterSet& iConfig) :
+PPPileUpVertexFilterLowPU::PPPileUpVertexFilterLowPU(const edm::ParameterSet& iConfig) :
 vtxSrc_(iConfig.getParameter<edm::InputTag>("vtxSrc")),
 doDzNtrkCut_(iConfig.getParameter<bool>("doDzNtrkCut")),
 doDxyDzCut_(iConfig.getParameter<bool>("doDxyDzCut")),
@@ -74,7 +74,7 @@ surfaceCutParameters_(iConfig.getParameter<std::vector<double> >("surfaceCutPara
         for(unsigned int i=0;i<surfaceCutParameters_.size();i++) func2D_->SetParameter(i,0);
     }
 }
-PPPileUpVertexFilter::~PPPileUpVertexFilter()
+PPPileUpVertexFilterLowPU::~PPPileUpVertexFilterLowPU()
 {
     delete func2D_;
 }
@@ -82,7 +82,7 @@ PPPileUpVertexFilter::~PPPileUpVertexFilter()
 bool PPwayToSort(reco::Vertex a, reco::Vertex b) { return a.tracksSize() > b.tracksSize(); }
 
 bool
-PPPileUpVertexFilter::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
+PPPileUpVertexFilterLowPU::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
     using namespace edm;
     bool accepted = true;
@@ -134,7 +134,7 @@ PPPileUpVertexFilter::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
     return accepted;
 }
 void
-PPPileUpVertexFilter::endJob()
+PPPileUpVertexFilterLowPU::endJob()
 {
 }
-DEFINE_FWK_MODULE(PPPileUpVertexFilter);
+DEFINE_FWK_MODULE(PPPileUpVertexFilterLowPU);

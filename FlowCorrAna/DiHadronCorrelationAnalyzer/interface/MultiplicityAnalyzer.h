@@ -12,6 +12,7 @@
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/EDAnalyzer.h"
 #include "FWCore/Framework/interface/Event.h"
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
@@ -84,6 +85,9 @@ class MultiplicityAnalyzer : public edm::EDAnalyzer {
  protected:
    
    edm::Service<TFileService> theOutputs;
+   edm::EDGetTokenT<reco::TrackCollection> token_tracks;
+   edm::EDGetTokenT<reco::VertexCollection> token_vertices;
+   edm::EDGetTokenT<reco::GenParticleCollection> token_genparticles;
 
    // histograms
    TH2D*  hEffWeight;
@@ -93,6 +97,14 @@ class MultiplicityAnalyzer : public edm::EDAnalyzer {
    TH2D*  hXYVtx;
    TH2D*  hMultRawVsGen;
    TH2D*  hMultCorrVsGen;
+   TH2D*  hMultRawVsPt_eta1;
+   TH2D*  hMultRawVsPtCorr_eta1;
+   TH2D*  hMultRawVsPt_eta2;
+   TH2D*  hMultRawVsPtCorr_eta2;
+   TH2D*  hMultRawVsPt_eta3;
+   TH2D*  hMultRawVsPtCorr_eta3;
+   TH1D*  hMultRaw;
+   TH1D*  hMultCorr;
 
    // parameters
    CutParameters cutPara;

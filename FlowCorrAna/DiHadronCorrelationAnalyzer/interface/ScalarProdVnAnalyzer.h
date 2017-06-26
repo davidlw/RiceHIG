@@ -20,19 +20,13 @@ class ScalarProdVnAnalyzer : public DiHadronCorrelationMultiBase {
 
    // histograms
    TH1D* hDeltaZvtx;
-   TH2D* hSignalCosnSame_pm[MAXPTTRGBINS][MAXPTASSBINS];
-   TH2D* hBackgroundCosnSame_pm[MAXPTTRGBINS][MAXPTASSBINS];
-   TH2D* hSignalCosnSame_mp[MAXPTTRGBINS][MAXPTASSBINS];
-   TH2D* hBackgroundCosnSame_mp[MAXPTTRGBINS][MAXPTASSBINS];
+   TH2D* hSignalCosn[MAXPTTRGBINS][MAXPTASSBINS];
+   TH2D* hBackgroundCosn[MAXPTTRGBINS][MAXPTASSBINS];
 
-   TH1D* hCosnCenter_trg_p[MAXPTTRGBINS][5];
-   TH1D* hCosnCenter_trg_m[MAXPTTRGBINS][5];
-   TH1D* hSinnCenter_trg_p[MAXPTTRGBINS][5];
-   TH1D* hSinnCenter_trg_m[MAXPTTRGBINS][5];
-   TH1D* hCosnCenter_ass_p[MAXPTASSBINS][5];
-   TH1D* hCosnCenter_ass_m[MAXPTASSBINS][5];
-   TH1D* hSinnCenter_ass_p[MAXPTASSBINS][5];
-   TH1D* hSinnCenter_ass_m[MAXPTASSBINS][5];
+   TH1D* hCosnCenter_trg[MAXPTTRGBINS][5];
+   TH1D* hSinnCenter_trg[MAXPTTRGBINS][5];
+   TH1D* hCosnCenter_ass[MAXPTASSBINS][5];
+   TH1D* hSinnCenter_ass[MAXPTASSBINS][5];
 
    // parameters
    int    bkgFactor;

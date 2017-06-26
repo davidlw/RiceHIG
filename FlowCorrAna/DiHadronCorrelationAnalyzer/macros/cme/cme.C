@@ -1,6 +1,6 @@
 void cme(TString filename, TH1D* h[8], TString type = "HI")
 {
-  TH1D* h[8];
+//  TH1D* h[8];
 
   TFile* f = new TFile(filename.Data());
 
@@ -241,15 +241,15 @@ void compare_centrality()
 
 void compare()
 {
-//  TString filename("/net/hisrv0001/home/davidlw/scratch1/DiHadronCorrelations/outputs_312/HIData_Minbias_2760GeV/merged/chargedepcorr_cent4050_pttrg033_ptassallweight_etaass445_eff1_zvtx1_bin01_v45.root");
-    TString filename("/net/hisrv0001/home/davidlw/scratch1/DiHadronCorrelations/outputs_312/PAData_Minbias_5TeV/merged/chargedepcorr_n150185_pttrg033_ptassallweight_etaass445_all_eff1_zvtx1_bin01_v13.root");
+  TString filename("/net/hisrv0001/home/davidlw/scratch1/DiHadronCorrelations/outputs_312/HIData_Minbias_2760GeV/merged/chargedepcorr_cent3040_pttrg033_ptassallweight_etaass445_eff1_zvtx1_bin01_v45.root");
+//    TString filename("/net/hisrv0001/home/davidlw/scratch1/DiHadronCorrelations/outputs_312/PAData_Minbias_5TeV/merged/chargedepcorr_n150185_pttrg033_ptassallweight_etaass445_all_eff1_zvtx1_bin01_v13.root");
 
   TH1D* h[10];
-  cme(filename,h,"pPb");
+  cme(filename,h,"HI");
 
-  TH2D* htmp = new TH2D("tmp","",1000,0.15,4.8,1000,-0.001*3,0.0005*3);
-  TH2D* htmp1 = new TH2D("tmp1","",1000,0.15,4.8,1000,-0.0005*3,0.0002*3);
-  TH2D* htmp2 = new TH2D("tmp2","",1000,0.15,4.8,1000,-0.0015*3,0.005*3);
+  TH2D* htmp = new TH2D("tmp","",1000,0.1,4.8,1000,-0.001*3,0.0005*3);
+  TH2D* htmp1 = new TH2D("tmp1","",1000,0.1,4.8,1000,-0.0005*3,0.0002*3);
+  TH2D* htmp2 = new TH2D("tmp2","",1000,0.1,4.8,1000,-0.0015*3,0.005*3);
 
   TCanvas* c = new TCanvas("c","c",1200,400);
   c->Divide(3,1);

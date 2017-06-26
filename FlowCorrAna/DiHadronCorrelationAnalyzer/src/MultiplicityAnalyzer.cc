@@ -39,10 +39,10 @@ MultiplicityAnalyzer::MultiplicityAnalyzer(const edm::ParameterSet& iConfig) :
 {
   TH1::SetDefaultSumw2();
 
-  cutPara.trgtrackCollection = iConfig.getParameter<string>("TrgTrackCollection");
-  cutPara.genParticleCollection = iConfig.getParameter<string>("GenParticleCollection");
-  cutPara.vertexCollection = iConfig.getParameter<string>("VertexCollection");
-
+  token_vertices = consumes<std::vector<reco::Vertex>>(iConfig.getParameter<edm::InputTag>("VertexCollection"));
+  token_tracks = consumes<std::vector<reco::Track>>(iConfig.getParameter<edm::InputTag>("TrgTrackCollection"));
+  token_genparticles = consumes<std::vector<reco::GenParticle>>(iConfig.getParameter<edm::InputTag>("GenParticleCollection"));
+   
   cutPara.xvtxcenter = iConfig.getParameter<double>("xvtxcenter");
   cutPara.yvtxcenter = iConfig.getParameter<double>("yvtxcenter");
   cutPara.zvtxcenter = iConfig.getParameter<double>("zvtxcenter");
@@ -57,6 +57,7 @@ MultiplicityAnalyzer::MultiplicityAnalyzer(const edm::ParameterSet& iConfig) :
   cutPara.ptmultmax = iConfig.getParameter<double>("ptmultmax");
   cutPara.nvtxmax = iConfig.getParameter<int>("nvtxmax");
 
+  cutPara.IsGenMult = iConfig.getParameter<bool>("IsGenMult");
   cutPara.IsVtxSel = iConfig.getParameter<bool>("IsVtxSel");
   cutPara.IsPPTrkQuality = iConfig.getParameter<bool>("IsPPTrkQuality");
   cutPara.IsHITrkQuality = iConfig.getParameter<bool>("IsHITrkQuality");
@@ -77,11 +78,27 @@ MultiplicityAnalyzer::MultiplicityAnalyzer(const edm::ParameterSet& iConfig) :
 
 void MultiplicityAnalyzer::beginJob()
 {
-  hMultRawVsGen = theOutputs->make<TH2D>("multrawvsgen",";n",500,0,500,500,0,500);
-  hMultCorrVsGen = theOutputs->make<TH2D>("multcorrvsgen",";n",500,0,500,500,0,500);
+   Double_t multbins[156] = {0};
+   for(int i=0;i<101;i++) multbins[i] = i;
+   for(int i=101;i<126;i++) multbins[i] = multbins[100] + (i-100)*2;
+   for(int i=126;i<136;i++) multbins[i] = multbins[125] + (i-125)*4;
+   for(int i=136;i<140;i++) multbins[i] = multbins[135] + (i-135)*10;
+   for(int i=140;i<150;i++) multbins[i] = multbins[139] + (i-139)*20;
+   for(int i=150;i<156;i++) multbins[i] = multbins[149] + (i-149)*70;
+
+  hMultRawVsPt_eta1 = theOutputs->make<TH2D>("multrawvspt_eta1",";N_{trk}^{offline};p_{T} (GeV/c)",600,0,600,500,0,50);
+  hMultRawVsPtCorr_eta1 = theOutputs->make<TH2D>("multrawvsptcorr_eta1",";N_{trk}^{offline};p_{T} (GeV/c)",600,0,600,500,0,50);
+  hMultRawVsPt_eta2 = theOutputs->make<TH2D>("multrawvspt_eta2",";N_{trk}^{offline};p_{T} (GeV/c)",600,0,600,500,0,50);
+  hMultRawVsPtCorr_eta2 = theOutputs->make<TH2D>("multrawvsptcorr_eta2",";N_{trk}^{offline};p_{T} (GeV/c)",600,0,600,500,0,50);
+  hMultRawVsPt_eta3 = theOutputs->make<TH2D>("multrawvspt_eta3",";N_{trk}^{offline};p_{T} (GeV/c)",600,0,600,500,0,50);
+  hMultRawVsPtCorr_eta3 = theOutputs->make<TH2D>("multrawvsptcorr_eta3",";N_{trk}^{offline};p_{T} (GeV/c)",600,0,600,500,0,50);
+  hMultRawVsGen = theOutputs->make<TH2D>("multrawvsgen",";N_{trk}^{offline};N_{trk}^{Gen}",155,&multbins[0],155,&multbins[0]);
+  hMultCorrVsGen = theOutputs->make<TH2D>("multcorrvsgen",";N_{trk}^{corrected};N_{trk}^{Gen}",155,&multbins[0],155,&multbins[0]);
   hZVtx = theOutputs->make<TH1D>("zvtx",";z_{vtx} (cm)",160,-20,20);
   hXYVtx = theOutputs->make<TH2D>("xyvtx",";x_{vtx} (cm);y_{vtx} (cm)",100,-0.5,0.5,100,-0.5,0.5);
   hNVtx = theOutputs->make<TH1D>("nvtx",";nVertices",51,-0.5,50.5);
+  hMultRaw = theOutputs->make<TH1D>("multraw",";N_{trk}^{offline}",5000,0,5000);
+  hMultCorr = theOutputs->make<TH1D>("multcorr",";N_{trk}^{offline}",5000,0,5000);
 }
 
 // ------------ method called to for each event  -----------
@@ -111,8 +128,60 @@ void MultiplicityAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSet
 
   // Select multiplicity
   GetMult(iEvent,iSetup);
-  hMultRawVsGen->Fill(nMultGen,nMult);
-  hMultCorrVsGen->Fill(nMultGen,nMultCorr,1.0/GetTrgWeight(nMult));
+  hMultRawVsGen->Fill(nMult,nMultGen);
+  hMultCorrVsGen->Fill(nMultCorr,nMultGen,1.0/GetTrgWeight(nMult));
+  hMultRaw->Fill(nMult);
+  hMultCorr->Fill(nMultCorr,1.0/GetTrgWeight(nMult));
+
+  edm::Handle< reco::TrackCollection > tracks;
+  iEvent.getByToken(token_tracks, tracks);
+
+  if( !tracks->size() ) { cout<<"Invalid or empty track collection!"<<endl; return; }
+
+  for(unsigned it=0; it<tracks->size(); ++it){
+
+    const reco::Track & trk = (*tracks)[it];
+
+    if(trk.pt()<0.0001) continue;
+
+    math::XYZPoint bestvtx(xVtx,yVtx,zVtx);
+
+    double dzvtx = trk.dz(bestvtx);
+    double dxyvtx = trk.dxy(bestvtx);
+    double dzerror = sqrt(trk.dzError()*trk.dzError()+zVtxError*zVtxError);
+    double dxyerror = sqrt(trk.d0Error()*trk.d0Error()+xVtxError*yVtxError);
+
+    if(cutPara.IsPPTrkQuality)
+    {
+      if(!trk.quality(reco::TrackBase::highPurity)) continue;
+      if(fabs(trk.ptError())/trk.pt()>0.1) continue;
+      if(fabs(dzvtx/dzerror) > 3.0) continue;
+      if(fabs(dxyvtx/dxyerror) > 3.0) continue;
+    }
+
+    if(cutPara.IsHITrkQuality && !trk.quality(reco::TrackBase::highPurity)) continue;
+
+    double eta = trk.eta();
+    double pt  = trk.pt();
+    double effweight = GetEffWeight(eta,pt);
+
+    if(fabs(eta)<1.0)
+    {
+      hMultRawVsPt_eta1->Fill(nMult,pt);
+      hMultRawVsPtCorr_eta1->Fill(nMult,pt,1.0/effweight);
+    }
+    if(fabs(eta)<2.0 && fabs(eta)>1.0)
+    {
+      hMultRawVsPt_eta2->Fill(nMult,pt);
+      hMultRawVsPtCorr_eta2->Fill(nMult,pt,1.0/effweight);
+    }
+    if(fabs(eta)<2.4 && fabs(eta)>2.0)
+    {
+      hMultRawVsPt_eta3->Fill(nMult,pt);
+      hMultRawVsPtCorr_eta3->Fill(nMult,pt,1.0/effweight);
+    }
+  }
+
 }
 
 void MultiplicityAnalyzer::endJob()
@@ -124,7 +193,7 @@ void MultiplicityAnalyzer::GetMult(const edm::Event& iEvent, const edm::EventSet
 {
      //----- loop over tracks -----
      edm::Handle< reco::TrackCollection > tracks;
-     iEvent.getByLabel(cutPara.trgtrackCollection.Data(), tracks);
+     iEvent.getByToken(token_tracks, tracks);
      if( !tracks->size() ) { cout<<"Invalid or empty track collection!"<<endl; return; }
 
      for(unsigned it=0; it<tracks->size(); ++it){
@@ -161,9 +230,12 @@ void MultiplicityAnalyzer::GetMult(const edm::Event& iEvent, const edm::EventSet
        if(eta>=cutPara.etamultmin && eta<=cutPara.etamultmax && pt>=cutPara.ptmultmin && pt<=cutPara.ptmultmax) { nMult++; nMultCorr=nMultCorr+1.0/effweight; }
      }
  
+     if(!cutPara.IsGenMult) return;
+
      //----- loop over particles -----
      edm::Handle<reco::GenParticleCollection> genTracks;
-     iEvent.getByLabel(cutPara.genParticleCollection.Data(), genTracks);
+     iEvent.getByToken(token_genparticles, genTracks);
+
      if( !genTracks->size() ) { cout<<"Invalid or empty genParticle collection!"<<endl; return; }
      
      for(unsigned ip=0; ip<genTracks->size(); ++ip){
@@ -191,7 +263,8 @@ void MultiplicityAnalyzer::GetVertices(const edm::Event& iEvent, const edm::Even
     zVtxError = -99999.9;
 
     edm::Handle< reco::VertexCollection > vertices;
-    iEvent.getByLabel(cutPara.vertexCollection.Data(), vertices);
+    iEvent.getByToken(token_vertices, vertices);
+
     if(!vertices->size()) { cout<<"Invalid or empty vertex collection!"<<endl; return; }
 
     for(unsigned int iv=0; iv<vertices->size(); ++iv)

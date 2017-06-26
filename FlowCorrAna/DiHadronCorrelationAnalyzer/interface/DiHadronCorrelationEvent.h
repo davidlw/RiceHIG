@@ -10,6 +10,9 @@ using namespace std;
 #define MAXPTTRGBINS 20 
 #define MAXPTASSBINS 20
 
+#define MAXQ2BINS 20
+#define MAXCHASYMBINS 20
+
 #define MAXETATRGBINSPT 48
 #define ETATRGBINWIDTHPT 0.1
 
@@ -39,6 +42,8 @@ class DiHadronCorrelationEvent {
 //   int               centbin;
    float            zvtx;
    float            epangle;
+   float            q2;
+   float            chasym;
 
    bool operator<(const DiHadronCorrelationEvent & b) const{
      if (zvtx != b.zvtx) return zvtx < b.zvtx;

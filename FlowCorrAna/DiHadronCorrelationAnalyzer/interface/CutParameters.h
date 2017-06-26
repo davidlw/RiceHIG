@@ -15,6 +15,8 @@ class CutParameters {
    int     nmax;
    int     centmin;
    int     centmax;
+   double  b_genmin;
+   double  b_genmax;
    double  etatrgmin;                                                                                     
    double  etatrgmax;
    double  etaassmin;
@@ -54,6 +56,8 @@ class CutParameters {
    double  pthard1;
    double  pthard2;
    double  delta;
+   double  q2min;
+   double  q2max;
    double  mass_trg;
    double  mass_ass;
    vector<double>  massmean_trg;
@@ -82,6 +86,7 @@ class CutParameters {
    bool IsGenVtx;
    bool IsVtxSel;
    bool IsEventEngineer;
+   int  EventEngineerFlag;
    bool IsInvMass;
    bool IsCorr;
    bool IsHI;
@@ -111,9 +116,12 @@ class CutParameters {
    bool IsDSGenEvt;
    bool IsCheckTrgV0Dau;
    bool IsCheckAssV0Dau;
+   bool IsEtaReverse;
    bool IsBoostRestFrameGen;
    bool IsBoostRestFrameV0;
    bool IsGenRP;
+   bool IsGenB;
+   bool IsGenAcc;
 };
 
 #endif  // CutParameters_

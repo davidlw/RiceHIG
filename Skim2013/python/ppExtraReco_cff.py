@@ -81,5 +81,5 @@ nTrkOffFilter300 = cms.EDFilter("TrackCountFilter",
 
 ppSingleTrackFilterSequence = cms.Sequence(
                                            highPurityTracks
-                                           * selectTracks 
+#                                           * selectTracks 
                                            )

@@ -6,7 +6,7 @@ process.MessageLogger.cerr.FwkReport.reportEvery = 2000
 
 ### conditions
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
-process.GlobalTag.globaltag = 'GR_R_53_LV6::All'
+process.GlobalTag.globaltag = '75X_mcRun2_HeavyIon_v13'
 
 process.maxEvents = cms.untracked.PSet(
     input = cms.untracked.int32(-1)
@@ -27,7 +27,8 @@ process.hltHIUCC.throw = cms.bool(False)
 
 process.source = cms.Source("PoolSource",
                                 fileNames = cms.untracked.vstring(
-'/store/user/davidlw/Hijing_PbPb_MinimumBias_b13_cmssw5_3_14_batch3/RecoSkim3_v1/96137662441175d818189f055278f49a/pPb_MB_100_1_4vr.root'
+#'/store/user/davidlw/Hydjet_Quenched_MinBias_5020GeV_750/ppRECO_std_v3/160216_232421/0000/step2pp_RAW2DIGI_L1Reco_RECO_1.root'
+'/store/user/gsfs/Hydjet_Quenched_MinBias_5020GeV_750/Hydjet_30_100_w_pp_RECO_20160724/160725_221957/0000/step3_FILTER_RAW2DIGI_L1Reco_RECO_102.root'
                 )
                             )
 

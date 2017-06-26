@@ -48,7 +48,7 @@ hltHM110OnPP13TeV = hltHM220.clone()
 hltHM110OnPP13TeV.HLTPaths = ['HLT_PixelTracks_Multiplicity110*_v*']
 
 hltHM80105PP13TeV = hltHM220.clone()
-hltHM80105PP13TeV.HLTPaths = ['HLT_PixelTracks_Multiplicity60*_v*']
+hltHM80105PP13TeV.HLTPaths = ['HLT_PixelTracks_Multiplicity60*_v*','HLT_FullTracks_Multiplicity80_v*']
 
 hltHM105135PP13TeV60On = hltHM220.clone()
 hltHM105135PP13TeV60On.HLTPaths = ['HLT_PixelTracks_Multiplicity60*_v*','!HLT_PixelTracks_Multiplicity85*_v*']
@@ -56,3 +56,12 @@ hltHM105135PP13TeV60On.andOr = cms.bool(False)
 
 hltHM105135PP13TeV85On = hltHM220.clone()
 hltHM105135PP13TeV85On.HLTPaths = ['HLT_PixelTracks_Multiplicity85*_v*']
+
+hltHM105135PP13TeV = hltHM220.clone()
+hltHM105135PP13TeV.HLTPaths = ['HLT_PixelTracks_Multiplicity60*_v*','HLT_PixelTracks_Multiplicity85*_v*','HLT_FullTracks_Multiplicity100_v*','HLT_FullTracks_Multiplicity80_v*']
+
+hltHM135155PP13TeV = hltHM220.clone()
+hltHM135155PP13TeV.HLTPaths = ['HLT_PixelTracks_Multiplicity60*_v*','HLT_PixelTracks_Multiplicity85*_v*','HLT_PixelTracks_Multiplicity110_v*','HLT_FullTracks_Multiplicity100_v*','HLT_FullTracks_Multiplicity80_v*','HLT_FullTracks_Multiplicity130_v*']
+
+hltHM155infPP13TeV = hltHM220.clone()
+hltHM155infPP13TeV.HLTPaths = ['HLT_PixelTracks_Multiplicity60*_v*','HLT_PixelTracks_Multiplicity85*_v*','HLT_PixelTracks_Multiplicity110_v*','HLT_PixelTracks_Multiplicity135_v*','HLT_FullTracks_Multiplicity100_v*','HLT_FullTracks_Multiplicity80_v*','HLT_FullTracks_Multiplicity130_v*','HLT_FullTracks_Multiplicity150_v*']

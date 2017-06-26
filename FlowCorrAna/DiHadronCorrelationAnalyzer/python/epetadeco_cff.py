@@ -14,7 +14,8 @@ epetadeco_ana_HI_hfp = epetadeco_ana.clone(
 
   etaassmin = cms.double(4.4),
   etaassmax = cms.double(5.0),
-  pttrgmin = cms.vdouble(0.5),
+  pttrgmin = cms.vdouble(8.0),
+  pttrgmax = cms.vdouble(10000.0),
 
 #  ptassmin = cms.vdouble(1.0),
 

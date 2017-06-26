@@ -22,8 +22,10 @@ process.maxEvents = cms.untracked.PSet(
 
 process.source = cms.Source("PoolSource",
                                 fileNames = cms.untracked.vstring(
+#'/store/user/davidlw/EPOS_PbPb5TeV/MB_Gen_v1/160628_112907/0000/ReggeGribovPartonMC_EposLHC_5TeV_PbPb_cfi_py_GEN_10.root'
+'/store/himc/HINPbPbWinter16DR/Hydjet_Quenched_MinBias_5020GeV_750/AODSIM/NoPU_75X_mcRun2_HeavyIon_v1_75X_mcRun2_HeavyIon_v13-v1/40000/0223C75F-B8F5-E511-B30C-14187741212B.root'
 #'file:/net/hisrv0001/home/davidlw/OSG_CMSSW/CMSSW_7_4_7_patch2_AMPT/src/MinBias_TuneZ2_7TeV_pythia6_cff_py_GEN.root'
-'/store/user/davidlw/MinBias_TuneZ2_7TeV_pythia6/HM85_batch1/150825_015323/0000/MinBias_TuneZ2_7TeV_pythia6_cff_py_GEN_382.root'
+#'/store/user/davidlw/MinBias_TuneZ2_7TeV_pythia6/HM85_batch1/150825_015323/0000/MinBias_TuneZ2_7TeV_pythia6_cff_py_GEN_382.root'
 #'/store/user/davidlw/AMPT_pp_Gen/HM95_string_v2/150808_041857/0000/amptDefault_cfi_py_GEN_834.root',
 #'/store/user/davidlw/AMPT_pp_Gen/HM95_string_v2/150808_041857/0000/amptDefault_cfi_py_GEN_836.root',
 #'/store/user/davidlw/AMPT_pp_Gen/HM95_string_v2/150808_041857/0000/amptDefault_cfi_py_GEN_846.root',

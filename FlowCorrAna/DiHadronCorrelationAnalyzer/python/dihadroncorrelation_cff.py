@@ -4,12 +4,109 @@ from FlowCorrAna.DiHadronCorrelationAnalyzer.dihadroncorrelation_cfi import *
 from FlowCorrAna.DiHadronCorrelationAnalyzer.hltFilter_cff import *
 from RiceHIG.V0Analysis.SelectedVertex_cfi import *
 
+corr_ana_N010 = corr_ana.clone()
+corr_ana_N010.nmin = cms.int32(0)
+corr_ana_N010.nmax = cms.int32(10)
+corr_ana_N1020 = corr_ana.clone()
+corr_ana_N1020.nmin = cms.int32(10)
+corr_ana_N1020.nmax = cms.int32(20)
+corr_ana_N2030 = corr_ana.clone()
+corr_ana_N2030.nmin = cms.int32(20)
+corr_ana_N2030.nmax = cms.int32(30)
+corr_ana_N3040 = corr_ana.clone()
+corr_ana_N3040.nmin = cms.int32(30)
+corr_ana_N3040.nmax = cms.int32(40)
+corr_ana_N4050 = corr_ana.clone()
+corr_ana_N4050.nmin = cms.int32(40)
+corr_ana_N4050.nmax = cms.int32(50)
+corr_ana_N5060 = corr_ana.clone()
+corr_ana_N5060.nmin = cms.int32(50)
+corr_ana_N5060.nmax = cms.int32(60)
+corr_ana_N6070 = corr_ana.clone()
+corr_ana_N6070.nmin = cms.int32(60)
+corr_ana_N6070.nmax = cms.int32(70)
+corr_ana_N7080 = corr_ana.clone()
+corr_ana_N7080.nmin = cms.int32(70)
+corr_ana_N7080.nmax = cms.int32(80)
+corr_ana_N80100 = corr_ana.clone()
+corr_ana_N80100.nmin = cms.int32(80)
+corr_ana_N80100.nmax = cms.int32(100)
+corr_ana_N100120 = corr_ana.clone()
+corr_ana_N100120.nmin = cms.int32(100)
+corr_ana_N100120.nmax = cms.int32(120)
+corr_ana_N120135 = corr_ana.clone()
+corr_ana_N120135.nmin = cms.int32(120)
+corr_ana_N120135.nmax = cms.int32(135)
+corr_ana_N135150 = corr_ana.clone()
+corr_ana_N135150.nmin = cms.int32(135)
+corr_ana_N135150.nmax = cms.int32(150)
+corr_ana_N150160 = corr_ana.clone()
+corr_ana_N150160.nmin = cms.int32(150)
+corr_ana_N150160.nmax = cms.int32(160)
+corr_ana_N160185 = corr_ana.clone()
+corr_ana_N160185.nmin = cms.int32(160)
+corr_ana_N160185.nmax = cms.int32(185)
+corr_ana_N185210 = corr_ana.clone()
+corr_ana_N185210.nmin = cms.int32(185)
+corr_ana_N185210.nmax = cms.int32(210)
+corr_ana_N210230 = corr_ana.clone()
+corr_ana_N210230.nmin = cms.int32(210)
+corr_ana_N210230.nmax = cms.int32(230)
+corr_ana_N230250 = corr_ana.clone()
+corr_ana_N230250.nmin = cms.int32(230)
+corr_ana_N230250.nmax = cms.int32(250)
+corr_ana_N250270 = corr_ana.clone()
+corr_ana_N250270.nmin = cms.int32(250)
+corr_ana_N250270.nmax = cms.int32(270)
+corr_ana_N270300 = corr_ana.clone()
+corr_ana_N270300.nmin = cms.int32(270)
+corr_ana_N270300.nmax = cms.int32(300)
+corr_ana_N300330 = corr_ana.clone()
+corr_ana_N300330.nmin = cms.int32(300)
+corr_ana_N300330.nmax = cms.int32(330)
+
+corr_ana_N330350 = corr_ana.clone()
+corr_ana_N330350.nmin = cms.int32(330)
+corr_ana_N330350.nmax = cms.int32(350)
+corr_ana_N350370 = corr_ana.clone()
+corr_ana_N350370.nmin = cms.int32(350)
+corr_ana_N350370.nmax = cms.int32(370)
+corr_ana_N370390 = corr_ana.clone()
+corr_ana_N370390.nmin = cms.int32(370)
+corr_ana_N370390.nmax = cms.int32(390)
+corr_ana_N390420 = corr_ana.clone()
+corr_ana_N390420.nmin = cms.int32(390)
+corr_ana_N390420.nmax = cms.int32(420)
+corr_ana_N420500 = corr_ana.clone()
+corr_ana_N420500.nmin = cms.int32(420)
+corr_ana_N420500.nmax = cms.int32(500)
+
+corr_ana_N330360 = corr_ana.clone()
+corr_ana_N330360.nmin = cms.int32(330)
+corr_ana_N330360.nmax = cms.int32(360)
+corr_ana_N360400 = corr_ana.clone()
+corr_ana_N360400.nmin = cms.int32(360)
+corr_ana_N360400.nmax = cms.int32(400)
+corr_ana_N400500 = corr_ana.clone()
+corr_ana_N400500.nmin = cms.int32(400)
+corr_ana_N400500.nmax = cms.int32(500)
+corr_ana_N500800 = corr_ana.clone()
+corr_ana_N500800.nmin = cms.int32(500)
+corr_ana_N500800.nmax = cms.int32(800)
+
 corr_ana_pp = corr_ana.clone(
 
 #  VertexCollection = cms.string('selectedVertex'),
 
-  pttrgmin = cms.vdouble(0.0, 0.2, 0.4, 0.6, 0.8, 1.1, 1.5, 2.0, 2.7, 4.0, 5.6, 9.0),
-  pttrgmax = cms.vdouble(0.2, 0.4, 0.6, 0.8, 1.1, 1.5, 2.0, 2.7, 4.0, 5.6, 9.0, 12.0),
+# 14-002
+#  pttrgmin = cms.vdouble(0.0, 0.2, 0.4, 0.6, 0.8, 1.1, 1.5, 2.0, 2.7, 4.0, 5.6, 9.0),
+#  pttrgmax = cms.vdouble(0.2, 0.4, 0.6, 0.8, 1.1, 1.5, 2.0, 2.7, 4.0, 5.6, 9.0, 12.0),
+
+  pttrgmin = cms.vdouble(0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.4, 1.8, 2.2, 2.6, 3.0, 3.5, 4.5, 6.0, 9.0),
+  pttrgmax = cms.vdouble(0.2, 0.4, 0.6, 0.8, 1.0, 1.4, 1.8, 2.2, 2.6, 3.0, 3.5, 4.5, 6.0, 9.0, 12.0),
+
+#  pttrgmin = cms.vdouble(0.0, 0.4, 0.7, 1.1, 1.7, 2.7, 4.0, 5.6),
+#  pttrgmax = cms.vdouble(0.4, 0.7, 1.1, 1.7, 2.7, 4.0, 5.6, 9.0),
 
   ptassmin = cms.vdouble(0.3),
   ptassmax = cms.vdouble(3.0),
@@ -20,11 +117,12 @@ corr_ana_pp = corr_ana.clone(
   yvtxcenter = cms.double(0.0),
   zvtxcenter = cms.double(-0.4),
 
-  zvtxmin = cms.double(-100),
-  zvtxmax = cms.double(100),
-  zvtxbin = cms.double(200),
+  zvtxmin = cms.double(-150),
+  zvtxmax = cms.double(150),
+  zvtxbin = cms.double(300),
 
-  EffFileName = cms.string('')
+#  EffFileName = cms.string('trkEff_pp_all_74X_origin.root')
+  EffFileName = cms.string('pp_dijet_NTT_5TeV.root')
 )
 
 corr_ana_pp_ks_sig = corr_ana_pp.clone(
@@ -86,8 +184,8 @@ corr_ana_pp_la_bkg = corr_ana_pp_la_sig.clone(
 
 corr_ana_HI = corr_ana.clone(
 #  TrgTrackCollection = cms.string('hiLowPtPixelTracks'),
-#  TrgTrackCollection = cms.string('hiGeneralAndPixelTracks'),
-  TrgTrackCollection = cms.string('hiGeneralTracks'),
+  TrgTrackCollection = cms.string('hiGeneralAndPixelTracks'),
+#  TrgTrackCollection = cms.string('hiGeneralTracks'),
   VertexCollection = cms.string('hiSelectedVertex'),
   GenParticleCollection = cms.string('hiGenParticles'),
 
@@ -113,7 +211,8 @@ corr_ana_HI = corr_ana.clone(
   IsHITrkQuality = cms.bool(True),
   IsPPTrkQuality = cms.bool(False),
 
-  EffFileName = cms.string('')
+  EffFileName = cms.string('EffCorrectionsPixel_NTT_pt_0_10_v2.root'),
+  EffHistName = cms.string('rTotalEff3D')
 )
 
 corr_ana_HI_hf = corr_ana_HI.clone(
@@ -147,10 +246,10 @@ corr_ana_pPb = corr_ana.clone(
 
   IsFullMatrix = cms.bool(False),
 
-  pttrgmin = cms.vdouble(1.0, 2.0, 4.0, 6.0),
-  pttrgmax = cms.vdouble(2.0, 4.0, 6.0, 12.0),
-  ptassmin = cms.vdouble(1.0, 2.0, 4.0, 6.0),
-  ptassmax = cms.vdouble(2.0, 4.0, 6.0, 12.0),
+  pttrgmin = cms.vdouble(0.3, 0.5, 1.0, 2.0, 4.0, 6.0),
+  pttrgmax = cms.vdouble(0.5, 1.0, 2.0, 4.0, 6.0, 12.0),
+  ptassmin = cms.vdouble(0.3, 0.5, 1.0, 2.0, 4.0, 6.0),
+  ptassmax = cms.vdouble(0.5, 1.0, 2.0, 4.0, 6.0, 12.0),
 
 #  EffFileName = cms.string('')
 )

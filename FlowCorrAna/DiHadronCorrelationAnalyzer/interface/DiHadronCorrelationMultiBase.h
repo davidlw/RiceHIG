@@ -12,6 +12,9 @@
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/EDAnalyzer.h"
 #include "FWCore/Framework/interface/Event.h"
+#include "FWCore/Framework/interface/ESHandle.h"
+#include "FWCore/Framework/interface/EventSetup.h"
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
@@ -57,6 +60,7 @@
 #include "DataFormats/Candidate/interface/VertexCompositeCandidateFwd.h"
 #include "SimDataFormats/Vertex/interface/SimVertex.h"
 #include "SimDataFormats/GeneratorProducts/interface/HepMCProduct.h"
+#include "SimGeneral/HepPDTRecord/interface/ParticleDataTable.h"
 #include "FWCore/Common/interface/TriggerNames.h"
 #include "RecoJets/JetAlgorithms/interface/JetAlgoHelper.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/CutParameters.h"
@@ -88,34 +92,35 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
    // particle types
    enum ParticleType {
      kGenParticle=0,
-     kTrack=1,
-     kTrackP=2,
-     kTrackM=3,
-     kJet=4,
-     kMuon=5,
-     kPhoton=6,
-     kEcalSC=7,
-     kEcalBC=8,
-     kPFHadron=9,
-     kPFPhoton=10,
-     kPFHadronPhoton=11,
-     kPFPhotonTrack=12,
-     kPFElectron=13,
-     kPFMuon=14,
-     kPFNeutral=15,
-     kPFHadronHF=16,
-     kPFEgammaHF=17,
-     kPionZero=18,
-     kPionZeroBkgUp=19,
-     kPionZeroBkgDown=20,
-     kCaloTower=21,
-     kEcalRecHit=22,
-     kHcalRecHit=23,
-     kKshort=24,
-     kLambda=25,
-     kLambdaP=26,
-     kLambdaM=27,
-     kD0=28
+     kGenerator=1,
+     kTrack=2,
+     kTrackP=3,
+     kTrackM=4,
+     kJet=5,
+     kMuon=6,
+     kPhoton=7,
+     kEcalSC=8,
+     kEcalBC=9,
+     kPFHadron=10,
+     kPFPhoton=11,
+     kPFHadronPhoton=12,
+     kPFPhotonTrack=13,
+     kPFElectron=14,
+     kPFMuon=15,
+     kPFNeutral=16,
+     kPFHadronHF=17,
+     kPFEgammaHF=18,
+     kPionZero=19,
+     kPionZeroBkgUp=20,
+     kPionZeroBkgDown=21,
+     kCaloTower=22,
+     kEcalRecHit=23,
+     kHcalRecHit=24,
+     kKshort=25,
+     kLambda=26,
+     kLambdaP=27,
+     kLambdaM=28,
+     kD0=29
    };
 
    ParticleType  trgID;
@@ -128,8 +133,17 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
 //   CentralityProvider * cent;
    edm::Service<TFileService> theOutputs;
 
+   edm::ESHandle<ParticleDataTable> pdt;
+
    edm::Handle<int> cbin_;
    edm::EDGetTokenT<int> tag_;
+   edm::EDGetTokenT<reco::Centrality> centtag_;
+   edm::EDGetTokenT<reco::TrackCollection> token_tracks;
+   edm::EDGetTokenT<reco::VertexCollection> token_vertices;
+   edm::EDGetTokenT<reco::GenParticleCollection> token_genparticles;
+   edm::EDGetTokenT<reco::VertexCompositeCandidateCollection> token_v0candidates;
+   edm::EDGetTokenT<reco::PFCandidateCollection> token_pfcandidates;
+   edm::EDGetTokenT<edm::SortedCollection<CaloTower>> token_calotowers;
 
    TNtuple* trackNtuple;
 
@@ -145,6 +159,9 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
    TH1D*  hMultRawAll;
    TH1D*  hMultCorrAll;
    TH1D*  hMultChargeAsym;
+   TH2D*  hMultEtaAsym;
+   TH2D*  hMultEtaPvsM;
+   TH2D*  hMultVsB;
    TH2D*  hThetaV0Plus;
    TH2D*  hThetaV0Minus;
    TH2D*  hV0InvMassVsP;
@@ -155,10 +172,14 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
    TH1D*  hPTotAll_trg;
    TH2D*  hdNdetadptAll_trg;
    TH2D*  hdNdetadphiAll_trg;
+//   TH2D*  hdNdetadphiAll_dau1_trg;
+//   TH2D*  hdNdetadphiAll_dau2_trg;
    TH1D*  hPtAll_ass;
    TH1D*  hPTotAll_ass;
    TH2D*  hdNdetadptAll_ass;
    TH2D*  hdNdetadphiAll_ass;
+//   TH2D*  hdNdetadphiAll_dau1_ass;
+//   TH2D*  hdNdetadphiAll_dau2_ass;
    TH1D*  hPtCorrAll_trg;
    TH2D*  hdNdetadptCorrAll_trg;
    TH2D*  hdNdetadphiCorrAll_trg;
@@ -178,11 +199,15 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
    TH1D*  hV0MassEE;
    TH2D*  hInvMassVsPt_Signal;
    TH1D*  hHighPurityFrac;
+   TH1D*  hpol_lam;
    TH1D*  hdzVtx;
    TH2D*  hdxyVtx;
    TH2D*  hnprivsnsec;
    TH2D*  hdxyVtx_dz1;
    TH2D*  hnprivsnsec_dz1;
+   TH2D*  hLamPtvsProtonPt;
+   TH2D*  hLamPtvsPionPt;
+   TH2D*  hLamDauPtRatiovsLamPt; 
 
    TH2D*  hdNdetadphi_trg[MAXPTTRGBINS];
    TH2D*  hdNdetadphi_ass[MAXPTASSBINS];
@@ -207,8 +232,10 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
    int  eventClass;
    int  nEvent; 
    int  nMult;
-   int  nMultP;
-   int  nMultM;
+   double  nMultP;
+   double  nMultM;
+   double  nMultEtaP;
+   double  nMultEtaM;
    int  nMultAll_trg;
    int  nMultAll_ass;
    double nMultCorr;
@@ -230,7 +257,10 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
    double  zVtxError;
    int  hiCentrality;
    double psi0_gen;
+   double b_gen;
    double pol_lam;
+   double pol_lam_mean;
+   double pol_lam_sigma;
    unsigned int nMult_trg[MAXPTTRGBINS];
    unsigned int nMult_ass[MAXPTASSBINS];
    double nMultCorr_trg[MAXPTTRGBINS];
@@ -241,10 +271,12 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
    double ptMean2_ass[MAXPTASSBINS];
   
    virtual void analyze(const edm::Event&, const edm::EventSetup&);
+   virtual void beginRun(const edm::Run&, const edm::EventSetup&);
    virtual void beginJob();
    virtual void endJob();
 
    virtual void GetMult(const edm::Event& iEvent, const edm::EventSetup& iSetup);
+   virtual void LoopGenerators(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg, int pdgid, bool isstable, bool ischarge);
    virtual void LoopParticles(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg, int pdgid, bool isstable, bool ischarge);    
    virtual void LoopTracks(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg, int icharge=999);
    virtual void LoopCaloTower(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg);
@@ -259,7 +291,7 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
                                 double pt_dau1 = -999., double eta_dau1 = -999., double phi_dau1 = -999., double mass_dau1 = -999.,
                                 double pt_dau2 = -999., double eta_dau2 = -999., double phi_dau2 = -999., double mass_dau2 = -999. );
    virtual double GetEventEngineer(const edm::Event& iEvent, const edm::EventSetup& iSetup, int nn);
-   virtual double GetRP(const edm::Event& iEvent, const edm::EventSetup& iSetup);
+   virtual double GetRP(const edm::Event& iEvent, const edm::EventSetup& iSetup, int index=1);
    virtual int  GetCentralityBin(const edm::Event& iEvent, const edm::EventSetup& iSetup);
    virtual double GetDeltaEta(double eta_trg, double eta_ass);
    virtual double GetDeltaPhi(double phi_trg, double phi_ass);
@@ -267,6 +299,7 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
    virtual bool   GetPtassBin(double pt, double eta, int jass);
    virtual double GetTrgWeight(double nmult);
    virtual double GetEffWeight(double eta, double phi, double pt, double zvtx, int centbin, double charge);
+   virtual bool Acceptance(double eta, double phi, double pt);
    virtual bool IsDSGen(const edm::Event& iEvent, const edm::EventSetup& iSetup);
    virtual ParticleType GetParticleID(TString particleid);
    

@@ -18,6 +18,7 @@
 //////////////////////////////////////////////////////////////////////////
 
 class TF1;
+class TF2;
 class TList;
 class TString;
 class TFile;
@@ -45,6 +46,8 @@ class TPhICM {
    Int_t fNevents;
    Int_t fMultiplicity;
    Int_t fInitMultiplicity;
+   Int_t fNparticle;
+   Int_t fCharge[100000];
 
    Double_t fNuclR;
    Double_t fB;
@@ -61,6 +64,7 @@ class TPhICM {
 
    TF1 *fClusPtDist[6];
    TF1 *fClusPzDist[6];
+   TF2 *fClusPtPhiDist[6];
 
    Bool_t fErrorflag;
    Bool_t fConserveMom;
