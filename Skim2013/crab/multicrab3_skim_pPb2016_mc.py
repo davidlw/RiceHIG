@@ -13,17 +13,11 @@ if __name__ == '__main__':
     config.General.transferOutputs = True
     config.General.transferLogs = False
     config.JobType.pluginName = 'Analysis'
-    config.JobType.maxMemoryMB = 3000
-#    config.JobType.psetName = '../test/pPbFlowCorrSkimSlim_2016_cfg.py'
-#    config.JobType.psetName = '../test/pPbFlowCorrSkimSlim_2016_D0_cfg.py'
-    config.JobType.psetName = '../test/pPbFlowCorrSkim_2016_D0_cfg.py'
-#    config.JobType.psetName = '../test/pPbFlowCorrSkim_2016_D0WrongSign_cfg.py'
-#    config.JobType.psetName = '../test/pPbFlowCorrSkim_2016_D0Both_cfg.py'
-#    config.Data.unitsPerJob = 20
-#    config.Data.unitsPerJob = 40 # for V0 only
-    config.Data.unitsPerJob = 5
-#    config.Data.totalUnits = 100
-    config.Data.splitting = 'LumiBased'
+#    config.JobType.psetName = '../test/pPbFlowCorrSkim_2016_MC_cfg.py'
+    config.JobType.psetName = '../test/pPbFlowCorrSkim_2016_D0Both_MC_cfg.py'
+    config.Data.unitsPerJob = 2
+    config.Data.splitting = 'FileBased'
+#    config.Data.inputDBS = 'phys03'
     config.Data.outLFNDirBase = '/store/user/%s/' % (getUsernameFromSiteDB())
     config.Data.publication = True
     config.Site.storageSite = 'T2_US_MIT'
@@ -41,14 +35,22 @@ if __name__ == '__main__':
     ## From now on that's what users should modify: this is the a-la-CRAB2 configuration part. ##
     #############################################################################################
 
-    config.General.requestName = 'pPb2016_pPb_Skim_DS_b1_v2'
-    config.JobType.psetName = '../test/pPbFlowCorrSkim_2016_DS_cfg.py'
-    config.Data.inputDataset = '/PAHighMultiplicity1/PARun2016C-PromptReco-v1/AOD'
-    config.Data.lumiMask = 'Cert_285479-285832_HI8TeV_PromptReco_pPb_Collisions16_JSON_NoL1T.txt'
-    config.Data.outputDatasetTag = 'RecoSkim2016_pPb_DS_v2'
+#    config.General.requestName = 'pPb2016_pPb_Skim_D0Both_MC_b1_v1'
+#    config.Data.inputDataset = '/EPOS_pPb_embed_prompt_D0_8160GeV/zhchen-EPOS_pPb_embed_prompt_D0_8160GeV_pt1p2_eta2p4_AOD-SIM-eb0de96e274499c444c51980f0cf37bd/USER'
+#    config.Data.outputDatasetTag = 'RecoSkim2016_pPb_D0Both_v1'
+#    submit(config)
+
+#    config.General.requestName = 'pPb2016_pPb_Skim_D0Both_MC_b2_v1'
+#    config.Data.inputDataset = '/EPOS_pPb_embed_nonprompt_D0_8160GeV/zhchen-EPOS_pPb_embed_nonprompt_D0_8160GeV_pt1p2_eta2p4_AOD-SIM-eb0de96e274499c444c51980f0cf37bd/USER'
+#    config.Data.outputDatasetTag = 'RecoSkim2016_pPb_D0Both_v1'
+#    submit(config)
+
+    config.General.requestName = 'pPb2016_pPb_Skim_D0Both_MC_b3_v2'
+    config.Data.inputDataset = '/PromptD0_D0pT-1p2_pPb-EmbEPOS_8p16_Pythia8/pPb816Summer16DR-pPbEmb_80X_mcRun2_pA_v4-v1/AODSIM'
+    config.Data.outputDatasetTag = 'RecoSkim2016_pPb_D0Both_v2'
     submit(config)
 
-    config.General.requestName = 'pPb2016_pPb_Skim_DPM_b1_v2'
-    config.JobType.psetName = '../test/pPbFlowCorrSkim_2016_DPM_cfg.py'
-    config.Data.outputDatasetTag = 'RecoSkim2016_pPb_DPM_v2'
-    submit(config)
+
+    config.General.requestName = 'pPb2016_pPb_Skim_D0Both_MC_b3_v2'
+    config.Data.inputDataset = '/PrmtD0_pThat-0_pT-1_eta-2p4_HydjetCymbMB_5p02-Pythia8/HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v14-v1/AODSIM'
+

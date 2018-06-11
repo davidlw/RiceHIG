@@ -66,8 +66,9 @@ private:
   virtual void produce(edm::Event&, const edm::EventSetup&);
   virtual void endJob() ;
 
-  edm::InputTag vertexCollName_;
-  std::string v0CollName_;
+  edm::EDGetTokenT<reco::VertexCollection> token_vertices;
+  edm::EDGetTokenT<reco::VertexCompositeCandidateCollection> token_v0candidates;
+
   std::string v0IDName_;
   double ptCut1_,ptCut2_;
   int nHitCut1_,nHitCut2_;

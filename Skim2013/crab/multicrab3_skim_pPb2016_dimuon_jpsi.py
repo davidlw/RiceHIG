@@ -13,15 +13,9 @@ if __name__ == '__main__':
     config.General.transferOutputs = True
     config.General.transferLogs = False
     config.JobType.pluginName = 'Analysis'
-    config.JobType.maxMemoryMB = 3000
-#    config.JobType.psetName = '../test/pPbFlowCorrSkimSlim_2016_cfg.py'
-#    config.JobType.psetName = '../test/pPbFlowCorrSkimSlim_2016_D0_cfg.py'
-    config.JobType.psetName = '../test/pPbFlowCorrSkim_2016_D0_cfg.py'
-#    config.JobType.psetName = '../test/pPbFlowCorrSkim_2016_D0WrongSign_cfg.py'
-#    config.JobType.psetName = '../test/pPbFlowCorrSkim_2016_D0Both_cfg.py'
-#    config.Data.unitsPerJob = 20
-#    config.Data.unitsPerJob = 40 # for V0 only
-    config.Data.unitsPerJob = 5
+#    config.JobType.maxMemoryMB = 3000
+    config.JobType.psetName = '../test/pPbFlowCorrSkim_2016_JPsi_cfg.py'
+    config.Data.unitsPerJob = 15
 #    config.Data.totalUnits = 100
     config.Data.splitting = 'LumiBased'
     config.Data.outLFNDirBase = '/store/user/%s/' % (getUsernameFromSiteDB())
@@ -41,14 +35,14 @@ if __name__ == '__main__':
     ## From now on that's what users should modify: this is the a-la-CRAB2 configuration part. ##
     #############################################################################################
 
-    config.General.requestName = 'pPb2016_pPb_Skim_DS_b1_v2'
-    config.JobType.psetName = '../test/pPbFlowCorrSkim_2016_DS_cfg.py'
-    config.Data.inputDataset = '/PAHighMultiplicity1/PARun2016C-PromptReco-v1/AOD'
+    config.General.requestName = 'pPb2016_pPb_Skim_JPsi_DiMuon_v1'
+    config.Data.inputDataset = '/PADoubleMuon/PARun2016C-PromptReco-v1/AOD'
     config.Data.lumiMask = 'Cert_285479-285832_HI8TeV_PromptReco_pPb_Collisions16_JSON_NoL1T.txt'
-    config.Data.outputDatasetTag = 'RecoSkim2016_pPb_DS_v2'
+    config.Data.outputDatasetTag = 'RecoSkim2016_pPb_JPsi_v1'
     submit(config)
 
-    config.General.requestName = 'pPb2016_pPb_Skim_DPM_b1_v2'
-    config.JobType.psetName = '../test/pPbFlowCorrSkim_2016_DPM_cfg.py'
-    config.Data.outputDatasetTag = 'RecoSkim2016_pPb_DPM_v2'
+    config.General.requestName = 'pPb2016_Pbp_Skim_JPsi_DiMuon_v1'
+    config.Data.inputDataset = '/PADoubleMuon/PARun2016C-PromptReco-v1/AOD'
+    config.Data.lumiMask = 'Cert_285952-286496_HI8TeV_PromptReco_Pbp_Collisions16_JSON_NoL1T.txt'
+    config.Data.outputDatasetTag = 'RecoSkim2016_Pbp_JPsi_v1'
     submit(config)

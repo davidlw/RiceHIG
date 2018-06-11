@@ -9,25 +9,22 @@ if __name__ == '__main__':
     from CRABClient.UserUtilities import config, getUsernameFromSiteDB
     config = config()
 
-    config.General.workArea = 'CorrAna'
+    config.General.workArea = 'LamPolAna'
     config.General.transferOutputs = True
     config.General.transferLogs = False
     config.JobType.pluginName = 'Analysis'
-    config.JobType.maxMemoryMB = 3000
-#    config.JobType.psetName = '../test/pPbFlowCorrSkimSlim_2016_cfg.py'
-#    config.JobType.psetName = '../test/pPbFlowCorrSkimSlim_2016_D0_cfg.py'
-    config.JobType.psetName = '../test/pPbFlowCorrSkim_2016_D0_cfg.py'
-#    config.JobType.psetName = '../test/pPbFlowCorrSkim_2016_D0WrongSign_cfg.py'
-#    config.JobType.psetName = '../test/pPbFlowCorrSkim_2016_D0Both_cfg.py'
-#    config.Data.unitsPerJob = 20
-#    config.Data.unitsPerJob = 40 # for V0 only
-    config.Data.unitsPerJob = 5
-#    config.Data.totalUnits = 100
-    config.Data.splitting = 'LumiBased'
+    config.JobType.psetName = '../cfg/lamlongpol_pPb_mc_cfg.py'
+#    config.JobType.maxMemoryMB = 2500
+    config.Data.unitsPerJob = 1
+    config.Data.totalUnits = -1
+    config.Data.inputDBS = 'phys03'
+    config.Data.splitting = 'FileBased'
+    config.Data.useParent = True
+#    config.Data.lumiMask = 'json_DCSONLY.txt'
+#    config.Data.lumiMask = 'json_run285537_285549.txt'
     config.Data.outLFNDirBase = '/store/user/%s/' % (getUsernameFromSiteDB())
-    config.Data.publication = True
+    config.Data.publication = False
     config.Site.storageSite = 'T2_US_MIT'
-#    config.Site.storageSite = 'T3_US_Rice'
 
     def submit(config):
         try:
@@ -41,14 +38,12 @@ if __name__ == '__main__':
     ## From now on that's what users should modify: this is the a-la-CRAB2 configuration part. ##
     #############################################################################################
 
-    config.General.requestName = 'pPb2016_pPb_Skim_DS_b1_v2'
-    config.JobType.psetName = '../test/pPbFlowCorrSkim_2016_DS_cfg.py'
-    config.Data.inputDataset = '/PAHighMultiplicity1/PARun2016C-PromptReco-v1/AOD'
-    config.Data.lumiMask = 'Cert_285479-285832_HI8TeV_PromptReco_pPb_Collisions16_JSON_NoL1T.txt'
-    config.Data.outputDatasetTag = 'RecoSkim2016_pPb_DS_v2'
+    config.General.requestName = 'lamlongpolana_pPb2016_cms_pPb_mc_v1'
+    config.JobType.psetName = '../cfg/lamlongpol_cms_pPb_mc_cfg.py'
+    config.Data.inputDataset = '/ReggeGribovPartonMC_EposLHC_pPb_4080_4080_DataBS/davidlw-RecoSkim2016_pPb_V0_v1-2fc6918bc3c19ca88eae36cad5440243/USER'
     submit(config)
 
-    config.General.requestName = 'pPb2016_pPb_Skim_DPM_b1_v2'
-    config.JobType.psetName = '../test/pPbFlowCorrSkim_2016_DPM_cfg.py'
-    config.Data.outputDatasetTag = 'RecoSkim2016_pPb_DPM_v2'
+    config.General.requestName = 'lamlongpolana_pPb2016_cms_Pbp_mc_v1'
+    config.JobType.psetName = '../cfg/lamlongpol_cms_Pbp_mc_cfg.py'
+    config.Data.inputDataset = '/ReggeGribovPartonMC_EposLHC_PbP_4080_4080_DataBS/davidlw-RecoSkim2016_Pbp_V0_v1-2fc6918bc3c19ca88eae36cad5440243/USER'
     submit(config)
