@@ -14,7 +14,8 @@ if __name__ == '__main__':
     config.General.transferLogs = False
     config.JobType.maxMemoryMB = 2500
     config.JobType.pluginName = 'Analysis'
-    config.Data.inputDataset = '/AMPT_PbPb5TeV_Gen/davidlw-b812_string_batch2-5d2cffe8e7bf7d2204de362aa65aa714/USER'
+#    config.Data.inputDataset = '/AMPT_PbPb5TeV_Gen/davidlw-b812_string_batch2-5d2cffe8e7bf7d2204de362aa65aa714/USER'
+    config.Data.inputDataset = '/AMPT_GenOnly/davidlw-AMPT_PPb_8160GeV_B0_batch1_v2-5275a0c25d43c9362adce48773751362/USER'
     config.Data.inputDBS = 'phys03'
     config.Data.splitting = 'FileBased'
     config.Data.unitsPerJob = 10

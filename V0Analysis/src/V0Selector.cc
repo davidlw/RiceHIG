@@ -36,8 +36,8 @@ V0Selector::V0Selector(const edm::ParameterSet& iConfig)
 {
   using std::string;
 
-  vertexCollName_ = iConfig.getParameter<edm::InputTag>("vertexCollName");
-  v0CollName_     = iConfig.getParameter<string>("v0CollName");
+  token_vertices = consumes<std::vector<reco::Vertex>>(iConfig.getParameter<edm::InputTag>("vertexCollName"));
+  token_v0candidates = consumes<std::vector<reco::VertexCompositeCandidate>>(iConfig.getParameter<edm::InputTag>("v0CollName"));
   v0IDName_       = iConfig.getParameter<string>("v0IDName");
   etaCutMin_      = iConfig.getParameter<double>("etaCutMin");
   etaCutMax_      = iConfig.getParameter<double>("etaCutMax");
@@ -56,7 +56,7 @@ V0Selector::V0Selector(const edm::ParameterSet& iConfig)
   misIDMassCutEE_ = iConfig.getParameter<double>("misIDMassCutEE");
   // Trying this with Candidates instead of the simple reco::Vertex
   produces< reco::VertexCompositeCandidateCollection >(v0IDName_);
-
+//  produces< reco::VertexCompositeCandidateCollection >("");
 }
 
 // (Empty) Destructor
@@ -76,8 +76,10 @@ void V0Selector::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
 //   using namespace reco;
     
     // select on requirement of valid vertex
-   edm::Handle<reco::VertexCollection> vertices;
-   iEvent.getByLabel(vertexCollName_,vertices);
+   edm::Handle< reco::VertexCollection > vertices;
+   iEvent.getByToken(token_vertices, vertices);
+   if(!vertices->size()) return;
+
    double bestvz=-999.9, bestvx=-999.9, bestvy=-999.9;
    double bestvzError=-999.9, bestvxError=-999.9, bestvyError=-999.9;
    const reco::Vertex & vtx = (*vertices)[0];
@@ -85,8 +87,8 @@ void V0Selector::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
    bestvzError = vtx.zError(); bestvxError = vtx.xError(); bestvyError = vtx.yError();
 //   if(bestvz < -15.0 || bestvz>15.0) return;
 
-   edm::Handle<reco::VertexCompositeCandidateCollection> v0candidates;
-   iEvent.getByLabel(v0CollName_,v0IDName_,v0candidates);
+   edm::Handle<reco::VertexCompositeCandidateCollection > v0candidates;
+   iEvent.getByToken(token_v0candidates, v0candidates);
    if(!v0candidates.isValid()) return;
 
    // Create auto_ptr for each collection to be stored in the Event

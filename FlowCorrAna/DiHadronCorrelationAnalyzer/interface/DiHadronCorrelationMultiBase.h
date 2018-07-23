@@ -171,12 +171,14 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
    TH1D*  hPtAll_trg;
    TH1D*  hPTotAll_trg;
    TH2D*  hdNdetadptAll_trg;
+   TH2D*  hdNdetadpAll_trg;
    TH2D*  hdNdetadphiAll_trg;
 //   TH2D*  hdNdetadphiAll_dau1_trg;
 //   TH2D*  hdNdetadphiAll_dau2_trg;
    TH1D*  hPtAll_ass;
    TH1D*  hPTotAll_ass;
    TH2D*  hdNdetadptAll_ass;
+   TH2D*  hdNdetadpAll_ass;
    TH2D*  hdNdetadphiAll_ass;
 //   TH2D*  hdNdetadphiAll_dau1_ass;
 //   TH2D*  hdNdetadphiAll_dau2_ass;

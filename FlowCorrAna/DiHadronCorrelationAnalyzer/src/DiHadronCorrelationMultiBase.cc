@@ -252,12 +252,14 @@ void DiHadronCorrelationMultiBase::beginJob()
     hPTotAll_trg = theOutputs->make<TH1D>("ptotall_trg",";p_{T}(GeV/c)",10000,0,1000);
 //  hNVtxVsNMult = theOutputs->make<TH2D>("nvtxvsnmult",";nMult;nVertices",500,0,500,50,0,50);
     hdNdetadptAll_trg = theOutputs->make<TH2D>("dNdetadptall_trg",";#eta;pT(GeV)",etaBins.size()-1, &etaBins[0],ptBins.size()-1, &ptBins[0]);
+    hdNdetadpAll_trg = theOutputs->make<TH2D>("dNdetadpall_trg",";#eta;p (GeV)",160,-8,8,500,0,50);
     hdNdetadphiAll_trg = theOutputs->make<TH2D>("dNdetadphiall_trg",";#eta;#phi",120,-6.0,6.0,36,-PI,PI);
 //    hdNdetadphiAll_dau1_trg = theOutputs->make<TH2D>("dNdetadphiall_dau1_trg",";#eta;#phi",120,-6.0,6.0,36,-PI,PI);
 //    hdNdetadphiAll_dau2_trg = theOutputs->make<TH2D>("dNdetadphiall_dau2_trg",";#eta;#phi",120,-6.0,6.0,36,-PI,PI);
     hPtAll_ass = theOutputs->make<TH1D>("ptall_ass",";p_{T}(GeV/c)",5000,0,50);
     hPTotAll_ass = theOutputs->make<TH1D>("ptotall_ass",";p_{T}(GeV/c)",10000,0,1000);
     hdNdetadptAll_ass = theOutputs->make<TH2D>("dNdetadptall_ass",";#eta;pT(GeV)",120,-6.0,6.0,1000,0,10.0);
+    hdNdetadpAll_ass = theOutputs->make<TH2D>("dNdetadpall_ass",";#eta;p (GeV)",160,-8,8,500,0,50);
     hdNdetadphiAll_ass = theOutputs->make<TH2D>("dNdetadphiall_ass",";#eta;#phi",120,-6.0,6.0,36,-PI,PI);
 //    hdNdetadphiAll_dau1_ass = theOutputs->make<TH2D>("dNdetadphiall_dau1_ass",";#eta;#phi",120,-6.0,6.0,36,-PI,PI);
 //    hdNdetadphiAll_dau2_ass = theOutputs->make<TH2D>("dNdetadphiall_dau2_ass",";#eta;#phi",120,-6.0,6.0,36,-PI,PI);
@@ -855,7 +857,7 @@ void DiHadronCorrelationMultiBase::LoopParticles(const edm::Event& iEvent, const
      if(p.charge() == 0 && ischarge) continue;
      if(p.pdgId() != pdgid && pdgid!=-999999) continue;
 //     if(p.pt()<0.001) continue;
-     if(p.mass()<(0.938272+0.13957)) continue;
+//     if(p.mass()<(0.938272+0.13957)) continue;
 
 //     cout<<"is prompt? "<<p.isPromptFinalState()<<endl;
 
@@ -1191,6 +1193,7 @@ void DiHadronCorrelationMultiBase::AssignTrgPtBins(double pt, double eta, double
    {
      hdNdetadphiAll_trg->Fill(eta,phi);
      hdNdetadptAll_trg->Fill(eta,pt);
+     hdNdetadpAll_trg->Fill(eta,pt*cosh(eta));
      hdNdetadphiCorrAll_trg->Fill(eta,phi,1.0/effweight);
      hdNdetadptCorrAll_trg->Fill(eta,pt,1.0/effweight);
      hPtAll_trg->Fill(pt,1.0/hPtAll_trg->GetBinWidth(hPtAll_trg->FindBin(pt)));
@@ -1248,6 +1251,7 @@ void DiHadronCorrelationMultiBase::AssignAssPtBins(double pt, double eta, double
    {
      hdNdetadphiAll_ass->Fill(eta,phi);
      hdNdetadptAll_ass->Fill(eta,pt);
+     hdNdetadpAll_ass->Fill(eta,pt*cosh(eta));
      hdNdetadphiCorrAll_ass->Fill(eta,phi,1.0/effweight);
      hdNdetadptCorrAll_ass->Fill(eta,pt,1.0/effweight);
      hPtAll_ass->Fill(pt);

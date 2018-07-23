@@ -6,6 +6,7 @@
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/EPEtaDecoAnalyzer.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/EPEtaDecoAnalyzerSP.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/ScalarProdVnAnalyzer.h"
+#include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/ScalarProdVnAnalyzerNew.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/EPEtaDecoAnalyzerSPMatrix.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/EPPtDecoAnalyzerSP.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/EbyEFlowAnalyzer.h"
@@ -15,6 +16,7 @@
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/ChargeDepCorrAnalyzerSP2.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/ChargeDepCorrAnalyzerSP3.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/LamPolGenAnalyzer.h"
+#include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/LamLongPolDataAnalyzer.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/LamPolGenAnalyzerSP.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/LamPolDataAnalyzer.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/LamPolDataAnalyzerSP.h"
@@ -38,7 +40,9 @@ DEFINE_FWK_MODULE(ChargeDepCorrAnalyzerSP);
 DEFINE_FWK_MODULE(ChargeDepCorrAnalyzerSP2);
 DEFINE_FWK_MODULE(ChargeDepCorrAnalyzerSP3);
 DEFINE_FWK_MODULE(LamPolGenAnalyzer);
+DEFINE_FWK_MODULE(LamLongPolDataAnalyzer);
 DEFINE_FWK_MODULE(LamPolGenAnalyzerSP);
 DEFINE_FWK_MODULE(LamPolDataAnalyzer);
 DEFINE_FWK_MODULE(LamPolDataAnalyzerSP);
 DEFINE_FWK_MODULE(ScalarProdVnAnalyzer);
+DEFINE_FWK_MODULE(ScalarProdVnAnalyzerNew);
