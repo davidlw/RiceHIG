@@ -2,7 +2,7 @@ import FWCore.ParameterSet.Config as cms
 
 process = cms.Process("corr")
 process.load("FWCore.MessageService.MessageLogger_cfi")
-process.MessageLogger.cerr.FwkReport.reportEvery = 1000
+process.MessageLogger.cerr.FwkReport.reportEvery = 500
 
 process.maxEvents = cms.untracked.PSet(
     input = cms.untracked.int32(2000)
@@ -57,12 +57,12 @@ process.TFileService = cms.Service("TFileService",
 
 process.load("RiceHIG.V0Analysis.v0selector_cff")
 process.selectV0CandidatesNewlambda.v0CollName = cms.InputTag("generalV0CandidatesNew:Lambda")
-process.corr_ana.V0CandidateCollection = cms.InputTag("selectV0CandidatesNewlambda:Lambda")
+process.corr_ana_cms_pPb.V0CandidateCollection = cms.InputTag("selectV0CandidatesNewlambda:Lambda")
 #process.corr_ana.V0CandidateCollection = cms.InputTag("generalV0CandidatesNew:Lambda")
-process.ana = cms.Path(process.selectV0CandidatesNewlambda*process.corr_ana)
+process.ana = cms.Path(process.selectV0CandidatesNewlambda*process.corr_ana_cms_pPb)
 
-process.corr_ana.nmin = cms.int32(185)
-process.corr_ana.nmax = cms.int32(250)
+#process.corr_ana_cms_pPb.nmin = cms.int32(185)
+#process.corr_ana_cms_pPb.nmax = cms.int32(250)
 
 #process.output_HM = cms.OutputModule("PoolOutputModule",
 #    outputCommands = cms.untracked.vstring('drop *','keep *_*Candidates*_*_*'),

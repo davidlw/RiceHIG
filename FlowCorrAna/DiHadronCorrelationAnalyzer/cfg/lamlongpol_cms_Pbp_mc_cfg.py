@@ -2,10 +2,10 @@ import FWCore.ParameterSet.Config as cms
 
 process = cms.Process("corr")
 process.load("FWCore.MessageService.MessageLogger_cfi")
-process.MessageLogger.cerr.FwkReport.reportEvery = 1000
+process.MessageLogger.cerr.FwkReport.reportEvery = 500
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(2000)
+    input = cms.untracked.int32(5000)
 )
 
 ### conditions
@@ -24,15 +24,19 @@ process.hltHIHM.throw = cms.bool(False)
 
 process.source = cms.Source("PoolSource",
                                 fileNames = cms.untracked.vstring(
-'root://cmsxrootd.fnal.gov//store/user/davidlw/PAHighMultiplicity1/RecoSkim2016_pPb_V0Cascade_v1/170301_201909/0000/pPb_HM_101.root'
-#'root://cmsxrootd.fnal.gov//store/user/davidlw/PAHighMultiplicity1/RecoSkim2016_pPb_V0Cascade_v1/170301_201909/0000/pPb_HM_112.root'
+'/store/user/davidlw/ReggeGribovPartonMC_EposLHC_pPb_4080_4080_DataBS/RecoSkim2016_pPb_V0_v1/170817_174330/0000/pPb_HM_11.root'
                 ),
                                 secondaryFileNames = cms.untracked.vstring(
-'root://cmsxrootd.fnal.gov//store/hidata/PARun2016C/PAHighMultiplicity1/AOD/PromptReco-v1/000/285/517/00000/0499F27C-2DB0-E611-8B1F-02163E014794.root',
-'root://cmsxrootd.fnal.gov//store/hidata/PARun2016C/PAHighMultiplicity1/AOD/PromptReco-v1/000/285/517/00000/2E66AA87-2DB0-E611-88B3-FA163E8A7AF7.root',
-'root://cmsxrootd.fnal.gov//store/hidata/PARun2016C/PAHighMultiplicity1/AOD/PromptReco-v1/000/285/517/00000/586A4582-2DB0-E611-8FCA-FA163E0BB21A.root',
-'root://cmsxrootd.fnal.gov//store/hidata/PARun2016C/PAHighMultiplicity1/AOD/PromptReco-v1/000/285/517/00000/A412D97C-2DB0-E611-B1F3-FA163E3702A7.root',
-'root://cmsxrootd.fnal.gov//store/hidata/PARun2016C/PAHighMultiplicity1/AOD/PromptReco-v1/000/285/517/00000/BCF96C85-2DB0-E611-A6C2-02163E0143C2.root'
+'/store/himc/pPb816Summer16DR/ReggeGribovPartonMC_EposLHC_pPb_4080_4080_DataBS/AODSIM/MB_80X_mcRun2_pA_v4-v2/120000/6A492ED2-FF08-E711-BCB1-3417EBE644DA.root',
+'/store/himc/pPb816Summer16DR/ReggeGribovPartonMC_EposLHC_pPb_4080_4080_DataBS/AODSIM/MB_80X_mcRun2_pA_v4-v2/120000/6A753DD4-1209-E711-9D00-A0000220FE80.root',
+'/store/himc/pPb816Summer16DR/ReggeGribovPartonMC_EposLHC_pPb_4080_4080_DataBS/AODSIM/MB_80X_mcRun2_pA_v4-v2/120000/6ACE1DA6-240F-E711-8F7D-FA163E8A53F1.root',
+'/store/himc/pPb816Summer16DR/ReggeGribovPartonMC_EposLHC_pPb_4080_4080_DataBS/AODSIM/MB_80X_mcRun2_pA_v4-v2/120000/7088D290-C00E-E711-910A-FA163EF0BFAF.root',
+'/store/himc/pPb816Summer16DR/ReggeGribovPartonMC_EposLHC_pPb_4080_4080_DataBS/AODSIM/MB_80X_mcRun2_pA_v4-v2/120000/720FF846-CF09-E711-B737-1866DA7F9778.root',
+'/store/himc/pPb816Summer16DR/ReggeGribovPartonMC_EposLHC_pPb_4080_4080_DataBS/AODSIM/MB_80X_mcRun2_pA_v4-v2/120000/728A27E6-610A-E711-8D2C-1CB72C0A3DC1.root',
+'/store/himc/pPb816Summer16DR/ReggeGribovPartonMC_EposLHC_pPb_4080_4080_DataBS/AODSIM/MB_80X_mcRun2_pA_v4-v2/120000/760BB0D8-C10E-E711-804B-FA163E9F00FD.root',
+'/store/himc/pPb816Summer16DR/ReggeGribovPartonMC_EposLHC_pPb_4080_4080_DataBS/AODSIM/MB_80X_mcRun2_pA_v4-v2/120000/76971D5F-270B-E711-B102-1866DA7F9225.root',
+'/store/himc/pPb816Summer16DR/ReggeGribovPartonMC_EposLHC_pPb_4080_4080_DataBS/AODSIM/MB_80X_mcRun2_pA_v4-v2/120000/78053BA6-FF08-E711-BE0C-1866DA7F952E.root',
+'/store/himc/pPb816Summer16DR/ReggeGribovPartonMC_EposLHC_pPb_4080_4080_DataBS/AODSIM/MB_80X_mcRun2_pA_v4-v2/120000/78348924-F008-E711-B38E-002590D0B05E.root'
 )
                             )
 process.load("FlowCorrAna.DiHadronCorrelationAnalyzer.lamlongpoldata_cff")
@@ -57,12 +61,12 @@ process.TFileService = cms.Service("TFileService",
 
 process.load("RiceHIG.V0Analysis.v0selector_cff")
 process.selectV0CandidatesNewlambda.v0CollName = cms.InputTag("generalV0CandidatesNew:Lambda")
-process.corr_ana.V0CandidateCollection = cms.InputTag("selectV0CandidatesNewlambda:Lambda")
+process.corr_ana_cms_Pbp.V0CandidateCollection = cms.InputTag("selectV0CandidatesNewlambda:Lambda")
 #process.corr_ana.V0CandidateCollection = cms.InputTag("generalV0CandidatesNew:Lambda")
-process.ana = cms.Path(process.selectV0CandidatesNewlambda*process.corr_ana)
+process.ana = cms.Path(process.selectV0CandidatesNewlambda*process.corr_ana_cms_Pbp)
 
-process.corr_ana.nmin = cms.int32(185)
-process.corr_ana.nmax = cms.int32(250)
+#process.corr_ana.nmin = cms.int32(185)
+#process.corr_ana.nmax = cms.int32(250)
 
 #process.output_HM = cms.OutputModule("PoolOutputModule",
 #    outputCommands = cms.untracked.vstring('drop *','keep *_*Candidates*_*_*'),

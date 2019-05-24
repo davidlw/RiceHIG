@@ -2,10 +2,10 @@ import FWCore.ParameterSet.Config as cms
 
 process = cms.Process("corr")
 process.load("FWCore.MessageService.MessageLogger_cfi")
-process.MessageLogger.cerr.FwkReport.reportEvery = 1000
+process.MessageLogger.cerr.FwkReport.reportEvery = 500
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(2000)
+    input = cms.untracked.int32(3000)
 )
 
 ### conditions
@@ -16,23 +16,24 @@ process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 
 #Trigger Selection
 ### Comment out for the timing being assuming running on secondary dataset with trigger bit selected already
-import HLTrigger.HLTfilters.hltHighLevel_cfi
-process.hltHIHM = HLTrigger.HLTfilters.hltHighLevel_cfi.hltHighLevel.clone()
-process.hltHIHM.HLTPaths = ['HLT_PAFullTracks_Multiplicity185_v*'] # for allphysics
-process.hltHIHM.andOr = cms.bool(True)
-process.hltHIHM.throw = cms.bool(False)
+#import HLTrigger.HLTfilters.hltHighLevel_cfi
+#process.hltHIHM = HLTrigger.HLTfilters.hltHighLevel_cfi.hltHighLevel.clone()
+#process.hltHIHM.HLTPaths = ['HLT_PAFullTracks_Multiplicity185_v*'] # for allphysics
+#process.hltHIHM.andOr = cms.bool(True)
+#process.hltHIHM.throw = cms.bool(False)
 
 process.source = cms.Source("PoolSource",
                                 fileNames = cms.untracked.vstring(
-'root://cmsxrootd.fnal.gov//store/user/davidlw/PAHighMultiplicity1/RecoSkim2016_pPb_V0Cascade_v1/170301_201909/0000/pPb_HM_101.root'
-#'root://cmsxrootd.fnal.gov//store/user/davidlw/PAHighMultiplicity1/RecoSkim2016_pPb_V0Cascade_v1/170301_201909/0000/pPb_HM_112.root'
+'root://cmsxrootd.fnal.gov//store/user/davidlw/PAMinimumBias1/RecoSkim2016_pPb_V0Cascade_v1/170302_094853/0000/pPb_HM_1.root'
                 ),
                                 secondaryFileNames = cms.untracked.vstring(
-'root://cmsxrootd.fnal.gov//store/hidata/PARun2016C/PAHighMultiplicity1/AOD/PromptReco-v1/000/285/517/00000/0499F27C-2DB0-E611-8B1F-02163E014794.root',
-'root://cmsxrootd.fnal.gov//store/hidata/PARun2016C/PAHighMultiplicity1/AOD/PromptReco-v1/000/285/517/00000/2E66AA87-2DB0-E611-88B3-FA163E8A7AF7.root',
-'root://cmsxrootd.fnal.gov//store/hidata/PARun2016C/PAHighMultiplicity1/AOD/PromptReco-v1/000/285/517/00000/586A4582-2DB0-E611-8FCA-FA163E0BB21A.root',
-'root://cmsxrootd.fnal.gov//store/hidata/PARun2016C/PAHighMultiplicity1/AOD/PromptReco-v1/000/285/517/00000/A412D97C-2DB0-E611-B1F3-FA163E3702A7.root',
-'root://cmsxrootd.fnal.gov//store/hidata/PARun2016C/PAHighMultiplicity1/AOD/PromptReco-v1/000/285/517/00000/BCF96C85-2DB0-E611-A6C2-02163E0143C2.root'
+'root://cmsxrootd.fnal.gov//store/hidata/PARun2016C/PAMinimumBias1/AOD/PromptReco-v1/000/285/479/00000/4E546F7B-DBAE-E611-B49E-FA163E63A392.root',
+'root://cmsxrootd.fnal.gov//store/hidata/PARun2016C/PAMinimumBias1/AOD/PromptReco-v1/000/285/480/00000/126AB4C4-2CAF-E611-93B9-FA163E41A46B.root',
+'root://cmsxrootd.fnal.gov//store/hidata/PARun2016C/PAMinimumBias1/AOD/PromptReco-v1/000/285/480/00000/2CB5DFE9-2BAF-E611-A0A9-FA163EA4BCD2.root',
+'root://cmsxrootd.fnal.gov//store/hidata/PARun2016C/PAMinimumBias1/AOD/PromptReco-v1/000/285/480/00000/52EDED08-28AF-E611-82AC-02163E0124B5.root',
+'root://cmsxrootd.fnal.gov//store/hidata/PARun2016C/PAMinimumBias1/AOD/PromptReco-v1/000/285/480/00000/9CDBDF3A-30AF-E611-8365-02163E01252E.root',
+'root://cmsxrootd.fnal.gov//store/hidata/PARun2016C/PAMinimumBias1/AOD/PromptReco-v1/000/285/480/00000/C8B078A7-24AF-E611-ADF7-FA163EDC366E.root',
+'root://cmsxrootd.fnal.gov//store/hidata/PARun2016C/PAMinimumBias1/AOD/PromptReco-v1/000/285/480/00000/F42B4F03-32AF-E611-9CC6-02163E011CAE.root'
 )
                             )
 process.load("FlowCorrAna.DiHadronCorrelationAnalyzer.lamlongpoldata_cff")
@@ -61,8 +62,8 @@ process.corr_ana.V0CandidateCollection = cms.InputTag("selectV0CandidatesNewlamb
 #process.corr_ana.V0CandidateCollection = cms.InputTag("generalV0CandidatesNew:Lambda")
 process.ana = cms.Path(process.selectV0CandidatesNewlambda*process.corr_ana)
 
-process.corr_ana.nmin = cms.int32(185)
-process.corr_ana.nmax = cms.int32(250)
+#process.corr_ana.nmin = cms.int32(185)
+#process.corr_ana.nmax = cms.int32(250)
 
 #process.output_HM = cms.OutputModule("PoolOutputModule",
 #    outputCommands = cms.untracked.vstring('drop *','keep *_*Candidates*_*_*'),

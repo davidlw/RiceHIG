@@ -46,4 +46,7 @@ DEFINE_FWK_MODULE(LamPolDataAnalyzer);
 DEFINE_FWK_MODULE(LamPolDataAnalyzerSP);
 DEFINE_FWK_MODULE(ScalarProdVnAnalyzer);
 DEFINE_FWK_MODULE(ScalarProdVnAnalyzerNew);
+<<<<<<< HEAD
 DEFINE_FWK_MODULE(ConversionAnalyzer);
+=======
+>>>>>>> a0623bf651233e590d34b2e295af2623a4f87153
