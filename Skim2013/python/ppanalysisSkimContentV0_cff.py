@@ -30,16 +30,9 @@ analysisSkimContent = cms.PSet(
       'keep *_generalV0Candidates*_Lambda_*',
       'keep *_generalCascadeCandidates*_Xi_*',
       'keep *_generalCascadeCandidates*_Omega_*',
-<<<<<<< HEAD
-      'keep *_generalLambdaCCandidates*_LambdaC*_*',
-      'keep *_generalDs*Candidates*_DS*_*',
-      'keep *_generalDpmCandidates*_DPM_*',
-      'keep *_generalPhiCandidates*_Phi_*',
-=======
       'keep *_generalCascadeCandidates*_LambdaC*_*',
       'keep *_generalCascadeCandidates*_DS_*',
       'keep *_generalCascadeCandidates*_DPM_*',
->>>>>>> a0623bf651233e590d34b2e295af2623a4f87153
       # tracks
 #      'keep recoTracks_generalTracks*_*_*',  
 #      'keep recoTracks_pixelTracks_*_*',
