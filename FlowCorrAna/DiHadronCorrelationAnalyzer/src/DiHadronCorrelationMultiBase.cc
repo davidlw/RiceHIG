@@ -64,6 +64,7 @@ DiHadronCorrelationMultiBase::DiHadronCorrelationMultiBase(const edm::ParameterS
   token_v0candidates = consumes<std::vector<reco::VertexCompositeCandidate>>(iConfig.getParameter<edm::InputTag>("V0CandidateCollection"));
   token_pfcandidates = consumes<std::vector<reco::PFCandidate>>(iConfig.getParameter<edm::InputTag>("pfCandidateCollection"));
   token_calotowers = consumes<edm::SortedCollection<CaloTower>>(edm::InputTag("towerMaker"));
+  token_conversions = consumes<std::vector<reco::Conversion>>(iConfig.getParameter<edm::InputTag>("conversionCollection"));
 
   trgID = GetParticleID(iConfig.getParameter<string>("TriggerID"));
   assID = GetParticleID(iConfig.getParameter<string>("AssociateID"));
@@ -232,7 +233,6 @@ void DiHadronCorrelationMultiBase::beginJob()
   hCentrality = theOutputs->make<TH1D>("centrality",";centbin",nCentBins,-1,nCentBins-1);
   hNVtx = theOutputs->make<TH1D>("nvtx",";nVertices",51,-0.5,50.5);
 
-  
   if(trgID == kLambda || trgID == kLambdaP || trgID == kLambdaM || trgID == kKshort || assID == kLambda || assID == kLambdaP || assID == kLambdaM || assID == kKshort) 
   { 
     hThetaV0Plus = theOutputs->make<TH2D>("thetav0plus",";x_{F};cos#theta",200,0,0.2,100,-1,1);
@@ -475,6 +475,11 @@ void DiHadronCorrelationMultiBase::analyze(const edm::Event& iEvent, const edm::
      case kD0:
        cutPara.mass_trg=1.86484;
        LoopV0Candidates(iEvent,iSetup, 1 , "D0",-1);
+       break;
+     case kConversion:
+       cutPara.mass_trg=0.0;
+       LoopConversions(iEvent,iSetup, 1);
+       break;
      default:
        break;
   }
@@ -542,6 +547,10 @@ void DiHadronCorrelationMultiBase::analyze(const edm::Event& iEvent, const edm::
      case kD0:
        cutPara.mass_ass=1.86484;
        LoopV0Candidates(iEvent,iSetup,0, "D0",-1);
+       break;
+     case kConversion:
+       cutPara.mass_ass=0.0;
+       LoopConversions(iEvent,iSetup, 0);
        break;
      default:
        break;
@@ -1037,6 +1046,32 @@ void DiHadronCorrelationMultiBase::LoopCaloTower(const edm::Event& iEvent, const
      else AssignAssPtBins(et,eta,phi,0,charge,effweight);
    }
 }
+
+void DiHadronCorrelationMultiBase::LoopConversions(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg)
+{
+   edm::Handle<ConversionCollection> conversions;
+   iEvent.getByToken(token_conversions, conversions);
+   if(!conversions->size()) { return; }
+
+   for(unsigned it=0; it<conversions->size(); ++it){
+
+     const Conversion & conversion = (*conversions)[it];
+
+     if(conversion.nTracks()!=2) continue;
+
+     double pt = conversion.pairMomentum().Rho();
+     double eta = conversion.pairMomentum().Eta();
+     double phi = conversion.pairMomentum().Phi();
+     double mass = conversion.pairInvariantMass(); 
+
+     double charge = 0.0;
+     double effweight = 1.0;
+     
+     if(istrg) AssignTrgPtBins(pt,eta,phi,mass,charge,effweight);
+     else AssignAssPtBins(pt,eta,phi,mass,charge,effweight);
+   }
+}
+
 
 void DiHadronCorrelationMultiBase::LoopV0Candidates(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg, TString candtype, int pdgID)
 {
@@ -1560,5 +1595,7 @@ DiHadronCorrelationMultiBase::ParticleType DiHadronCorrelationMultiBase::GetPart
     type=kLambdaM;
   else if(particleid == "D0")
     type=kD0;
+  else if(particleid == "Conversion")
+    type=kConversion;
   return type;
 }

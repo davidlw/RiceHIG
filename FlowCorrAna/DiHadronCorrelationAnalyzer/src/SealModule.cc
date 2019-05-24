@@ -21,7 +21,7 @@
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/LamPolDataAnalyzer.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/LamPolDataAnalyzerSP.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/EPEtaDecoAnalyzerSP2.h"
-
+#include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/ConversionAnalyzer.h"
 
 //DEFINE_SEAL_MODULE();
 
@@ -46,3 +46,4 @@ DEFINE_FWK_MODULE(LamPolDataAnalyzer);
 DEFINE_FWK_MODULE(LamPolDataAnalyzerSP);
 DEFINE_FWK_MODULE(ScalarProdVnAnalyzer);
 DEFINE_FWK_MODULE(ScalarProdVnAnalyzerNew);
+DEFINE_FWK_MODULE(ConversionAnalyzer);
