@@ -36,13 +36,8 @@ corr_ana = cms.EDAnalyzer('LamLongPolDataAnalyzer',
   etaassmax = cms.double(5),
   pttrgmin = cms.vdouble(0.7,1.0,2.0,3.0,5.0),
   pttrgmax = cms.vdouble(1.0,2.0,3.0,5.0,10.0),
-<<<<<<< HEAD
-  ptassmin = cms.vdouble(0.3),
-  ptassmax = cms.vdouble(10.0),
-=======
   ptassmin = cms.vdouble(0.0),
-  ptassmax = cms.vdouble(1000.0),
->>>>>>> a0623bf651233e590d34b2e295af2623a4f87153
+  ptassmax = cms.vdouble(10000.0),
   etamultmin = cms.double(-2.4),
   etamultmax = cms.double(2.4),
   chargeasymmin = cms.double(-9999.9),
@@ -79,11 +74,7 @@ corr_ana = cms.EDAnalyzer('LamLongPolDataAnalyzer',
   IsHarmonicsEta1Eta2 = cms.bool(False),
   IsFullMatrix = cms.bool(True),
   IsPtWeightTrg = cms.bool(False),
-<<<<<<< HEAD
-  IsPtWeightAss = cms.bool(False),
-=======
   IsPtWeightAss = cms.bool(True),
->>>>>>> a0623bf651233e590d34b2e295af2623a4f87153
   IsTrgEtaCutAbs = cms.bool(False),
   IsAssEtaCutAbs = cms.bool(True),
   IsHITrkQuality = cms.bool(False),

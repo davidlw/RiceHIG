@@ -181,13 +181,10 @@ void DiHadronCorrelationMultiBaseNew::analyze(const edm::Event& iEvent, const ed
      case kD0:
        cutPara.mass_trg=1.86484;
        LoopV0Candidates(iEvent,iSetup, 1 , "D0",-1);
-<<<<<<< HEAD
      case kConversion:
        cutPara.mass_trg=0.0;
        LoopConversions(iEvent,iSetup, 1);
        break;
-=======
->>>>>>> a0623bf651233e590d34b2e295af2623a4f87153
      default:
        break;
   }
@@ -256,13 +253,10 @@ void DiHadronCorrelationMultiBaseNew::analyze(const edm::Event& iEvent, const ed
        cutPara.mass_ass=1.86484;
        LoopV0Candidates(iEvent,iSetup,0, "D0",-1);
        break;
-<<<<<<< HEAD
      case kConversion:
        cutPara.mass_ass=0.0;
        LoopConversions(iEvent,iSetup, 0);
        break;
-=======
->>>>>>> a0623bf651233e590d34b2e295af2623a4f87153
      default:
        break;
   }
