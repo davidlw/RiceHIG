@@ -82,7 +82,7 @@ void ConversionAnalyzer::LoopConversions(const edm::Event& iEvent, const edm::Ev
 {
    edm::Handle<ConversionCollection> conversions;
    iEvent.getByToken(token_conversions, conversions);
-   if(!conversions->size()) { return; }
+//   if(!conversions->size()) { return; }
 
    runNb = iEvent.id().run();
    eventNb = iEvent.id().event();

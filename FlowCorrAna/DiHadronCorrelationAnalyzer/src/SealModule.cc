@@ -1,5 +1,7 @@
 #include "FWCore/PluginManager/interface/ModuleDef.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
+#include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/DiHadronCorrelationMultiBase.h"
+#include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/DiHadronCorrelationMultiBaseNew.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/DiHadronCorrelationMultiAnalyzer.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/DiHadronCorrelationMultiAnalyzerQ2.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/DiHadronCorrelationMultiAnalyzerChAsym.h"
@@ -22,9 +24,12 @@
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/LamPolDataAnalyzerSP.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/EPEtaDecoAnalyzerSP2.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/ConversionAnalyzer.h"
+#include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/TrackAnalyzer.h"
 
 //DEFINE_SEAL_MODULE();
 
+DEFINE_FWK_MODULE(DiHadronCorrelationMultiBase);
+DEFINE_FWK_MODULE(DiHadronCorrelationMultiBaseNew);
 DEFINE_FWK_MODULE(DiHadronCorrelationMultiAnalyzer);
 DEFINE_FWK_MODULE(DiHadronCorrelationMultiAnalyzerQ2);
 DEFINE_FWK_MODULE(DiHadronCorrelationMultiAnalyzerChAsym);
@@ -47,3 +52,4 @@ DEFINE_FWK_MODULE(LamPolDataAnalyzerSP);
 DEFINE_FWK_MODULE(ScalarProdVnAnalyzer);
 DEFINE_FWK_MODULE(ScalarProdVnAnalyzerNew);
 DEFINE_FWK_MODULE(ConversionAnalyzer);
+DEFINE_FWK_MODULE(TrackAnalyzer);

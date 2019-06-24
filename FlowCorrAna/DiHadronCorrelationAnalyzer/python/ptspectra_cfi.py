@@ -1,6 +1,6 @@
 import FWCore.ParameterSet.Config as cms
 
-corr_ana = cms.EDAnalyzer('DiHadronCorrelationMultiAnalyzer',
+ptspectra_ana = cms.EDAnalyzer('DiHadronCorrelationMultiBaseNew',
 
   centralityBinLabel = cms.InputTag("centralityBin","HFtowers"), 
   centralitySrc = cms.InputTag("hiCentrality"),

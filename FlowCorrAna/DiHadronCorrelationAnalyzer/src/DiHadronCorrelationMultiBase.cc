@@ -302,8 +302,11 @@ void DiHadronCorrelationMultiBase::beginJob()
   {
     hMult_trg[itrg] = theOutputs->make<TH1D>(Form("mult_trg_%d",itrg),";n^{trg}",2000,0,2000);
     hMultCorr_trg[itrg] = theOutputs->make<TH1D>(Form("multcorr_trg_%d",itrg),";n^{trg}",2000,0,2000);
-    hpT_Signal_trg[itrg] = theOutputs->make<TH1D>(Form("pt_signal_trg_%d",itrg),";pT(GeV)",1000,0,100.);
-    hpTCorr_Signal_trg[itrg] = theOutputs->make<TH1D>(Form("ptcorr_signal_trg_%d",itrg),";pT(GeV)",1000,0,100.);
+    hpT_Signal_trg[itrg] = theOutputs->make<TH1D>(Form("pt_signal_trg_%d",itrg),";pT(GeV)",2000,0,200.);
+    hpTCorr_Signal_trg[itrg] = theOutputs->make<TH1D>(Form("ptcorr_signal_trg_%d",itrg),";pT(GeV)",2000,0,200.);
+    hpTMult_Signal_trg[itrg] = theOutputs->make<TH2D>(Form("ptmult_signal_trg_%d",itrg),";pT(GeV);N_{trk}^{offline}",1000,0,200.,100,0,500);
+    hpTCorrMult_Signal_trg[itrg] = theOutputs->make<TH2D>(Form("ptcorrmult_signal_trg_%d",itrg),";pT(GeV);N_{ch}",1000,0,200.,100,0,500);
+
     if(cutPara.IsDebug)
     {
       hdNdetadphi_trg[itrg] = theOutputs->make<TH2D>(Form("dNdetadphi_trg_%d",itrg),";#eta;#phi",60,-6.0,6.0,NPhiBins,-PI,PI);
@@ -315,8 +318,11 @@ void DiHadronCorrelationMultiBase::beginJob()
   {
     hMult_ass[jass] = theOutputs->make<TH1D>(Form("mult_ass_%d",jass),";n^{ass}",2000,0,2000);
     hMultCorr_ass[jass] = theOutputs->make<TH1D>(Form("multcorr_ass_%d",jass),";n^{ass}",2000,0,2000);
-    hpT_Signal_ass[jass] = theOutputs->make<TH1D>(Form("pt_signal_ass_%d",jass),";pT(GeV)",1000,0,100.);
-    hpTCorr_Signal_ass[jass] = theOutputs->make<TH1D>(Form("ptcorr_signal_ass_%d",jass),";pT(GeV)",1000,0,100.);
+    hpT_Signal_ass[jass] = theOutputs->make<TH1D>(Form("pt_signal_ass_%d",jass),";pT(GeV)",2000,0,200.);
+    hpTCorr_Signal_ass[jass] = theOutputs->make<TH1D>(Form("ptcorr_signal_ass_%d",jass),";pT(GeV)",2000,0,200.);
+//    hpTMult_Signal_ass[jass] = theOutputs->make<TH2D>(Form("ptmult_signal_ass_%d",jass),";pT(GeV);N_{trk}^{offline}",1000,0,200.,100,0,500);
+//    hpTCorrMult_Signal_ass[jass] = theOutputs->make<TH2D>(Form("ptcorrmult_signal_ass_%d",jass),";pT(GeV);N_{ch}",1000,0,200.,100,0,500);
+
     if(cutPara.IsDebug)
     {
       hdNdetadphi_ass[jass] = theOutputs->make<TH2D>(Form("dNdetadphi_ass_%d",jass),";#eta;#phi",60,-6.0,6.0,NPhiBins,-PI,PI);
@@ -1258,6 +1264,9 @@ void DiHadronCorrelationMultiBase::AssignTrgPtBins(double pt, double eta, double
 
        hpT_Signal_trg[pttrgbin]->Fill(pt);
        hpTCorr_Signal_trg[pttrgbin]->Fill(pt,1.0/effweight);
+       hpTMult_Signal_trg[pttrgbin]->Fill(pt,nMult);
+       hpTCorrMult_Signal_trg[pttrgbin]->Fill(pt,nMultCorr,1.0/effweight);
+
        if(cutPara.IsDebug)
        {
          hdNdetadphi_trg[pttrgbin]->Fill(eta,phi);

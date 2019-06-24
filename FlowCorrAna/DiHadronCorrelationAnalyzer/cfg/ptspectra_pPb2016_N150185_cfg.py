@@ -16,18 +16,20 @@ process.source = cms.Source("PoolSource",
 #'/store/hidata/PARun2016B/PAMinimumBias1/AOD/PromptReco-v1/000/285/216/00000/0809417D-2DAC-E611-BFD1-02163E01340B.root'
 #'/store/hidata/PARun2016B/PAMinimumBias1/AOD/PromptReco-v1/000/285/090/00000/18E99CF6-59AB-E611-8F92-02163E01440E.root',
 #'/store/hidata/PARun2016B/PAMinimumBias1/AOD/PromptReco-v1/000/285/090/00000/DC56AAB2-5EAB-E611-A27A-FA163E251515.root'
-'/store/hidata/PARun2016C/PAHighMultiplicity7/AOD/PromptReco-v1/000/285/480/00000/5E0F96D9-08AF-E611-9C83-FA163E0C8993.root'
+'/store/hidata/PARun2016C/PAHighMultiplicity1/AOD/PromptReco-v1/000/285/832/00000/14FF0235-35B5-E611-989A-FA163E539153.root'
                 )
 #                                secondaryFileNames = cms.untracked.vstring('')
                             )
 
 process.load('HeavyIonsAnalysis.Configuration.collisionEventSelection_cff')
+#Pileup filter
+process.load("VertexCompositeAnalysis.VertexCompositeProducer.pileUpFilter_cff")
 
 #Trigger Selection
 ### Comment out for the timing being assuming running on secondary dataset with trigger bit selected already
 import HLTrigger.HLTfilters.hltHighLevel_cfi
 process.hltHM_pPb = HLTrigger.HLTfilters.hltHighLevel_cfi.hltHighLevel.clone()
-process.hltHM_pPb.HLTPaths = ['HLT_PAL1MinimumBiasHF_OR_SinglePixelTrack_*_v*']
+process.hltHM_pPb.HLTPaths = ['HLT_PAFullTracks_Multiplicity150*_v*','HLT_PAFullTracks_Multiplicity120*_v*']
 process.hltHM_pPb.andOr = cms.bool(True)
 process.hltHM_pPb.throw = cms.bool(False)
 
@@ -48,7 +50,8 @@ process.NoScraping = cms.EDFilter("FilterOutScraping",
 process.PAcollisionEventSelection = cms.Sequence(
                                          process.hfCoincFilter *
                                          process.PAprimaryVertexFilter *
-                                         process.NoScraping
+                                         process.NoScraping *
+                                         process.olvFilter_pPb8TeV_dz1p0
                                          )
 
 process.eventFilter_HM = cms.Sequence(
@@ -56,7 +59,7 @@ process.eventFilter_HM = cms.Sequence(
     process.PAcollisionEventSelection
 )
 
-process.load("FlowCorrAna.DiHadronCorrelationAnalyzer.dihadroncorrelation_cff")
+process.load("FlowCorrAna.DiHadronCorrelationAnalyzer.ptspectra_cff")
 
 process.options = cms.untracked.PSet(
     wantSummary = cms.untracked.bool(True)
@@ -64,10 +67,14 @@ process.options = cms.untracked.PSet(
 
 # Additional output definition
 process.TFileService = cms.Service("TFileService",
-                                   fileName = cms.string('ptspectra.root')
+                                   fileName = cms.string('ptspectra_hm.root')
                                    )
 
-process.ana = cms.Path(process.eventFilter_HM*process.corr_ana)
-process.corr_ana.IsCorr = cms.bool(False)
-process.corr_ana.nmin = cms.int32(0)
-process.corr_ana.nmax = cms.int32(100000)
+process.ana = cms.Path(process.eventFilter_HM*process.ptspectra_ana)
+process.ptspectra_ana.IsCorr = cms.bool(False)
+process.ptspectra_ana.nmin = cms.int32(150)
+process.ptspectra_ana.nmax = cms.int32(185)
+process.ptspectra_ana.pttrgmin = cms.vdouble(0.0)
+process.ptspectra_ana.pttrgmax = cms.vdouble(10000.0)
+process.ptspectra_ana.ptassmin = cms.vdouble(0.0)
+process.ptspectra_ana.ptassmax = cms.vdouble(10000.0)

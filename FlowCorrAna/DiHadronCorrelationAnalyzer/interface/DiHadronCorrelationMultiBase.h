@@ -225,8 +225,12 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
    TH1D*  hMultCorr_ass[MAXPTASSBINS];
    TH1D*  hpT_Signal_trg[MAXPTTRGBINS];
    TH1D*  hpT_Signal_ass[MAXPTASSBINS];
+   TH2D*  hpTMult_Signal_trg[MAXPTTRGBINS];
+   TH2D*  hpTMult_Signal_ass[MAXPTASSBINS];
    TH1D*  hpTCorr_Signal_trg[MAXPTTRGBINS];
    TH1D*  hpTCorr_Signal_ass[MAXPTASSBINS];
+   TH2D*  hpTCorrMult_Signal_trg[MAXPTTRGBINS];
+   TH2D*  hpTCorrMult_Signal_ass[MAXPTASSBINS];
    TH1D*  hpT_Background_trg[MAXPTTRGBINS];
    TH1D*  hpT_Background_ass[MAXPTASSBINS];
    TH1D*  hpTCorr_Background_trg[MAXPTTRGBINS];
