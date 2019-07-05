@@ -44,10 +44,15 @@ void TrackAnalyzer::beginJob()
   trackTree->Branch("bestvtxY",&yVtx,"bestvtxY/F");
   trackTree->Branch("bestvtxZ",&zVtx,"bestvtxZ/F");
   trackTree->Branch("candSizeTRK",&candSizeTRK,"candSizeTRK/i");
-  trackTree->Branch("pTTRK",pT,"pTTRK[candSizeTRK]/s");
-  trackTree->Branch("etaTRK",eta,"etaTRK[candSizeTRK]/S");
-  trackTree->Branch("phiTRK",phi,"phiTRK[candSizeTRK]/S");
-  trackTree->Branch("weightTRK",weight,"weightTRK[candSizeTRK]/s");
+  trackTree->Branch("pTTRK",pT,"pTTRK[candSizeTRK]/F");
+  trackTree->Branch("etaTRK",eta,"etaTRK[candSizeTRK]/F");
+  trackTree->Branch("phiTRK",phi,"phiTRK[candSizeTRK]/F");
+  trackTree->Branch("weightTRK",weight,"weightTRK[candSizeTRK]/F");
+//  trackTree->Branch("pTTRK",pT,"pTTRK[candSizeTRK]/s");
+//  trackTree->Branch("etaTRK",eta,"etaTRK[candSizeTRK]/S");
+//  trackTree->Branch("phiTRK",phi,"phiTRK[candSizeTRK]/S");
+//  trackTree->Branch("weightTRK",weight,"weightTRK[candSizeTRK]/s");
+
   
 //  DiHadronCorrelationMultiBaseNew::beginJob();
 }
@@ -78,7 +83,7 @@ void TrackAnalyzer::LoopTracks(const edm::Event& iEvent, const edm::EventSetup& 
    
      if(!trk.quality(reco::TrackBase::highPurity)) continue;
      if(fabs(trk.ptError())/trk.pt() > 0.1) continue;
-
+/*
      pT[candSizeTRK]  = (int)(trk.pt()*100);
      if(pT[candSizeTRK]<30) continue;
 
@@ -96,7 +101,26 @@ void TrackAnalyzer::LoopTracks(const edm::Event& iEvent, const edm::EventSetup& 
 
      phi[candSizeTRK] = (int)(trk.phi()*100);
      weight[candSizeTRK] = (int)(GetEffWeight(eta[candSizeTRK]/100.,phi[candSizeTRK]/100.,pT[candSizeTRK]/100.,0,-1,0)*100);
-    
+  */
+  
+     pT[candSizeTRK]  = trk.pt();
+     if(pT[candSizeTRK]<0.03) continue;
+
+     eta[candSizeTRK] = trk.eta();
+     if(fabs(eta[candSizeTRK])>2.4) continue;
+
+     math::XYZPoint bestvtx(xVtx,yVtx,zVtx);
+     double dzvtx = trk.dz(bestvtx);
+     double dxyvtx = trk.dxy(bestvtx);
+     double dzerror = sqrt(trk.dzError()*trk.dzError()+zVtxError*zVtxError);
+     double dxyerror = sqrt(trk.d0Error()*trk.d0Error()+xVtxError*yVtxError);
+     double pterror = trk.ptError();
+     if(fabs(dzvtx/dzerror) > 3.0) continue;
+     if(fabs(dxyvtx/dxyerror) > 3.0) continue;
+
+     phi[candSizeTRK] = trk.phi();
+     weight[candSizeTRK] = GetEffWeight(eta[candSizeTRK],phi[candSizeTRK],pT[candSizeTRK],0,-1,0);
+
      candSizeTRK++;
    }
    trackTree->Fill();

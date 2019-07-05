@@ -23,10 +23,16 @@ class TrackAnalyzer : public DiHadronCorrelationMultiBaseNew {
    TTree* trackTree;
 
    uint candSizeTRK;
+/*
    uint pT[MAXCAN];
    short eta[MAXCAN];
    short phi[MAXCAN];
    uint weight[MAXCAN];
+*/
+   float pT[MAXCAN];
+   float eta[MAXCAN];
+   float phi[MAXCAN];
+   float weight[MAXCAN];
 
    virtual void analyze(const edm::Event&, const edm::EventSetup&);
    virtual void beginJob();
