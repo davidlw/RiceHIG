@@ -53,7 +53,12 @@ void TrackAnalyzer::beginJob()
 //  trackTree->Branch("phiTRK",phi,"phiTRK[candSizeTRK]/S");
 //  trackTree->Branch("weightTRK",weight,"weightTRK[candSizeTRK]/s");
 
-  
+  genParticleTree = theOutputs->make<TTree>("genParticleTree","genParticleTree");
+  genParticleTree->Branch("candSizeGEN",&candSizeGEN,"candSizeGEN/i");
+  genParticleTree->Branch("pTGEN",pT,"pTGEN[candSizeGEN]/F");
+  genParticleTree->Branch("etaGEN",eta,"etaGEN[candSizeGEN]/F");
+  genParticleTree->Branch("phiGEN",phi,"phiGEN[candSizeGEN]/F");
+
 //  DiHadronCorrelationMultiBaseNew::beginJob();
 }
 
@@ -63,6 +68,7 @@ void TrackAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 {
   GetVertices(iEvent,iSetup);
   LoopTracks(iEvent,iSetup,1);
+  if(cutPara.IsGenMult) LoopParticles(iEvent,iSetup,1,-999999,1,1);
 }
 
 void TrackAnalyzer::LoopTracks(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg, int icharge)
@@ -83,25 +89,6 @@ void TrackAnalyzer::LoopTracks(const edm::Event& iEvent, const edm::EventSetup& 
    
      if(!trk.quality(reco::TrackBase::highPurity)) continue;
      if(fabs(trk.ptError())/trk.pt() > 0.1) continue;
-/*
-     pT[candSizeTRK]  = (int)(trk.pt()*100);
-     if(pT[candSizeTRK]<30) continue;
-
-     eta[candSizeTRK] = (int)(trk.eta()*100);
-     if(fabs(eta[candSizeTRK])>240) continue;
-
-     math::XYZPoint bestvtx(xVtx,yVtx,zVtx);
-     double dzvtx = trk.dz(bestvtx);
-     double dxyvtx = trk.dxy(bestvtx);
-     double dzerror = sqrt(trk.dzError()*trk.dzError()+zVtxError*zVtxError);
-     double dxyerror = sqrt(trk.d0Error()*trk.d0Error()+xVtxError*yVtxError);
-     double pterror = trk.ptError();
-     if(fabs(dzvtx/dzerror) > 3.0) continue;
-     if(fabs(dxyvtx/dxyerror) > 3.0) continue;
-
-     phi[candSizeTRK] = (int)(trk.phi()*100);
-     weight[candSizeTRK] = (int)(GetEffWeight(eta[candSizeTRK]/100.,phi[candSizeTRK]/100.,pT[candSizeTRK]/100.,0,-1,0)*100);
-  */
   
      pT[candSizeTRK]  = trk.pt();
      if(pT[candSizeTRK]<0.03) continue;
@@ -124,6 +111,29 @@ void TrackAnalyzer::LoopTracks(const edm::Event& iEvent, const edm::EventSetup& 
      candSizeTRK++;
    }
    trackTree->Fill();
+}
+
+void TrackAnalyzer::LoopParticles(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg, int pdgid, bool isstable, bool ischarge)
+{
+   edm::Handle<reco::GenParticleCollection> genTracks;
+   iEvent.getByToken(token_genparticles, genTracks);
+   if( !genTracks->size() ) { cout<<"Invalid or empty genParticle collection!"<<endl; return; }
+
+   candSizeGEN = 0;
+   for(unsigned ip=0; ip<genTracks->size(); ++ip){
+     const reco::GenParticle & p = (*genTracks)[ip];
+
+     if(p.status() != 1 && isstable) continue;
+     if(p.charge() == 0 && ischarge) continue;
+     if(p.pdgId() != pdgid && pdgid!=-999999) continue;
+
+     pTGEN[candSizeGEN]  = p.pt();
+     etaGEN[candSizeGEN]  = p.eta();
+     phiGEN[candSizeGEN]  = p.phi();
+
+     candSizeGEN++;
+   }
+   genParticleTree->Fill();
 }
 
 void TrackAnalyzer::endJob()
