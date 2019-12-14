@@ -25,6 +25,8 @@
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/EPEtaDecoAnalyzerSP2.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/ConversionAnalyzer.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/TrackAnalyzer.h"
+#include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/VertexAnalyzer.h"
+#include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/RCorrelatorAnalyzer.h"
 
 //DEFINE_SEAL_MODULE();
 
@@ -53,3 +55,5 @@ DEFINE_FWK_MODULE(ScalarProdVnAnalyzer);
 DEFINE_FWK_MODULE(ScalarProdVnAnalyzerNew);
 DEFINE_FWK_MODULE(ConversionAnalyzer);
 DEFINE_FWK_MODULE(TrackAnalyzer);
+DEFINE_FWK_MODULE(VertexAnalyzer);
+DEFINE_FWK_MODULE(RCorrelatorAnalyzer);

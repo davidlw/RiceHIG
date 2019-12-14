@@ -1182,6 +1182,7 @@ void DiHadronCorrelationMultiBase::GetVertices(const edm::Event& iEvent, const e
     double zvtxmax = -9999.0;
     double yvtxmax = -9999.0;
     double xvtxmax = -9999.0;
+
     for(unsigned int iv=0; iv<vertices->size(); ++iv)
     {
       const reco::Vertex & vtx = (*vertices)[iv];
@@ -1189,6 +1190,7 @@ void DiHadronCorrelationMultiBase::GetVertices(const edm::Event& iEvent, const e
       if(!vtx.isFake() && vtx.tracksSize()>=2)
       {
         nVertices++;
+
         if(vtx.tracksSize()>=maxofflinetracks)
         {
           xVtx = vtx.x();
