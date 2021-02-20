@@ -8,7 +8,7 @@
 #include <vector>
 #include <string>
 
-#define MAXCAN 50000
+#define MAXCAN 500000
 
 class TH1D;
 class TH2D;

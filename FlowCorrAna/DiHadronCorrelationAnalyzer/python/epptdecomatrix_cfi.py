@@ -1,8 +1,6 @@
 import FWCore.ParameterSet.Config as cms
 
-epetadecomatrix_ana = cms.EDAnalyzer('EPEtaDecoAnalyzerSPMatrix',
-
-  etaBinWidth = cms.double(0.2),
+epptdecomatrix_ana = cms.EDAnalyzer('EPPtDecoAnalyzerSPMatrix',
 
   centralityBinLabel = cms.InputTag("centralityBin","HFtowers"), 
   centralitySrc = cms.InputTag("hiCentrality"),
@@ -11,11 +9,11 @@ epetadecomatrix_ana = cms.EDAnalyzer('EPEtaDecoAnalyzerSPMatrix',
   VertexCollection = cms.InputTag('offlinePrimaryVertices'),
   GenParticleCollection = cms.InputTag('genParticles'),
   V0CandidateCollection = cms.InputTag('generalV0CandidatesNew'),
-  pfCandidateCollection = cms.InputTag('particleFlow'),
+  pfCandidateCollection = cms.InputTag('particleFlowTmp'),
   conversionCollection = cms.InputTag('allConversions'),
 
   TriggerID = cms.string('Track'),
-  AssociateID = cms.string('Track'),
+  AssociateID = cms.string(''),
 
   NEtaBins = cms.int32(32),
   NPhiBins = cms.int32(32),
@@ -38,13 +36,14 @@ epetadecomatrix_ana = cms.EDAnalyzer('EPEtaDecoAnalyzerSPMatrix',
   etaassmin = cms.double(0.0),
   etaassmax = cms.double(0.0),
 #  pttrgmin = cms.vdouble(0.5,0.7,1.0,1.3,1.6,2.0,2.5,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10),
-#  pttrgmax = cms.vdouble(0.7,1.0,1.3,1.6,2.0,2.5,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10,0,20),
+#  pttrgmax = cms.vdouble(0.7,1.0,1.3,1.6,2.0,2.5,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10,20),
 #  ptassmin = cms.vdouble(0.5,0.7,1.0,1.3,1.6,2.0,2.5,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10),
-#  ptassmax = cms.vdouble(0.7,1.0,1.3,1.6,2.0,2.5,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10,0,20),
-  pttrgmin = cms.vdouble(0.5),
-  pttrgmax = cms.vdouble(3.0),
-  ptassmin = cms.vdouble(0.5),
-  ptassmax = cms.vdouble(3.0),
+#  ptassmax = cms.vdouble(0.7,1.0,1.3,1.6,2.0,2.5,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10,20),
+
+  pttrgmin = cms.vdouble(0.5,0.7,1.0,1.3,1.6,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.0,8.5,9.0,9.5,10,15),
+  pttrgmax = cms.vdouble(0.7,1.0,1.3,1.6,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.0,8.5,9.0,9.5,10,15,20),
+  ptassmin = cms.vdouble(0.5,0.7,1.0,1.3,1.6,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.0,8.5,9.0,9.5,10,15),
+  ptassmax = cms.vdouble(0.7,1.0,1.3,1.6,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.0,8.5,9.0,9.5,10,15,20),
 
   etamultmin = cms.double(-2.4),
   etamultmax = cms.double(2.4),
@@ -97,9 +96,5 @@ epetadecomatrix_ana = cms.EDAnalyzer('EPEtaDecoAnalyzerSPMatrix',
 
   EffFileName = cms.string(''),
   EffHistName = cms.string('rTotalEff3D_0'),
-
-  FakFileName = cms.string(''),
-  FakHistName = cms.string('Fak3D'),
-
   EtaPhiFileName = cms.string('')
 )

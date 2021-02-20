@@ -2,7 +2,7 @@ import FWCore.ParameterSet.Config as cms
 
 from FlowCorrAna.DiHadronCorrelationAnalyzer.dihadroncorrelation_cfi import *
 from FlowCorrAna.DiHadronCorrelationAnalyzer.hltFilter_cff import *
-from RiceHIG.V0Analysis.SelectedVertex_cfi import *
+#from RiceHIG.V0Analysis.SelectedVertex_cfi import *
 
 corr_ana_N010 = corr_ana.clone()
 corr_ana_N010.nmin = cms.int32(0)
@@ -180,6 +180,31 @@ corr_ana_pp_la_bkg = corr_ana_pp_la_sig.clone(
 
   IsV0SignalTrg = cms.bool(False),
   IsV0BkgTrg = cms.bool(True)
+)
+
+corr_ana_PbPb2018 = corr_ana.clone(
+
+#  pttrgmin = cms.vdouble(1.0,3.0),
+#  pttrgmax = cms.vdouble(3.0,6.0),
+#  ptassmin = cms.vdouble(1.0,3.0),
+#  ptassmax = cms.vdouble(3.0,6.0),
+
+  pttrgmin = cms.vdouble(3.0,6.0,10),
+  pttrgmax = cms.vdouble(6.0,10.,20),
+  ptassmin = cms.vdouble(3.0,6.0,10),
+  ptassmax = cms.vdouble(6.0,10.,20),
+
+#  etatrgmin = cms.double(-1.),
+#  etatrgmax = cms.double(1.),
+#  etaassmin = cms.double(-1.),
+#  etaassmax = cms.double(1.),
+
+  xvtxcenter = cms.double(0.094),
+  yvtxcenter = cms.double(-0.064),
+  zvtxcenter = cms.double(0.1),
+
+  EffFileName = cms.string('EffCorrectionsPixelPbPb2018_v1.root'),
+  EffHistName = cms.string('Eff_50_100')
 )
 
 corr_ana_HI = corr_ana.clone(

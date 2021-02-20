@@ -137,7 +137,7 @@ void DiHadronCorrelationMultiAnalyzer::endJob()
       double deltazvtx = eventcorrArray[i].zvtx-eventcorrArray[j].zvtx;
       hDeltaZvtx->Fill(deltazvtx);
 
-      if(fabs(deltazvtx)>0.3) continue;
+//      if(fabs(deltazvtx)>0.5) continue;
 
       FillHistsBackground(eventcorrArray[i],eventcorrArray[j]);
     }

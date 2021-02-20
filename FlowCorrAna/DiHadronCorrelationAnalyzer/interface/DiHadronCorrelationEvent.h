@@ -7,8 +7,8 @@
 
 using namespace std;
 
-#define MAXPTTRGBINS 20 
-#define MAXPTASSBINS 20
+#define MAXPTTRGBINS 25
+#define MAXPTASSBINS 25
 
 #define MAXQ2BINS 20
 #define MAXCHASYMBINS 20

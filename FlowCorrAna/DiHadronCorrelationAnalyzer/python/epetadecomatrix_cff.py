@@ -3,40 +3,35 @@ import FWCore.ParameterSet.Config as cms
 from FlowCorrAna.DiHadronCorrelationAnalyzer.epetadecomatrix_cfi import *
 from FlowCorrAna.DiHadronCorrelationAnalyzer.hltFilter_cff import *
 
-epetadecomatrix_ana_HI_gen = epetadecomatrix_ana.clone(
-  TrgTrackCollection = cms.string('hiGeneralAndPixelTracks'),
-#  TrgTrackCollection = cms.string('hiGeneralTracks'),
-  VertexCollection = cms.string('hiSelectedVertex'),
-  GenParticleCollection = cms.string('genParticles'),
+epetadecomatrix_ana_PbPb2018_mergedtracks = epetadecomatrix_ana.clone(
+  xvtxcenter = cms.double(0.094),
+  yvtxcenter = cms.double(-0.064),
+  zvtxcenter = cms.double(0.1),
 
-  IsHITrkQuality = cms.bool(True),
-  IsPPTrkQuality = cms.bool(False),
+  TrgTrackCollection = cms.string(''),
 
-  TriggerID = cms.string('GenParticle'),
-  AssociateID = cms.string('GenParticle'),
-
-  IsGenMult = cms.bool(True),
-  IsVtxSel = cms.bool(False),
-
-  EffFileName = cms.string('')
-)
-
-epetadecomatrix_ana_HI = epetadecomatrix_ana.clone(
-  TrgTrackCollection = cms.string('hiGeneralAndPixelTracks'),
-#  TrgTrackCollection = cms.string('hiGeneralTracks'),
-  VertexCollection = cms.string('hiSelectedVertex'),
-  GenParticleCollection = cms.string('genParticles'),
-
-  IsHITrkQuality = cms.bool(True),
+  IsHITrkQuality = cms.bool(False),
   IsPPTrkQuality = cms.bool(False),
 
   EffFileName = cms.string('EffCorrectionsPixel_NTT_pt_0_10_v2.root'),
   EffHistName = cms.string('Eff_0_5')
 )
 
-#epetadeco_ana_seq = cms.Sequence(epetadeco_ana_pPb_hfp*epetadeco_ana_pPb_hfm)
-#epetadeco_ana_120150_seq = cms.Sequence(hltHM120150*epetadeco_ana_pPb_hfp*epetadeco_ana_pPb_hfm)
-#epetadeco_ana_150185_seq = cms.Sequence(hltHM150185*epetadeco_ana_pPb_hfp*epetadeco_ana_pPb_hfm)
-#epetadeco_ana_185220_seq = cms.Sequence(hltHM185220*epetadeco_ana_pPb_hfp*epetadeco_ana_pPb_hfm)
-#epetadeco_ana_220260_seq = cms.Sequence(hltHM220*epetadeco_ana_pPb_hfp*epetadeco_ana_pPb_hfm)
-#epetadeco_ana_260_seq = cms.Sequence(hltHM220*epetadeco_ana_pPb_hfp*epetadeco_ana_pPb_hfm)
+epetadecomatrix_ana_PbPb2018 = epetadecomatrix_ana.clone(
+  xvtxcenter = cms.double(0.094),
+  yvtxcenter = cms.double(-0.064),
+  zvtxcenter = cms.double(0.1),
+
+  IsHITrkQuality = cms.bool(True),
+  IsPPTrkQuality = cms.bool(False),
+
+#  EffFileName = cms.string(''),
+  EffFileName = cms.string('2018PbPb_Efficiency_GeneralTracks_MB.root'),
+  EffHistName = cms.string('Eff3D'),
+
+#  FakFileName = cms.string(''),
+  FakFileName = cms.string('2018PbPb_Efficiency_GeneralTracks_MB.root'),
+  FakHistName = cms.string('Fak3D'),
+
+  AssociateID = cms.string('')
+)

@@ -67,6 +67,7 @@
 #include "RecoJets/JetAlgorithms/interface/JetAlgoHelper.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/CutParameters.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/DiHadronCorrelationEvent.h"
+//#include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/trackingEfficiency2018PbPb.h"
 
 class TBranch;
 class TClonesArray;
@@ -124,6 +125,7 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
      kLambdaM=28,
      kD0=29,
      kConversion=30,
+     kPFCandidate=31,
    };
 
    ParticleType  trgID;
@@ -152,7 +154,8 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
    TNtuple* trackNtuple;
 
    // histograms
-   TH2D*  hEffWeight;
+   TH3D*  hEffWeight;
+   TH3D*  hFakWeight;
    TH2D*  hEtaPhiWeightPos;
    TH2D*  hEtaPhiWeightNeg;
    TH1D*  hTrgWeight;
@@ -197,6 +200,8 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
    TH1D*  hHFTowerSum; 
    TH2D*  hHFvsNpixel;
    TH2D*  hHFvsZDC;
+   TH2D*  hHFvsPt;
+   TH2D*  hNpixelvsPt;
    TH1D*  hNpart;
    TH2D*  hV0InvMassVsPt_masspipicut;
    TH2D*  hV0AP;
@@ -258,7 +263,7 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
    unsigned int  maxofflinetracks;
    int nCentBins;
    double hft;
-   double npixel;
+   int npixel;
    double zdc;
    int  NEtaBins;
    int  NPhiBins;      
@@ -296,6 +301,7 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
    virtual void LoopConversions(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg);
    virtual void LoopV0Candidates(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg, TString candtype, int pdgID);
    virtual void LoopPFCandidates(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg, reco::PFCandidate::ParticleType pfID);
+   virtual void LoopPFCandidates(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg);
    virtual void GetVertices(const edm::Event& iEvent, const edm::EventSetup& iSetup);
    virtual void NormalizeHists() {};
    virtual void AssignTrgPtBins(double pt, double eta, double phi, double mass, double charge, double effweight, bool isv0 = false,

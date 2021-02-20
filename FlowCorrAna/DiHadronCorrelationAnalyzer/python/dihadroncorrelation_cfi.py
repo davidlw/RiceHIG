@@ -9,7 +9,7 @@ corr_ana = cms.EDAnalyzer('DiHadronCorrelationMultiAnalyzer',
   VertexCollection = cms.InputTag('offlinePrimaryVertices'),
   GenParticleCollection = cms.InputTag('genParticles'),
   V0CandidateCollection = cms.InputTag('generalV0CandidatesNew'),
-  pfCandidateCollection = cms.InputTag('particleFlowTmp'),
+  pfCandidateCollection = cms.InputTag('particleFlow'),
   conversionCollection = cms.InputTag('allConversions'),
 
   TriggerID = cms.string('Track'),

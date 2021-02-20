@@ -1,6 +1,6 @@
 import FWCore.ParameterSet.Config as cms
 
-from FlowCorrAna.DiHadronCorrelationAnalyzer.epptdeco_cfi import *
+from FlowCorrAna.DiHadronCorrelationAnalyzer.epptdeconew_cfi import *
 from FlowCorrAna.DiHadronCorrelationAnalyzer.hltFilter_cff import *
 
 epptdeco_ana_HI = epptdeco_ana.clone(
@@ -19,6 +19,16 @@ epptdeco_ana_HI = epptdeco_ana.clone(
 
   EffFileName = cms.string('')
 )
+
+epptdeco_ana_PbPb2018 = epptdeco_ana.clone(
+  xvtxcenter = cms.double(0.094),
+  yvtxcenter = cms.double(-0.064),
+  zvtxcenter = cms.double(0.1),
+
+  EffFileName = cms.string('EffCorrectionsPixelPbPb2018_v1.root'),
+  EffHistName = cms.string('Eff_50_100')
+)
+
 
 epptdeco_ana_pPb = epptdeco_ana.clone(
 )

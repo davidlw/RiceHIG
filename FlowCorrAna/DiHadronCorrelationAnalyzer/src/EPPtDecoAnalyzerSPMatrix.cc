@@ -1,4 +1,4 @@
-#include "../interface/EPPtDecoAnalyzerSP.h"
+#include "../interface/EPPtDecoAnalyzerSPMatrix.h"
 #include <TH1.h>
 #include <TH2.h>
 #include <TH3.h>
@@ -18,16 +18,16 @@
 
 using namespace std;
 
-EPPtDecoAnalyzerSP::EPPtDecoAnalyzerSP(const edm::ParameterSet& iConfig) :
+EPPtDecoAnalyzerSPMatrix::EPPtDecoAnalyzerSPMatrix(const edm::ParameterSet& iConfig) :
   DiHadronCorrelationMultiBase(iConfig)
 {
   bkgFactor = 10;
 }
 
-EPPtDecoAnalyzerSP::~EPPtDecoAnalyzerSP() 
+EPPtDecoAnalyzerSPMatrix::~EPPtDecoAnalyzerSPMatrix() 
 {}
 
-void EPPtDecoAnalyzerSP::beginJob()
+void EPPtDecoAnalyzerSPMatrix::beginJob()
 {
   hDeltaZvtx = theOutputs->make<TH1D>("deltazvtx",";#Delta z_{vtx}",200,-1.0,1.0);
 
@@ -37,15 +37,28 @@ void EPPtDecoAnalyzerSP::beginJob()
     {
       if(!cutPara.IsFullMatrix && itrg<jass) continue;
     
-      hSignalCosn[itrg][jass] = theOutputs->make<TH2D>(Form("signalcosn_trg%d_ass%d",itrg,jass),";cos(n#Delta#phi);n",20000,-1.0,1.0,3,1.5,4.5);
-      hBackgroundCosn[itrg][jass] = theOutputs->make<TH2D>(Form("backgroundcosn_trg%d_ass%d",itrg,jass),";cos(n#Delta#phi);n",20000,-1.0,1.0,3,1.5,4.5);
+      for(int n=0;n<4;n++)
+      {
+        hSignalCosn[n][itrg][jass] = theOutputs->make<TH1D>(Form("signalcos%d_trg%d_ass%d",n+1,itrg,jass),";cos(n#Delta#phi)",2,-1.0,1.0);
+        hBackgroundCosn[n][itrg][jass] = theOutputs->make<TH1D>(Form("backgroundcos%d_trg%d_ass%d",n+1,itrg,jass),";cos(n#Delta#phi)",2,-1.0,1.0);
+        hSignalCosnNew[n][itrg][jass] = theOutputs->make<TH1D>(Form("signalcosnew%d_trg%d_ass%d",n+1,itrg,jass),";cos(n#Delta#phi)",2,-1.0,1.0);
+        hBackgroundCosnNew[n][itrg][jass] = theOutputs->make<TH1D>(Form("backgroundcosnew%d_trg%d_ass%d",n+1,itrg,jass),";cos(n#Delta#phi)",2,-1.0,1.0);
+/*
+        hSignalSinn[n][itrg][jass] = theOutputs->make<TH1D>(Form("signalsin%d_trg%d_ass%d",n+1,itrg,jass),";sin(n#Delta#phi)",2,-1.0,1.0);
+        hBackgroundSinn[n][itrg][jass] = theOutputs->make<TH1D>(Form("backgroundsin%d_trg%d_ass%d",n+1,itrg,jass),";sin(n#Delta#phi)",2,-1.0,1.0);
+        hSignalSinnNew[n][itrg][jass] = theOutputs->make<TH1D>(Form("signalsinnew%d_trg%d_ass%d",n+1,itrg,jass),";sin(n#Delta#phi)",2,-1.0,1.0);
+        hBackgroundSinnNew[n][itrg][jass] = theOutputs->make<TH1D>(Form("backgroundsinnew%d_trg%d_ass%d",n+1,itrg,jass),";sin(n#Delta#phi)",2,-1.0,1.0);
+
+*/        hSignalNpairs[itrg][jass] = theOutputs->make<TH1D>(Form("signalnpairs_trg%d_ass%d",itrg,jass),";Npairs",10,0,100000);
+        hBackgroundNpairs[itrg][jass] = theOutputs->make<TH1D>(Form("backgroundnpairs_trg%d_ass%d",itrg,jass),";Npairs",10,0,100000);
+      }
     }
   }
 
   DiHadronCorrelationMultiBase::beginJob();
 }
 
-void EPPtDecoAnalyzerSP::endJob()
+void EPPtDecoAnalyzerSPMatrix::endJob()
 {
   DiHadronCorrelationMultiBase::endJob();
   
@@ -83,74 +96,12 @@ void EPPtDecoAnalyzerSP::endJob()
   cout<< "Finish normalizing the histograms!" << endl;
 }
 
-void EPPtDecoAnalyzerSP::NormalizeHists()
+void EPPtDecoAnalyzerSPMatrix::NormalizeHists()
 {
 }
 
 //--------------- Calculate signal distributions ----------------------
-/*
-void EPPtDecoAnalyzerSP::FillHistsSignal(const DiHadronCorrelationEvent& eventcorr)
-{
-    unsigned int ntrgsize = eventcorr.pVect_trg[0].size();
-    unsigned int nasssize = eventcorr.pVect_ass[0].size();
-//    double nMultCorr_trg = eventcorr.nMultCorrVect_trg[0];
-//    double nMultCorr_ass = eventcorr.nMultCorrVect_ass[0];
-
-    double sumcosn_trg[MAXETATRGBINS][5]={{0.0}};
-    double sumsinn_trg[MAXETATRGBINS][5]={{0.0}};
-    double npairs_trg[MAXETATRGBINS][5]={{0.0}};
-    double sumcosn_ass[5]={0.0};
-    double sumsinn_ass[5]={0.0};
-    double npairs_ass[5]={0.0};
-
-    for(unsigned int ntrg=0;ntrg<ntrgsize;ntrg++)
-    {
-      TLorentzVector pvector_trg = (eventcorr.pVect_trg[0])[ntrg];	  
-      double effweight_trg = (eventcorr.effVect_trg[0])[ntrg];
-      double eta_trg = pvector_trg.Eta()-cutPara.etacms;
-      double phi_trg = pvector_trg.Phi();
-
-      int ietabin = (int)((eta_trg+2.4)/ETATRGBINWIDTH);
-      if(cutPara.etaassmin<0 && cutPara.etaassmax<0) ietabin = (int)((2.4-eta_trg)/ETATRGBINWIDTH);
-
-      for(int nn = 1; nn<4; nn++)
-      {
-        sumcosn_trg[ietabin][nn] = sumcosn_trg[ietabin][nn] + cos((nn+1)*phi_trg)/effweight_trg;
-        sumsinn_trg[ietabin][nn] = sumsinn_trg[ietabin][nn] + sin((nn+1)*phi_trg)/effweight_trg;
-        npairs_trg[ietabin][nn] += 1.0/effweight_trg;
-      }
-   }
-
-   for(unsigned int nass=0;nass<nasssize;nass++)
-   {
-     TLorentzVector pvector_ass = (eventcorr.pVect_ass[0])[nass];   
-     double effweight_ass = (eventcorr.effVect_ass[0])[nass];
-     double phi_ass = pvector_ass.Phi();
-
-     for(int nn = 1; nn<4; nn++)
-     {
-       sumcosn_ass[nn] = sumcosn_ass[nn] + cos((nn+1)*phi_ass)/effweight_ass;
-       sumsinn_ass[nn] = sumsinn_ass[nn] + sin((nn+1)*phi_ass)/effweight_ass;
-       npairs_ass[nn] += 1.0/effweight_ass;
-     }
-   }
-    
-   for(int i=0;i<MAXETATRGBINS;i++)
-     for(int nn = 1; nn<4; nn++) 
-      {
-        if(npairs_trg[i][nn]==0.0 || npairs_ass[nn]==0.0) continue;
-        double Qx = sumcosn_trg[i][nn]*sumcosn_ass[nn]+sumsinn_trg[i][nn]*sumsinn_ass[nn];
-        double Qy = -sumcosn_trg[i][nn]*sumsinn_ass[nn]+sumsinn_trg[i][nn]*sumcosn_ass[nn];
-
-        Qx = Qx/npairs_trg[i][nn]/npairs_ass[nn];
-        Qy = Qy/npairs_trg[i][nn]/npairs_ass[nn];
-
-        hSignalCosn[i]->Fill(Qx,nn+1);
-//        hSignalSinn[i]->Fill(Qy,nn+1);
-      }
-}
-*/
-void EPPtDecoAnalyzerSP::FillHistsBackground(const DiHadronCorrelationEvent& eventcorr_trg, const DiHadronCorrelationEvent& eventcorr_ass)
+void EPPtDecoAnalyzerSPMatrix::FillHistsBackground(const DiHadronCorrelationEvent& eventcorr_trg, const DiHadronCorrelationEvent& eventcorr_ass)
 {
   for(unsigned int itrg=0;itrg<cutPara.pttrgmin.size();itrg++)
     for(unsigned int jass=0;jass<cutPara.ptassmin.size();jass++)
@@ -158,7 +109,7 @@ void EPPtDecoAnalyzerSP::FillHistsBackground(const DiHadronCorrelationEvent& eve
       if(!cutPara.IsFullMatrix && itrg<jass) continue;
 
       unsigned int ntrgsize = eventcorr_trg.pVect_trg[itrg].size();
-      unsigned int nasssize = eventcorr_ass.pVect_ass[jass].size();
+      unsigned int nasssize = eventcorr_ass.pVect_trg[jass].size();
 
       double sumcosn_trg[MAXETATRGBINSPT][5]={{0.0}};
       double sumsinn_trg[MAXETATRGBINSPT][5]={{0.0}};
@@ -176,7 +127,7 @@ void EPPtDecoAnalyzerSP::FillHistsBackground(const DiHadronCorrelationEvent& eve
 
         int ietabin = (int)((eta_trg+2.4)/ETATRGBINWIDTHPT);
 
-        for(int nn = 1; nn<4; nn++)
+        for(int nn = 0; nn<4; nn++)
         {
           sumcosn_trg[ietabin][nn] = sumcosn_trg[ietabin][nn] + cos((nn+1)*phi_trg)/effweight_trg;
           sumsinn_trg[ietabin][nn] = sumsinn_trg[ietabin][nn] + sin((nn+1)*phi_trg)/effweight_trg;
@@ -186,14 +137,14 @@ void EPPtDecoAnalyzerSP::FillHistsBackground(const DiHadronCorrelationEvent& eve
 
       for(unsigned int nass=0;nass<nasssize;nass++)
       {
-        TLorentzVector pvector_ass = (eventcorr_ass.pVect_ass[jass])[nass];
-        double effweight_ass = (eventcorr_ass.effVect_ass[jass])[nass];
+        TLorentzVector pvector_ass = (eventcorr_ass.pVect_trg[jass])[nass];
+        double effweight_ass = (eventcorr_ass.effVect_trg[jass])[nass];
         double eta_ass = pvector_ass.Eta()-cutPara.etacms;
         double phi_ass = pvector_ass.Phi();
 
         int ietabin = (int)((eta_ass+2.4)/ETATRGBINWIDTHPT);
 
-        for(int nn = 1; nn<4; nn++)
+        for(int nn = 0; nn<4; nn++)
         {
           sumcosn_ass[ietabin][nn] = sumcosn_ass[ietabin][nn] + cos((nn+1)*phi_ass)/effweight_ass;
           sumsinn_ass[ietabin][nn] = sumsinn_ass[ietabin][nn] + sin((nn+1)*phi_ass)/effweight_ass;
@@ -201,7 +152,7 @@ void EPPtDecoAnalyzerSP::FillHistsBackground(const DiHadronCorrelationEvent& eve
         }
       }
 
-      for(int nn = 1; nn<4; nn++)
+      for(int nn = 0; nn<4; nn++)
       {
         double Qx=0;
         double Qy=0;
@@ -217,8 +168,22 @@ void EPPtDecoAnalyzerSP::FillHistsBackground(const DiHadronCorrelationEvent& eve
           }
         Qx = Qx/npairs_tot;
         Qy = Qy/npairs_tot;
-        if(eventcorr_trg.run==eventcorr_ass.run && eventcorr_trg.event==eventcorr_ass.event) hSignalCosn[itrg][jass]->Fill(Qx,nn+1);
-        else hBackgroundCosn[itrg][jass]->Fill(Qx,nn+1);
+        if(eventcorr_trg.run==eventcorr_ass.run && eventcorr_trg.event==eventcorr_ass.event)
+        { 
+          hSignalCosn[nn][itrg][jass]->Fill(Qx,npairs_tot);
+          hSignalCosnNew[nn][itrg][jass]->Fill(Qx);
+//          hSignalSinn[nn][itrg][jass]->Fill(Qy,npairs_tot);
+//          hSignalSinnNew[nn][itrg][jass]->Fill(Qy);
+          hSignalNpairs[itrg][jass]->Fill(npairs_tot);
+        }
+        else
+        {
+          hBackgroundCosn[nn][itrg][jass]->Fill(Qx,npairs_tot);
+          hBackgroundCosnNew[nn][itrg][jass]->Fill(Qx);
+//          hBackgroundSinn[nn][itrg][jass]->Fill(Qy,npairs_tot);
+//          hBackgroundSinnNew[nn][itrg][jass]->Fill(Qy);
+          hBackgroundNpairs[itrg][jass]->Fill(npairs_tot);
+        }
       }
     }
 }
