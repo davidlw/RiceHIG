@@ -18,10 +18,8 @@ config.JobType.inputFiles = ['HeavyIonRPRcd_PbPb2018_offline.db']
 
 config.section_('Data')
 config.Data.inputDBS = 'global'
-config.Data.splitting = 'LumiBased'
-#config.Data.totalUnits = 200
-config.Data.lumiMask = '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions18/HI/PromptReco/Cert_326381-327564_HI_PromptReco_Collisions18_JSON.txt'
-config.Data.runRange = '326381-327564'
+config.Data.splitting = 'FileBased'
+#config.Data.totalUnits = 50
 config.Data.publication = False
 config.JobType.allowUndistributedCMSSW = True
 config.Data.allowNonValidInputDataset = True
@@ -44,22 +42,17 @@ def submit(config):
 #############################################################################################
 
 dataMap = {
-#            "HIDoubleMuon": { "PD": "/HIDoubleMuon/HIRun2018A-04Apr2019-v1/AOD", "Units": 5, "Memory": 2500, "RunTime": 1800, "PSet": "PbPbSkimAndTree2018_DiMuContBoth_ZDC_cfg.py" },
-#            "HISingleMuon": { "PD": "/HISingleMuon/HIRun2018A-04Apr2019-v1/AOD", "Units": 5, "Memory": 2500, "RunTime": 1800, "PSet": "PbPbSkimAndTree2018_DiMuContBoth_ZDC_cfg.py" },
-#            "HIDoubleMuonPsiPeri": { "PD": "/HIDoubleMuonPsiPeri/HIRun2018A-04Apr2019-v1/AOD", "Units": 5, "Memory": 2500, "RunTime": 1800, "PSet": "PbPbSkimAndTree2018_DiMuContBoth_ZDC_cfg.py" },
-#            "HIForward": { "PD": "/HIForward/HIRun2018A-04Apr2019-v1/AOD", "Units": 30, "Memory": 1800, "RunTime": 1400, "PSet": "PbPbSkimAndTree2018_DiMuContBoth_ZDC_ALLDIMU_cfg.py" },
+            "MinBias_Hydjet_Drum5F_2018_5p02TeV": { "PD": "/MinBias_Hydjet_Drum5F_2018_5p02TeV/HINPbPbAutumn18DR-NoPUmva98_103X_upgrade2018_realistic_HI_v11-v1/AODSIM", "Units": 1, "Memory": 4500, "RunTime": 1800, "PSet": "dihadroncorrelation_PbPb2018_mc_cfg.py" },
+#            "MinBias_Hydjet_Drum5F_2018_5p02TeV": { "PD": "/MinBias_Hydjet_Drum5F_2018_5p02TeV/HINPbPbAutumn18DR-NoPUmva98_103X_upgrade2018_realistic_HI_v11-v1/AODSIM", "Units": 4, "Memory": 4500, "RunTime": 1800, "PSet": "dihadroncorrelation_PbPb2018_gen_cfg.py" }
             }
-
-for i in range(1,2):
-    dataMap[("HIMinimumBias"+str(i))] = { "PD": ("/HIMinimumBias"+str(i)+"/HIRun2018A-04Apr2019-v1/AOD"), "Units": 6, "Memory": 4000, "RunTime": 2100, "PSet": "dihadroncorrelation_PbPb2018_cfg.py" } # UCC
-#    dataMap[("HIMinimumBias"+str(i))] = { "PD": ("/HIMinimumBias"+str(i)+"/HIRun2018A-04Apr2019-v1/AOD"), "Units": 7, "Memory": 5000, "RunTime": 1500, "PSet": "dihadroncorrelation_PbPb2018_cfg.py" }
-
+#for i in range(0,1):
+#    dataMap[("HIMinimumBias"+str(i))] = { "PD": ("/HIMinimumBias"+str(i)+"/HIRun2018A-04Apr2019-v1/AOD"), "Units": 10, "Memory": 2500, "RunTime": 1000, "PSet": "dihadroncorrelation_PbPb2018_cfg.py" }
+#    dataMap[("HIMinimumBias"+str(i))] = { "PD": ("/HIMinimumBias"+str(i)+"/HIRun2018A-04Apr2019-v1/AOD"), "Units": 10, "Memory": 1800, "RunTime": 1000, "PSet": "dihadroncorrelation_PbPb2018_UCC_cfg.py" }
 
 ## Submit the muon PDs
 for key, val in dataMap.items():
-#    config.General.requestName = 'Multiplicity_'+key+'_HIRun2018_04Apr2019_mergedtracks_NoCorrDEBUG_20211213'
-#    config.General.requestName = 'DiHadronCorrelation_'+key+'_HIRun2018_04Apr2019_mergedtracks_NoCorrDEBUG_UCC005_20211216'
-    config.General.requestName = 'DiHadronCorrelation_'+key+'_HIRun2018_04Apr2019_mergedtracks_NoCorrDEBUG_effv2pol2_20220507'
+#    config.General.requestName = 'DiHadronCorrelation_'+key+'_gen_pt0_20211120'
+    config.General.requestName = 'DiHadronCorrelation_'+key+'_mergedtracks_NoCorrDEBUG_UCCpol2v2_20211217'
 #    config.General.requestName = 'DiHadronCorrelation_'+key+'_HIRun2018_04Apr2019_generaltracks_20211008'
     config.Data.inputDataset = val["PD"]
     config.Data.unitsPerJob = val["Units"]

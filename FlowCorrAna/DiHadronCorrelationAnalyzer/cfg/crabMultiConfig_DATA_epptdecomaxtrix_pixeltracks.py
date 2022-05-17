@@ -19,7 +19,7 @@ config.JobType.inputFiles = ['HeavyIonRPRcd_PbPb2018_offline.db']
 config.section_('Data')
 config.Data.inputDBS = 'global'
 config.Data.splitting = 'LumiBased'
-#config.Data.totalUnits = 200
+#config.Data.totalUnits = 1000
 config.Data.lumiMask = '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions18/HI/PromptReco/Cert_326381-327564_HI_PromptReco_Collisions18_JSON.txt'
 config.Data.runRange = '326381-327564'
 config.Data.publication = False
@@ -28,7 +28,7 @@ config.Data.allowNonValidInputDataset = True
 
 config.section_('Site')
 #config.Data.ignoreLocality = True
-#config.Site.whitelist = ['T1_US_*','T2_US_*','T1_FR_*','T2_FR_*','T2_CH_CERN','T2_BE_IIHE']
+#config.Site.whitelist = ['T1_US_*','T2_US_*','T1_FR_*','T2_FR_*','T2_CH_CERN']
 config.Site.storageSite = 'T2_CH_CERN'
 
 def submit(config):
@@ -50,17 +50,13 @@ dataMap = {
 #            "HIForward": { "PD": "/HIForward/HIRun2018A-04Apr2019-v1/AOD", "Units": 30, "Memory": 1800, "RunTime": 1400, "PSet": "PbPbSkimAndTree2018_DiMuContBoth_ZDC_ALLDIMU_cfg.py" },
             }
 
-for i in range(1,2):
-    dataMap[("HIMinimumBias"+str(i))] = { "PD": ("/HIMinimumBias"+str(i)+"/HIRun2018A-04Apr2019-v1/AOD"), "Units": 6, "Memory": 4000, "RunTime": 2100, "PSet": "dihadroncorrelation_PbPb2018_cfg.py" } # UCC
-#    dataMap[("HIMinimumBias"+str(i))] = { "PD": ("/HIMinimumBias"+str(i)+"/HIRun2018A-04Apr2019-v1/AOD"), "Units": 7, "Memory": 5000, "RunTime": 1500, "PSet": "dihadroncorrelation_PbPb2018_cfg.py" }
-
+for i in range(0,1):
+    dataMap[("HIMinimumBias"+str(i))] = { "PD": ("/HIMinimumBias"+str(i)+"/HIRun2018A-04Apr2019-v1/AOD"), "Units": 10, "Memory": 5000, "RunTime": 2000, "PSet": "epptdecomatrix_PbPb2018_pixeltracks_cfg.py" }
 
 ## Submit the muon PDs
 for key, val in dataMap.items():
-#    config.General.requestName = 'Multiplicity_'+key+'_HIRun2018_04Apr2019_mergedtracks_NoCorrDEBUG_20211213'
-#    config.General.requestName = 'DiHadronCorrelation_'+key+'_HIRun2018_04Apr2019_mergedtracks_NoCorrDEBUG_UCC005_20211216'
-    config.General.requestName = 'DiHadronCorrelation_'+key+'_HIRun2018_04Apr2019_mergedtracks_NoCorrDEBUG_effv2pol2_20220507'
-#    config.General.requestName = 'DiHadronCorrelation_'+key+'_HIRun2018_04Apr2019_generaltracks_20211008'
+#    config.General.requestName = 'epptdecomatrix_'+key+'_HIRun2018_04Apr2019_20210208v2_cent3040'
+    config.General.requestName = 'epptdecomatrix_pixeltracks_'+key+'_HIRun2018_04Apr2019_20210220v1'
     config.Data.inputDataset = val["PD"]
     config.Data.unitsPerJob = val["Units"]
     config.JobType.maxMemoryMB = val["Memory"]
@@ -68,7 +64,9 @@ for key, val in dataMap.items():
     config.JobType.psetName = val["PSet"]
     config.Data.outputDatasetTag = config.General.requestName
 #    config.Data.outLFNDirBase = '/store/user/davidlw/'
-    config.Data.outLFNDirBase = '/store/group/phys_heavyions/flowcorr/' 
+#    config.Data.outLFNDirBase = '/store/user/%s/' % (getUsernameFromSiteDB())
+#    config.Data.outLFNDirBase = '/store/group/phys_heavyions/%s/RiceHIN/PbPb2018/TREE/%s' % (getUsernameFromSiteDB(), config.General.requestName)
+    config.Data.outLFNDirBase = '/store/group/phys_heavyions/flowcorr/'
 
     print("Submitting CRAB job for: "+val["PD"])
     submit(config)

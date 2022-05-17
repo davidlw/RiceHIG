@@ -199,9 +199,13 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
    TH1D*  hCentrality;
    TH1D*  hHFTowerSum; 
    TH2D*  hHFvsNpixel;
+   TH2D*  hHFvsNtrk;
+   TH2D*  hHFvsNtrkCorr;
    TH2D*  hHFvsZDC;
    TH2D*  hHFvsPt;
    TH2D*  hNpixelvsPt;
+   TH2D*  hNtrkvsPt;
+   TH2D*  hNtrkCorrvsPt;
    TH1D*  hNpart;
    TH2D*  hV0InvMassVsPt_masspipicut;
    TH2D*  hV0AP;
@@ -220,6 +224,7 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
    TH2D*  hLamPtvsPionPt;
    TH2D*  hLamDauPtRatiovsLamPt; 
 
+   TH2D*  hMultCorr_trgVsass;
    TH2D*  hdNdetadphi_trg[MAXPTTRGBINS];
    TH2D*  hdNdetadphi_ass[MAXPTASSBINS];
    TH2D*  hdNdetadphiCorr_trg[MAXPTTRGBINS];
@@ -259,6 +264,7 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
    double nMultCorr;
    double nMultAllCorr_trg;
    double nMultAllCorr_ass;
+   double hfGen;
    int  nVertices;
    unsigned int  maxofflinetracks;
    int nCentBins;

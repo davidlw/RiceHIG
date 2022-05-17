@@ -51,12 +51,12 @@ dataMap = {
             }
 
 for i in range(0,1):
-    dataMap[("HIMinimumBias"+str(i))] = { "PD": ("/HIMinimumBias"+str(i)+"/HIRun2018A-04Apr2019-v1/AOD"), "Units": 12, "Memory": 5000, "RunTime": 2000, "PSet": "epptdecomatrix_PbPb2018_cfg.py" }
+    dataMap[("HIMinimumBias"+str(i))] = { "PD": ("/HIMinimumBias"+str(i)+"/HIRun2018A-04Apr2019-v1/AOD"), "Units": 7, "Memory": 5000, "RunTime": 2000, "PSet": "epptdecomatrix_PbPb2018_cfg.py" }
 
 ## Submit the muon PDs
 for key, val in dataMap.items():
 #    config.General.requestName = 'epptdecomatrix_'+key+'_HIRun2018_04Apr2019_20210208v2_cent3040'
-    config.General.requestName = 'epptdecomatrix_'+key+'_HIRun2018_04Apr2019_20210219v1'
+    config.General.requestName = 'epptdecomatrix_'+key+'_HIRun2018_04Apr2019_20210221v1'
     config.Data.inputDataset = val["PD"]
     config.Data.unitsPerJob = val["Units"]
     config.JobType.maxMemoryMB = val["Memory"]

@@ -83,6 +83,7 @@ class CutParameters {
    TString v0CandidateCollection;
    TString pfCandidateCollection;
    bool IsGenMult;
+   bool IsGenCentrality;
    bool IsGenVtx;
    bool IsVtxSel;
    bool IsEventEngineer;

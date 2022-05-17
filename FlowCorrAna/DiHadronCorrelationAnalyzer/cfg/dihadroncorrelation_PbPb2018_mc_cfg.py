@@ -9,19 +9,20 @@ process.load('Configuration.StandardSequences.Reconstruction_cff')
 
 # Limit the output messages
 process.load('FWCore.MessageService.MessageLogger_cfi')
-process.MessageLogger.cerr.FwkReport.reportEvery = 200
+process.MessageLogger.cerr.FwkReport.reportEvery = 1
 process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
 
 # Define the input source
 process.source = cms.Source("PoolSource",
-   fileNames = cms.untracked.vstring('file:/eos/cms/store/group/phys_heavyions/flowcorr/F134F372-A1D6-9844-AB54-77742E73027C_PbPb2018.root'),
+   fileNames = cms.untracked.vstring('root://cmsxrootd.fnal.gov//store/himc/HINPbPbAutumn18DR/MinBias_Hydjet_Drum5F_2018_5p02TeV/AODSIM/NoPUmva98_103X_upgrade2018_realistic_HI_v11-v1/120000/411DF9D7-A2FF-AD42-8FE2-5D2396C0970D.root'),
    inputCommands=cms.untracked.vstring('keep *', 'drop *_hiEvtPlane_*_*')
 )
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 
 # Set the global tag
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
-process.GlobalTag.globaltag = cms.string('103X_dataRun2_v6')
+from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
+process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:phase1_2018_realistic', '') 
 
 # Add PbPb centrality
 process.load("RecoHI.HiCentralityAlgos.CentralityBin_cfi")
@@ -29,26 +30,26 @@ process.load('RecoHI.HiCentralityAlgos.HiCentrality_cfi')
 process.hiCentrality.produceHFhits = False
 process.hiCentrality.produceHFtowers = False
 process.hiCentrality.produceEcalhits = False
-process.hiCentrality.produceZDChits = True
+process.hiCentrality.produceZDChits = False
 process.hiCentrality.produceETmidRapidity = False
 process.hiCentrality.producePixelhits = False
 process.hiCentrality.produceTracks = False
 process.hiCentrality.producePixelTracks = False
 process.hiCentrality.reUseCentrality = True
-process.hiCentrality.srcZDChits = cms.InputTag("QWzdcreco")
-process.hiCentrality.srcReUse = cms.InputTag("hiCentrality","","reRECO")
+process.hiCentrality.srcReUse = cms.InputTag("hiCentrality","","")
 process.centralityBin.Centrality = cms.InputTag("hiCentrality")
 process.centralityBin.centralityVariable = cms.string("HFtowers")
 process.centralityBin.nonDefaultGlauberModel = cms.string("")
 process.GlobalTag.snapshotTime = cms.string("9999-12-31 23:59:59.000")
 process.GlobalTag.toGet.extend([
     cms.PSet(record = cms.string("HeavyIonRcd"),
-        tag = cms.string("CentralityTable_HFtowers200_DataPbPb_periHYDJETshape_run2v1033p1x01_offline"),
+        tag = cms.string("CentralityTable_HFtowers200_HydjetDrum5F_v1032x02_mc"),
         connect = cms.string("frontier://FrontierProd/CMS_CONDITIONS"),
         label = cms.untracked.string("HFtowers")
         ),
     ])
-process.cent_seq = cms.Sequence(process.hiCentrality * process.centralityBin)
+#process.cent_seq = cms.Sequence(process.hiCentrality * process.centralityBin)
+process.cent_seq = cms.Sequence(process.centralityBin)
 
 # Add PbPb event plane
 process.load("RecoHI.HiEvtPlaneAlgos.HiEvtPlane_cfi")
@@ -93,16 +94,13 @@ process.colEvtSel = cms.Sequence(process.hfCoincFilter2Th4 * process.primaryVert
 
 # Define the event selection sequence
 process.eventFilter_HM = cms.Sequence(
-    process.hltFilter *
+#    process.hltFilter *
 #    process.offlinePrimaryVerticesRecovery *
-    process.colEvtSel
+#    process.colEvtSel
 )
 process.eventFilter_HM_step = cms.Path( process.eventFilter_HM )
 
-# ZDC info
-process.load('VertexCompositeAnalysis.VertexCompositeProducer.QWZDC2018Producer_cfi')
-process.load('VertexCompositeAnalysis.VertexCompositeProducer.QWZDC2018RecHit_cfi')
-process.pcentandep_step = cms.Path(process.eventFilter_HM * process.zdcdigi * process.QWzdcreco * process.cent_seq ) #* process.evtplane_seq)
+process.pcentandep_step = cms.Path(process.eventFilter_HM * process.cent_seq ) #* process.evtplane_seq)
 
 # Define the analysis steps
 process.load('MergingProducer.generalAndHiPixelTracks.MergingPixAndGenProducer_cfi')
@@ -124,37 +122,20 @@ process.corr_ana_PbPb2018.etatrgmax = cms.double(1.0)
 process.corr_ana_PbPb2018.ptassmin = cms.vdouble(0.0)
 process.corr_ana_PbPb2018.ptassmax = cms.vdouble(0.0)
 process.corr_ana_PbPb2018.AssociateID = cms.string('CaloTower')
-#process.corr_ana_PbPb2018.EffFileName = cms.string('')
-#process.corr_ana_PbPb2018.EffFileName = cms.string('EffCorrectionsPbPb2018_merged_3D_pol2_mcnpix_v4.root')
-#process.corr_ana_PbPb2018.EffFileName = cms.string('EffCorrectionsPbPb2018_merged_3D_pol1_v4.root')
-process.corr_ana_PbPb2018.EffFileName = cms.string('EffCorrectionsPbPb2018_merged_3D_pol1_v2.root')
-#process.corr_ana_PbPb2018.EffHistName = cms.string('Cor3D')
+process.corr_ana_PbPb2018.EffFileName = cms.string('EffCorrectionsPbPb2018_merged_3D_pol2_v2.root')
 process.corr_ana_PbPb2018.EffHistName = cms.string('Cor3D_fitsplit')
 
-process.corr_ana_PbPb2018_cent005 = process.corr_ana_PbPb2018.clone()
 process.corr_ana_PbPb2018_cent05 = process.corr_ana_PbPb2018.clone()
 process.corr_ana_PbPb2018_cent510 = process.corr_ana_PbPb2018.clone()
 process.corr_ana_PbPb2018_cent1030 = process.corr_ana_PbPb2018.clone()
 process.corr_ana_PbPb2018_cent3050 = process.corr_ana_PbPb2018.clone()
 process.corr_ana_PbPb2018_cent50100 = process.corr_ana_PbPb2018.clone()
-process.corr_ana_PbPb2018_centbin01 = process.corr_ana_PbPb2018.clone()
-process.corr_ana_PbPb2018_centbin12 = process.corr_ana_PbPb2018.clone()
-process.corr_ana_PbPb2018_centbin23 = process.corr_ana_PbPb2018.clone()
-process.corr_ana_PbPb2018_centbin34 = process.corr_ana_PbPb2018.clone()
-process.corr_ana_PbPb2018_centbin45 = process.corr_ana_PbPb2018.clone()
-process.corr_ana_PbPb2018_centbin56 = process.corr_ana_PbPb2018.clone()
-process.corr_ana_PbPb2018_centbin67 = process.corr_ana_PbPb2018.clone()
-process.corr_ana_PbPb2018_centbin78 = process.corr_ana_PbPb2018.clone()
-process.corr_ana_PbPb2018_centbin89 = process.corr_ana_PbPb2018.clone()
-process.corr_ana_PbPb2018_centbin910 = process.corr_ana_PbPb2018.clone()
-process.corr_ana_PbPb2018_centbin1012 = process.corr_ana_PbPb2018.clone()
-process.corr_ana_PbPb2018_centbin1214 = process.corr_ana_PbPb2018.clone()
-process.corr_ana_PbPb2018_centbin1416 = process.corr_ana_PbPb2018.clone()
-process.corr_ana_PbPb2018_centbin1618 = process.corr_ana_PbPb2018.clone()
-process.corr_ana_PbPb2018_centbin1820 = process.corr_ana_PbPb2018.clone()
-
-process.corr_ana_PbPb2018_cent005.centmin = cms.int32(0)
-process.corr_ana_PbPb2018_cent005.centmax = cms.int32(1)
+#process.corr_ana_PbPb2018_cent05.EffHistName = cms.string('Eff_0_5')
+#process.corr_ana_PbPb2018_cent510.EffHistName = cms.string('Eff_0_5')
+#process.corr_ana_PbPb2018_cent510.EffHistName = cms.string('Eff_5_10')
+#process.corr_ana_PbPb2018_cent1030.EffHistName = cms.string('Eff_10_30')
+#process.corr_ana_PbPb2018_cent3050.EffHistName = cms.string('Eff_30_50')
+#process.corr_ana_PbPb2018_cent50100.EffHistName = cms.string('Eff_50_100')
 process.corr_ana_PbPb2018_cent05.centmin = cms.int32(0)
 process.corr_ana_PbPb2018_cent05.centmax = cms.int32(10)
 process.corr_ana_PbPb2018_cent510.centmin = cms.int32(10)
@@ -165,36 +146,6 @@ process.corr_ana_PbPb2018_cent3050.centmin = cms.int32(60)
 process.corr_ana_PbPb2018_cent3050.centmax = cms.int32(100)
 process.corr_ana_PbPb2018_cent50100.centmin = cms.int32(100)
 process.corr_ana_PbPb2018_cent50100.centmax = cms.int32(200)
-process.corr_ana_PbPb2018_centbin01.centmin = cms.int32(0)
-process.corr_ana_PbPb2018_centbin01.centmax = cms.int32(1)
-process.corr_ana_PbPb2018_centbin12.centmin = cms.int32(1)
-process.corr_ana_PbPb2018_centbin12.centmax = cms.int32(2)
-process.corr_ana_PbPb2018_centbin23.centmin = cms.int32(2)
-process.corr_ana_PbPb2018_centbin23.centmax = cms.int32(3)
-process.corr_ana_PbPb2018_centbin34.centmin = cms.int32(3)
-process.corr_ana_PbPb2018_centbin34.centmax = cms.int32(4)
-process.corr_ana_PbPb2018_centbin45.centmin = cms.int32(4)
-process.corr_ana_PbPb2018_centbin45.centmax = cms.int32(5)
-process.corr_ana_PbPb2018_centbin56.centmin = cms.int32(5)
-process.corr_ana_PbPb2018_centbin56.centmax = cms.int32(6)
-process.corr_ana_PbPb2018_centbin67.centmin = cms.int32(6)
-process.corr_ana_PbPb2018_centbin67.centmax = cms.int32(7)
-process.corr_ana_PbPb2018_centbin78.centmin = cms.int32(7)
-process.corr_ana_PbPb2018_centbin78.centmax = cms.int32(8)
-process.corr_ana_PbPb2018_centbin89.centmin = cms.int32(8)
-process.corr_ana_PbPb2018_centbin89.centmax = cms.int32(9)
-process.corr_ana_PbPb2018_centbin910.centmin = cms.int32(9)
-process.corr_ana_PbPb2018_centbin910.centmax = cms.int32(10)
-process.corr_ana_PbPb2018_centbin1012.centmin = cms.int32(10)
-process.corr_ana_PbPb2018_centbin1012.centmax = cms.int32(12)
-process.corr_ana_PbPb2018_centbin1214.centmin = cms.int32(12)
-process.corr_ana_PbPb2018_centbin1214.centmax = cms.int32(14)
-process.corr_ana_PbPb2018_centbin1416.centmin = cms.int32(14)
-process.corr_ana_PbPb2018_centbin1416.centmax = cms.int32(16)
-process.corr_ana_PbPb2018_centbin1618.centmin = cms.int32(16)
-process.corr_ana_PbPb2018_centbin1618.centmax = cms.int32(18)
-process.corr_ana_PbPb2018_centbin1820.centmin = cms.int32(18)
-process.corr_ana_PbPb2018_centbin1820.centmax = cms.int32(20)
 
 process.generalAndHiPixelTracksTight = process.generalAndHiPixelTracks.clone(
   dxyErrMax = cms.double(2.0),
@@ -222,20 +173,16 @@ process.corr_ana_PbPb2018_loose.TrgTrackCollection = cms.InputTag("generalAndHiP
 #process.corr_ana_PbPb2018_loose.EffFileName = cms.string('EffCorrectionsMergedPbPb2018_loose.root')
 process.corr_ana_PbPb2018_loose.EffFileName = cms.string('EffCorrectionsPbPb2018_merged_3D_pol2_loose_v2.root')
 
-#process.corr_ana_PbPb2018_tight.EffFileName = cms.string('')
-#process.corr_ana_PbPb2018_loose.EffFileName = cms.string('')
-#process.corr_ana_PbPb2018.EffFileName = cms.string('')
-
 process.corr_ana_PbPb2018_tight_cent05 = process.corr_ana_PbPb2018_tight.clone()
 process.corr_ana_PbPb2018_tight_cent510 = process.corr_ana_PbPb2018_tight.clone()
 process.corr_ana_PbPb2018_tight_cent1030 = process.corr_ana_PbPb2018_tight.clone()
 process.corr_ana_PbPb2018_tight_cent3050 = process.corr_ana_PbPb2018_tight.clone()
-process.corr_ana_PbPb2018_tight_cent50100 = process.corr_ana_PbPb2018_tight.clone()
+process.corr_ana_PbPb2018_tight_cent5070 = process.corr_ana_PbPb2018_tight.clone()
 #process.corr_ana_PbPb2018_tight_cent05.EffHistName = cms.string('Cor_0_5')
 #process.corr_ana_PbPb2018_tight_cent510.EffHistName = cms.string('Cor_0_5')
 #process.corr_ana_PbPb2018_tight_cent1030.EffHistName = cms.string('Cor_10_30')
 #process.corr_ana_PbPb2018_tight_cent3050.EffHistName = cms.string('Cor_30_50')
-#process.corr_ana_PbPb2018_tight_cent50100.EffHistName = cms.string('Cor_50_100')
+#process.corr_ana_PbPb2018_tight_cent5070.EffHistName = cms.string('Cor_50_100')
 process.corr_ana_PbPb2018_tight_cent05.centmin = cms.int32(0)
 process.corr_ana_PbPb2018_tight_cent05.centmax = cms.int32(10)
 process.corr_ana_PbPb2018_tight_cent510.centmin = cms.int32(10)
@@ -244,19 +191,19 @@ process.corr_ana_PbPb2018_tight_cent1030.centmin = cms.int32(20)
 process.corr_ana_PbPb2018_tight_cent1030.centmax = cms.int32(60)
 process.corr_ana_PbPb2018_tight_cent3050.centmin = cms.int32(60)
 process.corr_ana_PbPb2018_tight_cent3050.centmax = cms.int32(100)
-process.corr_ana_PbPb2018_tight_cent50100.centmin = cms.int32(100)
-process.corr_ana_PbPb2018_tight_cent50100.centmax = cms.int32(200)
+process.corr_ana_PbPb2018_tight_cent5070.centmin = cms.int32(100)
+process.corr_ana_PbPb2018_tight_cent5070.centmax = cms.int32(140)
 
 process.corr_ana_PbPb2018_loose_cent05 = process.corr_ana_PbPb2018_loose.clone()
 process.corr_ana_PbPb2018_loose_cent510 = process.corr_ana_PbPb2018_loose.clone()
 process.corr_ana_PbPb2018_loose_cent1030 = process.corr_ana_PbPb2018_loose.clone()
 process.corr_ana_PbPb2018_loose_cent3050 = process.corr_ana_PbPb2018_loose.clone()
-process.corr_ana_PbPb2018_loose_cent50100 = process.corr_ana_PbPb2018_loose.clone()
+process.corr_ana_PbPb2018_loose_cent5070 = process.corr_ana_PbPb2018_loose.clone()
 #process.corr_ana_PbPb2018_loose_cent05.EffHistName = cms.string('Cor_0_5')
 #process.corr_ana_PbPb2018_loose_cent510.EffHistName = cms.string('Cor_0_5')
 #process.corr_ana_PbPb2018_loose_cent1030.EffHistName = cms.string('Cor_10_30')
 #process.corr_ana_PbPb2018_loose_cent3050.EffHistName = cms.string('Cor_30_50')
-#process.corr_ana_PbPb2018_loose_cent50100.EffHistName = cms.string('Cor_50_100')
+#process.corr_ana_PbPb2018_loose_cent5070.EffHistName = cms.string('Cor_50_100')
 process.corr_ana_PbPb2018_loose_cent05.centmin = cms.int32(0)
 process.corr_ana_PbPb2018_loose_cent05.centmax = cms.int32(10)
 process.corr_ana_PbPb2018_loose_cent510.centmin = cms.int32(10)
@@ -265,34 +212,50 @@ process.corr_ana_PbPb2018_loose_cent1030.centmin = cms.int32(20)
 process.corr_ana_PbPb2018_loose_cent1030.centmax = cms.int32(60)
 process.corr_ana_PbPb2018_loose_cent3050.centmin = cms.int32(60)
 process.corr_ana_PbPb2018_loose_cent3050.centmax = cms.int32(100)
-process.corr_ana_PbPb2018_loose_cent50100.centmin = cms.int32(100)
-process.corr_ana_PbPb2018_loose_cent50100.centmax = cms.int32(200)
+process.corr_ana_PbPb2018_loose_cent5070.centmin = cms.int32(100)
+process.corr_ana_PbPb2018_loose_cent5070.centmax = cms.int32(140)
 
-process.ana_ucc_step = cms.Path(process.eventFilter_HM * process.generalAndHiPixelTracks *
-  process.corr_ana_PbPb2018_cent005
+process.corr_ana_PbPb2018_gen_cent05 = process.corr_ana_PbPb2018_cent05.clone()
+process.corr_ana_PbPb2018_gen_cent05.EffFileName = cms.string('')
+process.corr_ana_PbPb2018_gen_cent05.IsGenMult = cms.bool(True)
+process.corr_ana_PbPb2018_gen_cent05.TriggerID = cms.string('GenParticle')
+process.corr_ana_PbPb2018_gen_cent510 = process.corr_ana_PbPb2018_cent510.clone()
+process.corr_ana_PbPb2018_gen_cent510.EffFileName = cms.string('')
+process.corr_ana_PbPb2018_gen_cent510.IsGenMult = cms.bool(True)
+process.corr_ana_PbPb2018_gen_cent510.TriggerID = cms.string('GenParticle')
+
+process.corr_ana_PbPb2018_genmult_cent05 = process.corr_ana_PbPb2018_gen_cent05.clone()
+process.corr_ana_PbPb2018_genmult_cent05.IsGenMult = cms.bool(True)
+process.corr_ana_PbPb2018_genmult_cent05.IsGenCentrality = cms.bool(True)
+process.corr_ana_PbPb2018_genmult_cent510 = process.corr_ana_PbPb2018_gen_cent510.clone()
+process.corr_ana_PbPb2018_genmult_cent510.IsGenMult = cms.bool(True)
+process.corr_ana_PbPb2018_genmult_cent510.IsGenCentrality = cms.bool(True)
+
+process.corr_ana_PbPb2018_genmult = process.corr_ana_PbPb2018_genmult_cent05.clone()
+process.corr_ana_PbPb2018_genmult.centmin = cms.int32(-1)
+process.corr_ana_PbPb2018_genmult.centmax = cms.int32(-1)
+process.corr_ana_PbPb2018_genmult.IsVtxSel = cms.bool(False)
+
+process.corr_ana_PbPb2018_genmult_pt0 = process.corr_ana_PbPb2018_genmult.clone()
+process.corr_ana_PbPb2018_genmult_pt0.ptmultmin = cms.double(0.)
+process.corr_ana_PbPb2018_genmult_pt0.pttrgmin = cms.vdouble(0.)
+
+process.ana_step = cms.Path(process.eventFilter_HM * process.generalAndHiPixelTracks * 
+process.corr_ana_PbPb2018_cent05 *
+process.corr_ana_PbPb2018_cent510 #*
+#process.corr_ana_PbPb2018_cent1030 *
+#process.corr_ana_PbPb2018_cent3050 *
+#process.corr_ana_PbPb2018_cent50100 
+#process.corr_ana_PbPb2018
 )
 
-process.ana_step = cms.Path(process.eventFilter_HM * process.generalAndHiPixelTracks *
-  process.corr_ana_PbPb2018_cent05 *
-  process.corr_ana_PbPb2018_cent510 #*
-#process.corr_ana_PbPb2018_centbin01 *
-#process.corr_ana_PbPb2018_centbin12 *
-#process.corr_ana_PbPb2018_centbin23 *
-#process.corr_ana_PbPb2018_centbin34 *
-#process.corr_ana_PbPb2018_centbin45 *
-#process.corr_ana_PbPb2018_centbin56 *
-#process.corr_ana_PbPb2018_centbin67 *
-#process.corr_ana_PbPb2018_centbin78 *
-#process.corr_ana_PbPb2018_centbin89 *
-#process.corr_ana_PbPb2018_centbin910 *
-#process.corr_ana_PbPb2018_centbin1012 *
-#process.corr_ana_PbPb2018_centbin1214 *
-#process.corr_ana_PbPb2018_centbin1416 *
-#process.corr_ana_PbPb2018_centbin1618 *
-#process.corr_ana_PbPb2018_centbin1820
-#  process.corr_ana_PbPb2018_cent1030 *
-#  process.corr_ana_PbPb2018_cent3050 *
-#  process.corr_ana_PbPb2018_cent50100
+process.ana_step_gen = cms.Path(process.eventFilter_HM * process.generalAndHiPixelTracks *
+process.corr_ana_PbPb2018_gen_cent05 *
+process.corr_ana_PbPb2018_gen_cent510 *
+process.corr_ana_PbPb2018_genmult_cent05 *
+process.corr_ana_PbPb2018_genmult_cent510 *
+process.corr_ana_PbPb2018_genmult *
+process.corr_ana_PbPb2018_genmult_pt0 
 )
 
 process.ana_step_syst = cms.Path(process.eventFilter_HM * process.generalAndHiPixelTracksTight * process.generalAndHiPixelTracksLoose *
@@ -300,12 +263,12 @@ process.ana_step_syst = cms.Path(process.eventFilter_HM * process.generalAndHiPi
   process.corr_ana_PbPb2018_tight_cent510 *
 #  process.corr_ana_PbPb2018_tight_cent1030 *
 #  process.corr_ana_PbPb2018_tight_cent3050 *
-#  process.corr_ana_PbPb2018_tight_cent50100 *
+#  process.corr_ana_PbPb2018_tight_cent5070 *
   process.corr_ana_PbPb2018_loose_cent05 *
   process.corr_ana_PbPb2018_loose_cent510 #*
 #  process.corr_ana_PbPb2018_loose_cent1030 *
 #  process.corr_ana_PbPb2018_loose_cent3050 *
-#  process.corr_ana_PbPb2018_loose_cent50100
+#  process.corr_ana_PbPb2018_loose_cent5070
 )
 
 # Define the output
@@ -315,9 +278,9 @@ process.TFileService = cms.Service("TFileService", fileName = cms.string('dihadr
 process.schedule = cms.Schedule(
     process.eventFilter_HM_step,
     process.pcentandep_step,
-#    process.ana_ucc_step,
-    process.ana_step #,
-#    process.ana_step_syst
+    process.ana_step,
+    process.ana_step_syst,
+    process.ana_step_gen
 )
 
 # Add recovery for offline primary vertex

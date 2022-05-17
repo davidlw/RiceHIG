@@ -94,7 +94,7 @@ process.colEvtSel = cms.Sequence(process.hfCoincFilter2Th4 * process.primaryVert
 # Define the event selection sequence
 process.eventFilter_HM = cms.Sequence(
     process.hltFilter *
-#    process.offlinePrimaryVerticesRecovery *
+    process.offlinePrimaryVerticesRecovery *
     process.colEvtSel
 )
 process.eventFilter_HM_step = cms.Path( process.eventFilter_HM )
@@ -108,7 +108,6 @@ process.load('VertexCompositeAnalysis.VertexCompositeProducer.QWZDC2018RecHit_cf
 process.pcentandep_step = cms.Path(process.eventFilter_HM * process.cent_seq)
 
 process.load("FlowCorrAna.DiHadronCorrelationAnalyzer.epptdecomatrix_cff")
-process.ana_step = cms.Path(process.eventFilter_HM * process.epptdecomatrix_ana_PbPb2018)
 process.epptdecomatrix_ana_PbPb2018.centmin = cms.int32(0)
 process.epptdecomatrix_ana_PbPb2018.centmax = cms.int32(2)
 #process.epptdecomatrix_ana_PbPb2018.IsPtWeightTrg = cms.bool(True)
@@ -168,6 +167,6 @@ process.schedule = cms.Schedule(
 )
 
 # Add recovery for offline primary vertex
-#from HLTrigger.Configuration.CustomConfigs import MassReplaceInputTag
-#process = MassReplaceInputTag(process,"offlinePrimaryVertices","offlinePrimaryVerticesRecovery")
-#process.offlinePrimaryVerticesRecovery.oldVertexLabel = "offlinePrimaryVertices"
+from HLTrigger.Configuration.CustomConfigs import MassReplaceInputTag
+process = MassReplaceInputTag(process,"offlinePrimaryVertices","offlinePrimaryVerticesRecovery")
+process.offlinePrimaryVerticesRecovery.oldVertexLabel = "offlinePrimaryVertices"

@@ -64,6 +64,7 @@ corr_ana = cms.EDAnalyzer('DiHadronCorrelationMultiAnalyzer',
   ischarge_ass = cms.bool(True),
 
   IsGenMult = cms.bool(False),
+  IsGenCentrality = cms.bool(False),
   IsVtxSel = cms.bool(True),
   IsCorr = cms.bool(True),
   IsHI = cms.bool(False),
@@ -92,5 +93,9 @@ corr_ana = cms.EDAnalyzer('DiHadronCorrelationMultiAnalyzer',
 #  EffFileName = cms.string('Hijing_8TeV_MB_eff_v4_wide.root'),
 #  EffFileName = cms.string('Hijing_8TeV_MB_eff_v3_tight.root'),
   EffHistName = cms.string('rTotalEff3D_0'),
+
+  FakFileName = cms.string(''),
+  FakHistName = cms.string('Fak3D'),
+
   EtaPhiFileName = cms.string('')
 )

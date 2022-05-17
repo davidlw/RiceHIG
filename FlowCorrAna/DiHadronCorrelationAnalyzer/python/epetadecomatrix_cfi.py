@@ -2,7 +2,7 @@ import FWCore.ParameterSet.Config as cms
 
 epetadecomatrix_ana = cms.EDAnalyzer('EPEtaDecoAnalyzerSPMatrix',
 
-  etaBinWidth = cms.double(0.2),
+  etaBinWidth = cms.double(0.1),
 
   centralityBinLabel = cms.InputTag("centralityBin","HFtowers"), 
   centralitySrc = cms.InputTag("hiCentrality"),

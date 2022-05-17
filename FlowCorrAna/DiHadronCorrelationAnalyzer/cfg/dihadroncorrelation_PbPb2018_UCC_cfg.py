@@ -29,7 +29,7 @@ process.load('RecoHI.HiCentralityAlgos.HiCentrality_cfi')
 process.hiCentrality.produceHFhits = False
 process.hiCentrality.produceHFtowers = False
 process.hiCentrality.produceEcalhits = False
-process.hiCentrality.produceZDChits = False
+process.hiCentrality.produceZDChits = True
 process.hiCentrality.produceETmidRapidity = False
 process.hiCentrality.producePixelhits = False
 process.hiCentrality.produceTracks = False
@@ -102,63 +102,72 @@ process.eventFilter_HM_step = cms.Path( process.eventFilter_HM )
 # ZDC info
 process.load('VertexCompositeAnalysis.VertexCompositeProducer.QWZDC2018Producer_cfi')
 process.load('VertexCompositeAnalysis.VertexCompositeProducer.QWZDC2018RecHit_cfi')
+process.pcentandep_step = cms.Path(process.eventFilter_HM * process.zdcdigi * process.QWzdcreco * process.cent_seq ) #* process.evtplane_seq)
 
 # Define the analysis steps
-#process.pcentandep_step = cms.Path(process.eventFilter_HM * process.zdcdigi * process.QWzdcreco * process.cent_seq * process.evtplane_seq)
-process.pcentandep_step = cms.Path(process.eventFilter_HM * process.cent_seq)
+process.load("FlowCorrAna.DiHadronCorrelationAnalyzer.dihadroncorrelation_cff")
+process.corr_ana_PbPb2018.IsPPTrkQuality = cms.bool(False)
+process.corr_ana_PbPb2018.IsHITrkQuality = cms.bool(True)
+#process.corr_ana_PbPb2018.IsCorr = cms.bool(False)
+process.corr_ana_PbPb2018.IsDebug = cms.bool(True)
+process.corr_ana_PbPb2018.centmin = cms.int32(0)
+process.corr_ana_PbPb2018.centmax = cms.int32(200)
+#process.corr_ana_PbPb2018.etamultmin = cms.double(-1.0)
+#process.corr_ana_PbPb2018.etamultmax = cms.double(1.0)
+#process.corr_ana_PbPb2018.ptmultmin = cms.double(0.3)
+process.corr_ana_PbPb2018.pttrgmin = cms.vdouble(5.0,7.0)
+process.corr_ana_PbPb2018.pttrgmax = cms.vdouble(7.0,10.0)
+process.corr_ana_PbPb2018.ptassmin = cms.vdouble(0.5)
+process.corr_ana_PbPb2018.ptassmax = cms.vdouble(5.0)
+process.corr_ana_PbPb2018.EffFileName = cms.string('2018PbPb_Efficiency_GeneralTracks_MB.root')
+process.corr_ana_PbPb2018.EffHistName = cms.string('Eff3D')
+process.corr_ana_PbPb2018.FakFileName = cms.string('2018PbPb_Efficiency_GeneralTracks_MB.root')
+process.corr_ana_PbPb2018.FakHistName = cms.string('Fak3D')
 
-process.load("FlowCorrAna.DiHadronCorrelationAnalyzer.epetadecomatrix_cff")
-process.ana_step = cms.Path(process.eventFilter_HM * process.epetadecomatrix_ana_PbPb2018)
-process.epetadecomatrix_ana_PbPb2018.centmin = cms.int32(0)
-process.epetadecomatrix_ana_PbPb2018.centmax = cms.int32(2)
-process.epetadecomatrix_ana_PbPb2018.pttrgmin = cms.vdouble(5.0)
-process.epetadecomatrix_ana_PbPb2018.pttrgmax = cms.vdouble(8.0)
-process.epetadecomatrix_ana_PbPb2018.IsPtWeightTrg = cms.bool(True)
-process.epetadecomatrix_ana_PbPb2018_cent01 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent05 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent510 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent1020 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent2030 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent3040 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent4050 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent5060 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent6070 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent7080 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent05.centmin = cms.int32(0)
-process.epetadecomatrix_ana_PbPb2018_cent05.centmax = cms.int32(10)
-process.epetadecomatrix_ana_PbPb2018_cent510.centmin = cms.int32(10)
-process.epetadecomatrix_ana_PbPb2018_cent510.centmax = cms.int32(20)
-process.epetadecomatrix_ana_PbPb2018_cent1020.centmin = cms.int32(20)
-process.epetadecomatrix_ana_PbPb2018_cent1020.centmax = cms.int32(40)
-process.epetadecomatrix_ana_PbPb2018_cent2030.centmin = cms.int32(40)
-process.epetadecomatrix_ana_PbPb2018_cent2030.centmax = cms.int32(60)
-process.epetadecomatrix_ana_PbPb2018_cent3040.centmin = cms.int32(60)
-process.epetadecomatrix_ana_PbPb2018_cent3040.centmax = cms.int32(80)
-process.epetadecomatrix_ana_PbPb2018_cent4050.centmin = cms.int32(80)
-process.epetadecomatrix_ana_PbPb2018_cent4050.centmax = cms.int32(100)
-process.epetadecomatrix_ana_PbPb2018_cent5060.centmin = cms.int32(100)
-process.epetadecomatrix_ana_PbPb2018_cent5060.centmax = cms.int32(120)
-process.epetadecomatrix_ana_PbPb2018_cent6070.centmin = cms.int32(120)
-process.epetadecomatrix_ana_PbPb2018_cent6070.centmax = cms.int32(140)
-process.epetadecomatrix_ana_PbPb2018_cent7080.centmin = cms.int32(140)
-process.epetadecomatrix_ana_PbPb2018_cent7080.centmax = cms.int32(160)
 
-process.ana_step = cms.Path(process.eventFilter_HM 
-#                          * process.epetadecomatrix_ana_PbPb2018_cent01
-                          * process.epetadecomatrix_ana_PbPb2018_cent05
-#                          * process.epetadecomatrix_ana_PbPb2018_cent510
-#                          * process.epetadecomatrix_ana_PbPb2018_cent1020
-#                          * process.epetadecomatrix_ana_PbPb2018_cent2030
-#                          * process.epetadecomatrix_ana_PbPb2018_cent3040
-#                          * process.epetadecomatrix_ana_PbPb2018_cent4050
-#                          * process.epetadecomatrix_ana_PbPb2018_cent5060
-#                          * process.epetadecomatrix_ana_PbPb2018_cent6070
-#                          * process.epetadecomatrix_ana_PbPb2018_cent7080
+process.corr_ana_PbPb2018_cent01_mid = process.corr_ana_PbPb2018.clone()
+process.corr_ana_PbPb2018_cent01_fwd = process.corr_ana_PbPb2018.clone()
+process.corr_ana_PbPb2018_cent01_bak = process.corr_ana_PbPb2018.clone()
+#process.corr_ana_PbPb2018_cent01_mid.etatrgmin = cms.vdouble(-0.5,-0.5)
+#process.corr_ana_PbPb2018_cent01_mid.etatrgmax = cms.vdouble(0.5,0.5)
+#process.corr_ana_PbPb2018_cent01_mid.etatrgmin = cms.vdouble(1.5,1.5)
+#process.corr_ana_PbPb2018_cent01_mid.etatrgmax = cms.vdouble(1.8,1.8)
+
+process.corr_ana_PbPb2018_cent01 = process.corr_ana_PbPb2018.clone()
+process.corr_ana_PbPb2018_cent05 = process.corr_ana_PbPb2018.clone()
+process.corr_ana_PbPb2018_cent510 = process.corr_ana_PbPb2018.clone()
+process.corr_ana_PbPb2018_cent1030 = process.corr_ana_PbPb2018.clone()
+process.corr_ana_PbPb2018_cent3050 = process.corr_ana_PbPb2018.clone()
+process.corr_ana_PbPb2018_cent5070 = process.corr_ana_PbPb2018.clone()
+process.corr_ana_PbPb2018_cent50100 = process.corr_ana_PbPb2018.clone()
+process.corr_ana_PbPb2018_cent01.centmin = cms.int32(0)
+process.corr_ana_PbPb2018_cent01.centmax = cms.int32(2)
+process.corr_ana_PbPb2018_cent05.centmin = cms.int32(0)
+process.corr_ana_PbPb2018_cent05.centmax = cms.int32(10)
+process.corr_ana_PbPb2018_cent510.centmin = cms.int32(10)
+process.corr_ana_PbPb2018_cent510.centmax = cms.int32(20)
+process.corr_ana_PbPb2018_cent1030.centmin = cms.int32(20)
+process.corr_ana_PbPb2018_cent1030.centmax = cms.int32(60)
+process.corr_ana_PbPb2018_cent3050.centmin = cms.int32(60)
+process.corr_ana_PbPb2018_cent3050.centmax = cms.int32(100)
+process.corr_ana_PbPb2018_cent50100.centmin = cms.int32(100)
+process.corr_ana_PbPb2018_cent50100.centmax = cms.int32(200)
+process.corr_ana_PbPb2018_cent5070.centmin = cms.int32(100)
+process.corr_ana_PbPb2018_cent5070.centmax = cms.int32(140)
+
+process.ana_step = cms.Path(process.eventFilter_HM * #process.generalAndHiPixelTracks * 
+process.corr_ana_PbPb2018_cent01 *
+#process.corr_ana_PbPb2018_cent05 *
+#process.corr_ana_PbPb2018_cent510 *
+#process.corr_ana_PbPb2018_cent1030 *
+#process.corr_ana_PbPb2018_cent3050 *
+#process.corr_ana_PbPb2018_cent50100 
+process.corr_ana_PbPb2018_cent5070
+#process.corr_ana_PbPb2018
 )
 
-
 # Define the output
-process.TFileService = cms.Service("TFileService", fileName = cms.string('epetadecomatrix.root'))
+process.TFileService = cms.Service("TFileService", fileName = cms.string('dihadroncorrelation.root'))
 
 # Define the process schedule
 process.schedule = cms.Schedule(

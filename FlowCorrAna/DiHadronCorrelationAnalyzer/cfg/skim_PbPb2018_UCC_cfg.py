@@ -1,6 +1,6 @@
 import FWCore.ParameterSet.Config as cms
 from Configuration.StandardSequences.Eras import eras
-process = cms.Process('ANASKIM',eras.Run2_2018_pp_on_AA)
+process = cms.Process('AODSKIM',eras.Run2_2018_pp_on_AA)
 
 process.load('Configuration.StandardSequences.Services_cff')
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
@@ -29,7 +29,7 @@ process.load('RecoHI.HiCentralityAlgos.HiCentrality_cfi')
 process.hiCentrality.produceHFhits = False
 process.hiCentrality.produceHFtowers = False
 process.hiCentrality.produceEcalhits = False
-process.hiCentrality.produceZDChits = False
+process.hiCentrality.produceZDChits = True
 process.hiCentrality.produceETmidRapidity = False
 process.hiCentrality.producePixelhits = False
 process.hiCentrality.produceTracks = False
@@ -48,20 +48,26 @@ process.GlobalTag.toGet.extend([
         label = cms.untracked.string("HFtowers")
         ),
     ])
-process.cent_seq = cms.Sequence(process.hiCentrality * process.centralityBin)
+
+process.load("RecoHI.HiCentralityAlgos.CentralityFilter_cfi")
+process.centralityFilter.selectedBins = cms.vint32(0)
+
+process.load('VertexCompositeAnalysis.VertexCompositeProducer.QWZDC2018Producer_cfi')
+process.load('VertexCompositeAnalysis.VertexCompositeProducer.QWZDC2018RecHit_cfi')
+process.cent_seq = cms.Sequence(process.zdcdigi * process.QWzdcreco * process.hiCentrality * process.centralityBin * process.centralityFilter)
 
 # Add PbPb event plane
 process.load("RecoHI.HiEvtPlaneAlgos.HiEvtPlane_cfi")
 process.load("RecoHI.HiEvtPlaneAlgos.hiEvtPlaneFlat_cfi")
 process.hiEvtPlane.trackTag = cms.InputTag("generalTracks")
-process.hiEvtPlane.vertexTag = cms.InputTag("offlinePrimaryVerticesRecovery")
+process.hiEvtPlane.vertexTag = cms.InputTag("offlinePrimaryVertices")
 process.hiEvtPlane.loadDB = cms.bool(True)
 process.hiEvtPlane.useNtrk = cms.untracked.bool(False)
 process.hiEvtPlane.caloCentRef = cms.double(-1)
 process.hiEvtPlane.caloCentRefWidth = cms.double(-1)
 process.hiEvtPlaneFlat.caloCentRef = cms.double(-1)
 process.hiEvtPlaneFlat.caloCentRefWidth = cms.double(-1)
-process.hiEvtPlaneFlat.vertexTag = cms.InputTag("offlinePrimaryVerticesRecovery")
+process.hiEvtPlaneFlat.vertexTag = cms.InputTag("offlinePrimaryVertices")
 process.hiEvtPlaneFlat.useNtrk = cms.untracked.bool(False)
 process.CondDB.connect = "sqlite_file:HeavyIonRPRcd_PbPb2018_offline.db"
 process.PoolDBESSource = cms.ESSource("PoolDBESSource",
@@ -95,76 +101,40 @@ process.colEvtSel = cms.Sequence(process.hfCoincFilter2Th4 * process.primaryVert
 process.eventFilter_HM = cms.Sequence(
     process.hltFilter *
 #    process.offlinePrimaryVerticesRecovery *
-    process.colEvtSel
+    process.colEvtSel *
+    process.cent_seq
 )
 process.eventFilter_HM_step = cms.Path( process.eventFilter_HM )
 
-# ZDC info
-process.load('VertexCompositeAnalysis.VertexCompositeProducer.QWZDC2018Producer_cfi')
-process.load('VertexCompositeAnalysis.VertexCompositeProducer.QWZDC2018RecHit_cfi')
+process.load('MergingProducer.generalAndHiPixelTracks.MergingPixAndGenProducer_cfi')
+process.ana_step = cms.Path(process.eventFilter_HM * process.evtplane_seq * process.generalAndHiPixelTracks )
 
-# Define the analysis steps
-#process.pcentandep_step = cms.Path(process.eventFilter_HM * process.zdcdigi * process.QWzdcreco * process.cent_seq * process.evtplane_seq)
-process.pcentandep_step = cms.Path(process.eventFilter_HM * process.cent_seq)
-
-process.load("FlowCorrAna.DiHadronCorrelationAnalyzer.epetadecomatrix_cff")
-process.ana_step = cms.Path(process.eventFilter_HM * process.epetadecomatrix_ana_PbPb2018)
-process.epetadecomatrix_ana_PbPb2018.centmin = cms.int32(0)
-process.epetadecomatrix_ana_PbPb2018.centmax = cms.int32(2)
-process.epetadecomatrix_ana_PbPb2018.pttrgmin = cms.vdouble(5.0)
-process.epetadecomatrix_ana_PbPb2018.pttrgmax = cms.vdouble(8.0)
-process.epetadecomatrix_ana_PbPb2018.IsPtWeightTrg = cms.bool(True)
-process.epetadecomatrix_ana_PbPb2018_cent01 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent05 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent510 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent1020 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent2030 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent3040 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent4050 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent5060 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent6070 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent7080 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent05.centmin = cms.int32(0)
-process.epetadecomatrix_ana_PbPb2018_cent05.centmax = cms.int32(10)
-process.epetadecomatrix_ana_PbPb2018_cent510.centmin = cms.int32(10)
-process.epetadecomatrix_ana_PbPb2018_cent510.centmax = cms.int32(20)
-process.epetadecomatrix_ana_PbPb2018_cent1020.centmin = cms.int32(20)
-process.epetadecomatrix_ana_PbPb2018_cent1020.centmax = cms.int32(40)
-process.epetadecomatrix_ana_PbPb2018_cent2030.centmin = cms.int32(40)
-process.epetadecomatrix_ana_PbPb2018_cent2030.centmax = cms.int32(60)
-process.epetadecomatrix_ana_PbPb2018_cent3040.centmin = cms.int32(60)
-process.epetadecomatrix_ana_PbPb2018_cent3040.centmax = cms.int32(80)
-process.epetadecomatrix_ana_PbPb2018_cent4050.centmin = cms.int32(80)
-process.epetadecomatrix_ana_PbPb2018_cent4050.centmax = cms.int32(100)
-process.epetadecomatrix_ana_PbPb2018_cent5060.centmin = cms.int32(100)
-process.epetadecomatrix_ana_PbPb2018_cent5060.centmax = cms.int32(120)
-process.epetadecomatrix_ana_PbPb2018_cent6070.centmin = cms.int32(120)
-process.epetadecomatrix_ana_PbPb2018_cent6070.centmax = cms.int32(140)
-process.epetadecomatrix_ana_PbPb2018_cent7080.centmin = cms.int32(140)
-process.epetadecomatrix_ana_PbPb2018_cent7080.centmax = cms.int32(160)
-
-process.ana_step = cms.Path(process.eventFilter_HM 
-#                          * process.epetadecomatrix_ana_PbPb2018_cent01
-                          * process.epetadecomatrix_ana_PbPb2018_cent05
-#                          * process.epetadecomatrix_ana_PbPb2018_cent510
-#                          * process.epetadecomatrix_ana_PbPb2018_cent1020
-#                          * process.epetadecomatrix_ana_PbPb2018_cent2030
-#                          * process.epetadecomatrix_ana_PbPb2018_cent3040
-#                          * process.epetadecomatrix_ana_PbPb2018_cent4050
-#                          * process.epetadecomatrix_ana_PbPb2018_cent5060
-#                          * process.epetadecomatrix_ana_PbPb2018_cent6070
-#                          * process.epetadecomatrix_ana_PbPb2018_cent7080
+process.output = cms.OutputModule("PoolOutputModule",
+    fileName = cms.untracked.string('skim.root'),
+    SelectEvents = cms.untracked.PSet(SelectEvents = cms.vstring('eventFilter_HM_step')),
+    dataset = cms.untracked.PSet(
+      dataTier = cms.untracked.string('AOD')
+    )
 )
-
-
-# Define the output
-process.TFileService = cms.Service("TFileService", fileName = cms.string('epetadecomatrix.root'))
+process.output.outputCommands = cms.untracked.vstring('drop *',
+#'keep *_generalTracks_*_* ',
+#'keep *_particleFlow_*_*',
+'keep *_generalAndHiPixelTracks_*_*',
+'keep *_towerMaker_*_*',
+'keep *_offlinePrimaryVertices_*_*',
+'keep *_hiCentrality_*_AODSKIM',
+'keep *_hiEvtPlane*_*_AODSKIM',
+'keep *_zdcdigi_*_*',
+'keep *_*zdcreco*_*_*',
+'keep *_centralityBin_*_*'
+)
+process.output_step = cms.EndPath(process.output)
 
 # Define the process schedule
 process.schedule = cms.Schedule(
     process.eventFilter_HM_step,
-    process.pcentandep_step,
-    process.ana_step 
+    process.ana_step,
+    process.output_step
 )
 
 # Add recovery for offline primary vertex

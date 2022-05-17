@@ -94,7 +94,7 @@ process.colEvtSel = cms.Sequence(process.hfCoincFilter2Th4 * process.primaryVert
 # Define the event selection sequence
 process.eventFilter_HM = cms.Sequence(
     process.hltFilter *
-#    process.offlinePrimaryVerticesRecovery *
+    process.offlinePrimaryVerticesRecovery *
     process.colEvtSel
 )
 process.eventFilter_HM_step = cms.Path( process.eventFilter_HM )
@@ -107,58 +107,79 @@ process.load('VertexCompositeAnalysis.VertexCompositeProducer.QWZDC2018RecHit_cf
 #process.pcentandep_step = cms.Path(process.eventFilter_HM * process.zdcdigi * process.QWzdcreco * process.cent_seq * process.evtplane_seq)
 process.pcentandep_step = cms.Path(process.eventFilter_HM * process.cent_seq)
 
-process.load("FlowCorrAna.DiHadronCorrelationAnalyzer.epetadecomatrix_cff")
-process.ana_step = cms.Path(process.eventFilter_HM * process.epetadecomatrix_ana_PbPb2018)
-process.epetadecomatrix_ana_PbPb2018.centmin = cms.int32(0)
-process.epetadecomatrix_ana_PbPb2018.centmax = cms.int32(2)
-process.epetadecomatrix_ana_PbPb2018.pttrgmin = cms.vdouble(5.0)
-process.epetadecomatrix_ana_PbPb2018.pttrgmax = cms.vdouble(8.0)
-process.epetadecomatrix_ana_PbPb2018.IsPtWeightTrg = cms.bool(True)
-process.epetadecomatrix_ana_PbPb2018_cent01 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent05 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent510 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent1020 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent2030 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent3040 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent4050 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent5060 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent6070 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent7080 = process.epetadecomatrix_ana_PbPb2018.clone()
-process.epetadecomatrix_ana_PbPb2018_cent05.centmin = cms.int32(0)
-process.epetadecomatrix_ana_PbPb2018_cent05.centmax = cms.int32(10)
-process.epetadecomatrix_ana_PbPb2018_cent510.centmin = cms.int32(10)
-process.epetadecomatrix_ana_PbPb2018_cent510.centmax = cms.int32(20)
-process.epetadecomatrix_ana_PbPb2018_cent1020.centmin = cms.int32(20)
-process.epetadecomatrix_ana_PbPb2018_cent1020.centmax = cms.int32(40)
-process.epetadecomatrix_ana_PbPb2018_cent2030.centmin = cms.int32(40)
-process.epetadecomatrix_ana_PbPb2018_cent2030.centmax = cms.int32(60)
-process.epetadecomatrix_ana_PbPb2018_cent3040.centmin = cms.int32(60)
-process.epetadecomatrix_ana_PbPb2018_cent3040.centmax = cms.int32(80)
-process.epetadecomatrix_ana_PbPb2018_cent4050.centmin = cms.int32(80)
-process.epetadecomatrix_ana_PbPb2018_cent4050.centmax = cms.int32(100)
-process.epetadecomatrix_ana_PbPb2018_cent5060.centmin = cms.int32(100)
-process.epetadecomatrix_ana_PbPb2018_cent5060.centmax = cms.int32(120)
-process.epetadecomatrix_ana_PbPb2018_cent6070.centmin = cms.int32(120)
-process.epetadecomatrix_ana_PbPb2018_cent6070.centmax = cms.int32(140)
-process.epetadecomatrix_ana_PbPb2018_cent7080.centmin = cms.int32(140)
-process.epetadecomatrix_ana_PbPb2018_cent7080.centmax = cms.int32(160)
+process.load('MergingProducer.generalAndHiPixelTracks.MergingPixAndGenProducer_cfi')
+process.load("FlowCorrAna.DiHadronCorrelationAnalyzer.epptdecomatrix_cff")
+process.epptdecomatrix_ana_PbPb2018.TrgTrackCollection = cms.InputTag("generalAndHiPixelTracks")
+process.epptdecomatrix_ana_PbPb2018.IsPPTrkQuality = cms.bool(False)
+process.epptdecomatrix_ana_PbPb2018.IsHITrkQuality = cms.bool(False)
+process.epptdecomatrix_ana_PbPb2018.centmin = cms.int32(0)
+process.epptdecomatrix_ana_PbPb2018.centmax = cms.int32(2)
+#process.epptdecomatrix_ana_PbPb2018.IsPtWeightTrg = cms.bool(True)
+process.epptdecomatrix_ana_PbPb2018.EffFileName = cms.string('EffCorrectionsPixelPbPb2018_v1.root')
+process.epptdecomatrix_ana_PbPb2018.EffHistName = cms.string('Eff_0_5')
+process.epptdecomatrix_ana_PbPb2018.FakFileName = cms.string('')
+process.epptdecomatrix_ana_PbPb2018.FakHistName = cms.string('')
+process.epptdecomatrix_ana_PbPb2018.pttrgmin = cms.vdouble(0.3,0.5,0.7,1.0,1.3,1.6,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.0,8.5,9.0,9.5,10,15)
+process.epptdecomatrix_ana_PbPb2018.pttrgmax = cms.vdouble(0.5,0.7,1.0,1.3,1.6,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.0,8.5,9.0,9.5,10,15,20)
+process.epptdecomatrix_ana_PbPb2018.ptassmin = cms.vdouble(0.3,0.5,0.7,1.0,1.3,1.6,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.0,8.5,9.0,9.5,10,15)
+process.epptdecomatrix_ana_PbPb2018.ptassmax = cms.vdouble(0.5,0.7,1.0,1.3,1.6,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.0,8.5,9.0,9.5,10,15,20)
+
+process.epptdecomatrix_ana_PbPb2018_cent01 = process.epptdecomatrix_ana_PbPb2018.clone()
+process.epptdecomatrix_ana_PbPb2018_cent05 = process.epptdecomatrix_ana_PbPb2018.clone()
+process.epptdecomatrix_ana_PbPb2018_cent510 = process.epptdecomatrix_ana_PbPb2018.clone()
+process.epptdecomatrix_ana_PbPb2018_cent1020 = process.epptdecomatrix_ana_PbPb2018.clone()
+process.epptdecomatrix_ana_PbPb2018_cent2030 = process.epptdecomatrix_ana_PbPb2018.clone()
+process.epptdecomatrix_ana_PbPb2018_cent3040 = process.epptdecomatrix_ana_PbPb2018.clone()
+process.epptdecomatrix_ana_PbPb2018_cent4050 = process.epptdecomatrix_ana_PbPb2018.clone()
+process.epptdecomatrix_ana_PbPb2018_cent5060 = process.epptdecomatrix_ana_PbPb2018.clone()
+process.epptdecomatrix_ana_PbPb2018_cent6070 = process.epptdecomatrix_ana_PbPb2018.clone()
+process.epptdecomatrix_ana_PbPb2018_cent7080 = process.epptdecomatrix_ana_PbPb2018.clone()
+process.epptdecomatrix_ana_PbPb2018_cent05.centmin = cms.int32(0)
+process.epptdecomatrix_ana_PbPb2018_cent05.centmax = cms.int32(10)
+process.epptdecomatrix_ana_PbPb2018_cent510.centmin = cms.int32(10)
+process.epptdecomatrix_ana_PbPb2018_cent510.centmax = cms.int32(20)
+process.epptdecomatrix_ana_PbPb2018_cent1020.centmin = cms.int32(20)
+process.epptdecomatrix_ana_PbPb2018_cent1020.centmax = cms.int32(40)
+process.epptdecomatrix_ana_PbPb2018_cent2030.centmin = cms.int32(40)
+process.epptdecomatrix_ana_PbPb2018_cent2030.centmax = cms.int32(60)
+process.epptdecomatrix_ana_PbPb2018_cent3040.centmin = cms.int32(60)
+process.epptdecomatrix_ana_PbPb2018_cent3040.centmax = cms.int32(80)
+process.epptdecomatrix_ana_PbPb2018_cent4050.centmin = cms.int32(80)
+process.epptdecomatrix_ana_PbPb2018_cent4050.centmax = cms.int32(100)
+process.epptdecomatrix_ana_PbPb2018_cent5060.centmin = cms.int32(100)
+process.epptdecomatrix_ana_PbPb2018_cent5060.centmax = cms.int32(120)
+process.epptdecomatrix_ana_PbPb2018_cent6070.centmin = cms.int32(120)
+process.epptdecomatrix_ana_PbPb2018_cent6070.centmax = cms.int32(140)
+process.epptdecomatrix_ana_PbPb2018_cent7080.centmin = cms.int32(140)
+process.epptdecomatrix_ana_PbPb2018_cent7080.centmax = cms.int32(160)
+process.epptdecomatrix_ana_PbPb2018_cent510.EffHistName = cms.string('Eff_5_10')
+process.epptdecomatrix_ana_PbPb2018_cent1020.EffHistName = cms.string('Eff_10_30')
+process.epptdecomatrix_ana_PbPb2018_cent2030.EffHistName = cms.string('Eff_10_30')
+process.epptdecomatrix_ana_PbPb2018_cent3040.EffHistName = cms.string('Eff_30_50')
+process.epptdecomatrix_ana_PbPb2018_cent4050.EffHistName = cms.string('Eff_30_50')
+process.epptdecomatrix_ana_PbPb2018_cent5060.EffHistName = cms.string('Eff_50_100')
+process.epptdecomatrix_ana_PbPb2018_cent6070.EffHistName = cms.string('Eff_50_100')
+process.epptdecomatrix_ana_PbPb2018_cent7080.EffHistName = cms.string('Eff_50_100')
+
+#process.epptdecomatrix_ana_PbPb2018_cent05.IsCorr = cms.bool(False)
 
 process.ana_step = cms.Path(process.eventFilter_HM 
-#                          * process.epetadecomatrix_ana_PbPb2018_cent01
-                          * process.epetadecomatrix_ana_PbPb2018_cent05
-#                          * process.epetadecomatrix_ana_PbPb2018_cent510
-#                          * process.epetadecomatrix_ana_PbPb2018_cent1020
-#                          * process.epetadecomatrix_ana_PbPb2018_cent2030
-#                          * process.epetadecomatrix_ana_PbPb2018_cent3040
-#                          * process.epetadecomatrix_ana_PbPb2018_cent4050
-#                          * process.epetadecomatrix_ana_PbPb2018_cent5060
-#                          * process.epetadecomatrix_ana_PbPb2018_cent6070
-#                          * process.epetadecomatrix_ana_PbPb2018_cent7080
+                          * process.generalAndHiPixelTracks
+                          * process.epptdecomatrix_ana_PbPb2018_cent01
+                          * process.epptdecomatrix_ana_PbPb2018_cent05
+                          * process.epptdecomatrix_ana_PbPb2018_cent510
+                          * process.epptdecomatrix_ana_PbPb2018_cent1020
+                          * process.epptdecomatrix_ana_PbPb2018_cent2030
+                          * process.epptdecomatrix_ana_PbPb2018_cent3040
+                          * process.epptdecomatrix_ana_PbPb2018_cent4050
+                          * process.epptdecomatrix_ana_PbPb2018_cent5060
+                          * process.epptdecomatrix_ana_PbPb2018_cent6070
+                          * process.epptdecomatrix_ana_PbPb2018_cent7080
 )
 
 
 # Define the output
-process.TFileService = cms.Service("TFileService", fileName = cms.string('epetadecomatrix.root'))
+process.TFileService = cms.Service("TFileService", fileName = cms.string('epptdecomatrix.root'))
 
 # Define the process schedule
 process.schedule = cms.Schedule(
@@ -168,6 +189,6 @@ process.schedule = cms.Schedule(
 )
 
 # Add recovery for offline primary vertex
-#from HLTrigger.Configuration.CustomConfigs import MassReplaceInputTag
-#process = MassReplaceInputTag(process,"offlinePrimaryVertices","offlinePrimaryVerticesRecovery")
-#process.offlinePrimaryVerticesRecovery.oldVertexLabel = "offlinePrimaryVertices"
+from HLTrigger.Configuration.CustomConfigs import MassReplaceInputTag
+process = MassReplaceInputTag(process,"offlinePrimaryVertices","offlinePrimaryVerticesRecovery")
+process.offlinePrimaryVerticesRecovery.oldVertexLabel = "offlinePrimaryVertices"
