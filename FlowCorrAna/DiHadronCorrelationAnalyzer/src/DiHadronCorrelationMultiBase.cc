@@ -261,8 +261,8 @@ void DiHadronCorrelationMultiBase::beginJob()
     hHFTowerSum = theOutputs->make<TH1D>("hftowersum",";HF Sum E_{T}",2400,0,12000);
     hHFvsNpixel = theOutputs->make<TH2D>("hfvsnpixel",";HF Sum E_{T}; Npixel;",2400,0,12000,1600,0,160000);
     hHFvsZDC = theOutputs->make<TH2D>("hfvszdc",";HF Sum E_{T}; ZDC Sum E_{T};",1200,0,12000,1000,0,2000000);
-    hHFvsNtrk = theOutputs->make<TH2D>("hfvsntrk",";HF Sum E_{T}; Ntrack;",2400,0,12000,1000,0,5000);
-    hHFvsNtrkCorr = theOutputs->make<TH2D>("hfvsntrkcorr",";HF Sum E_{T}; Ntrack;",2400,0,12000,1000,0,5000);
+    hHFvsNtrk = theOutputs->make<TH2D>("hfvsntrk",";HF Sum E_{T}; Ntrack;",2400,0,12000,2400,0,12000);
+    hHFvsNtrkCorr = theOutputs->make<TH2D>("hfvsntrkcorr",";HF Sum E_{T}; Ntrack;",2400,0,12000,2400,0,12000);
     hNtrkvsPt = theOutputs->make<TH2D>("ntrkvspt",";Ntrack; p_{T}(GeV/c);",1000,0,5000,400,0,20);
     hNtrkCorrvsPt = theOutputs->make<TH2D>("ntrkcorrvspt",";Ntrack; p_{T}(GeV/c);",1000,0,5000,400,0,20);
     hHFvsPt = theOutputs->make<TH2D>("hfvspt",";HF Sum E_{T}; p_{T}(GeV/c);",2400,0,12000,400,0,20);
@@ -434,7 +434,8 @@ void DiHadronCorrelationMultiBase::analyze(const edm::Event& iEvent, const edm::
   hMultEtaAsym->Fill(nMult,(double)(nMultEtaP-nMultEtaM)/(nMultEtaP+nMultEtaM));
   hMultEtaPvsM->Fill(nMultEtaP,nMultEtaM);
 
-  if(nMult<0.09375*hft) return;
+  if(nMult<0.09375*hft && !cutPara.IsGenMult) return; // PbPb 2018
+//  if(nMult<0.45*(hft-3000.)+1250) return; // XeXe 2017
 
   if(cutPara.IsGenCentrality) hft = hfGen;
 
@@ -709,7 +710,7 @@ void DiHadronCorrelationMultiBase::GetMult(const edm::Event& iEvent, const edm::
 //       double effweight = GetEffWeight(eta,phi,pt,0.5*(cutPara.zvtxmax+cutPara.zvtxmin),hiCentrality,charge);
        double effweight = GetEffWeight(eta,phi,pt,0.5*(cutPara.zvtxmax+cutPara.zvtxmin),npixel,charge);
 
-       if(eta>=cutPara.etamultmin && eta<=cutPara.etamultmax && pt>=cutPara.ptmultmin && pt<=cutPara.ptmultmax) 
+       if(((eta>=cutPara.etamultmin && eta<=cutPara.etamultmax && !cutPara.IsTrgEtaCutAbs) || (fabs(eta)>=cutPara.etamultmin && fabs(eta)<=cutPara.etamultmax && cutPara.IsTrgEtaCutAbs)) && pt>=cutPara.ptmultmin && pt<=cutPara.ptmultmax) 
        { 
          nMult++; 
          nMultCorr=nMultCorr+1.0/effweight;
@@ -737,11 +738,13 @@ void DiHadronCorrelationMultiBase::GetMult(const edm::Event& iEvent, const edm::
 
          double eta = p.eta();
          double pt  = p.pt();
+         double effweight = 1.0;
+         if(cutPara.IsPtWeightTrg) effweight *= pt;
 
-         if(p.charge() != 0 && eta>=cutPara.etamultmin && eta<=cutPara.etamultmax && pt>=cutPara.ptmultmin && pt<=cutPara.ptmultmax) 
+         if( ((p.charge() != 0 && cutPara.ischarge_trg) || !cutPara.ischarge_trg) && ((eta>=cutPara.etamultmin && eta<=cutPara.etamultmax && !cutPara.IsTrgEtaCutAbs) || (fabs(eta)>=cutPara.etamultmin && fabs(eta)<=cutPara.etamultmax && cutPara.IsTrgEtaCutAbs)) && pt>=cutPara.ptmultmin && pt<=cutPara.ptmultmax) 
          {
            nMult++;
-           nMultCorr++;
+           nMultCorr += effweight;
            if(eta>0) nMultEtaP += 1.0;
            if(eta<0) nMultEtaM += 1.0;
          }
@@ -773,11 +776,14 @@ void DiHadronCorrelationMultiBase::GetMult(const edm::Event& iEvent, const edm::
 
          float eta = (*it)->momentum().eta();
          float pt = (*it)->momentum().perp();
+         double effweight = 1.0;
+         if(cutPara.IsPtWeightTrg) effweight *= pt;
 
-         if(charge != 0 && eta>=cutPara.etamultmin && eta<=cutPara.etamultmax && pt>=cutPara.ptmultmin && pt<=cutPara.ptmultmax)
+         if(((charge != 0 && cutPara.ischarge_trg) || !cutPara.ischarge_trg) && ((eta>=cutPara.etamultmin && eta<=cutPara.etamultmax && !cutPara.IsTrgEtaCutAbs) || (fabs(eta)>=cutPara.etamultmin && fabs(eta)<=cutPara.etamultmax && cutPara.IsTrgEtaCutAbs)) && pt>=cutPara.ptmultmin && pt<=cutPara.ptmultmax)
          {
            nMult++;
-           nMultCorr++;
+           nMultCorr += effweight;
+
            if(eta>0) nMultEtaP += 1.0;
            if(eta<0) nMultEtaM += 1.0;
          }
@@ -1220,17 +1226,30 @@ void DiHadronCorrelationMultiBase::GetVertices(const edm::Event& iEvent, const e
     yVtxError = -99999.9;
     zVtxError = -99999.9;
 
-    edm::Handle< reco::VertexCollection > vertices;
+    edm::Handle<std::vector<reco::Vertex> > vertices;
     iEvent.getByToken(token_vertices, vertices);
-    if(!vertices->size()) { cout<<"Invalid or empty vertex collection!"<<endl; return; }
+    std::vector<reco::Vertex> vtx_sorted = *vertices;
+    std::sort( vtx_sorted.begin(), vtx_sorted.end(), DiHadronCorrelationMultiBase::vtxSort );
+    if(vtx_sorted.size() == 0) { cout<<"Invalid or empty vertex collection!"<<endl; return; } 
 
+    xVtx = (double)vtx_sorted.begin()->position().x();// VertexX_->Fill(vtx_x);
+    yVtx = (double)vtx_sorted.begin()->position().y();// VertexY_->Fill(vtx_y);
+    zVtx = (double)vtx_sorted.begin()->position().z(); 
+    xVtxError = (double)vtx_sorted.begin()->xError();
+    yVtxError = (double)vtx_sorted.begin()->yError();
+    zVtxError = (double)vtx_sorted.begin()->zError();
+    nVertices = vtx_sorted.size();
+
+/*
     double ntrkmax = 0;
     double zvtxmax = -9999.0;
     double yvtxmax = -9999.0;
     double xvtxmax = -9999.0;
-    for(unsigned int iv=0; iv<vertices->size(); ++iv)
+    for(unsigned int iv=0; iv<vtx_sorted.size(); ++iv)
     {
-      const reco::Vertex & vtx = (*vertices)[iv];
+      const reco::Vertex & vtx = vtx_sorted[iv];
+cout<<vtx.z()<<endl;
+cout<<vtx->tracksSize()<<endl;
 
       if(!vtx.isFake() && vtx.tracksSize()>=2)
       {
@@ -1269,6 +1288,7 @@ void DiHadronCorrelationMultiBase::GetVertices(const edm::Event& iEvent, const e
         }
       }
     }
+*/
 }
 
 void DiHadronCorrelationMultiBase::AssignTrgPtBins(double pt, double eta, double phi, double mass, double charge, double effweight, bool isv0,
@@ -1466,6 +1486,12 @@ int DiHadronCorrelationMultiBase::GetCentralityBin(const edm::Event& iEvent, con
 
   if(zdc>(-170.*(hft-8500.))) { bin=-1; return bin; }
 
+// temporary smearing
+/////////////////////////////////////////////////
+//  hft = gRandom->Gaus(hft,hft*0.0035);
+/////////////////////////////////////////////////
+//
+
   if(cutPara.IsDebug)
   {
     hHFTowerSum->Fill(hft);
@@ -1562,7 +1588,7 @@ double DiHadronCorrelationMultiBase::GetTrgWeight(double nmult)
 
 double DiHadronCorrelationMultiBase::GetEffWeight(double eta, double phi, double pt, double zvtx, int centbin, double charge)
 {
-//  if(pt>2.0) pt=2.0;
+  if(pt>9.8) pt=9.8;
   double effweight = 1.0;
   if(hEffWeight) 
   {
@@ -1606,6 +1632,13 @@ bool DiHadronCorrelationMultiBase::Acceptance(double eta, double phi, double pt)
    if(random > erf_pt) return false;
 
    return true;
+}
+
+bool DiHadronCorrelationMultiBase::vtxSort( const reco::Vertex &  a, const reco::Vertex & b ){
+   if( a.tracksSize() != b.tracksSize() )
+      return  a.tracksSize() > b.tracksSize() ? true : false ;
+   else
+      return  a.chi2() < b.chi2() ? true : false ;
 }
 
 DiHadronCorrelationMultiBase::ParticleType DiHadronCorrelationMultiBase::GetParticleID(TString particleid)

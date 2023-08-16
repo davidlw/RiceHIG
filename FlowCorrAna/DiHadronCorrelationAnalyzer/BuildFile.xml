@@ -11,6 +11,7 @@
 <use   name="SimTracker/TrackAssociation"/>
 <use   name="SimGeneral/HepPDTRecord"/>
 <use   name="CommonTools/UtilAlgos"/>
+<use   name="PhysicsTools/HepMCCandAlgos"/>
 <use   name="DataFormats/FWLite"/>
 <use   name="DataFormats/TrackReco"/>
 <use   name="DataFormats/VertexReco"/>

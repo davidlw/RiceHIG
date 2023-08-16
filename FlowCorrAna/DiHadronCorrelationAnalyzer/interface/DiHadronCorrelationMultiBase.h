@@ -327,6 +327,7 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
    virtual double GetEffWeight(double eta, double phi, double pt, double zvtx, int centbin, double charge);
    virtual bool Acceptance(double eta, double phi, double pt);
    virtual bool IsDSGen(const edm::Event& iEvent, const edm::EventSetup& iSetup);
+   static bool vtxSort( const reco::Vertex &  a, const reco::Vertex & b );
    virtual ParticleType GetParticleID(TString particleid);
    
  public:
