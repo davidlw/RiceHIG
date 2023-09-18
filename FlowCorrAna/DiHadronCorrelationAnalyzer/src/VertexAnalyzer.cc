@@ -47,9 +47,11 @@ void VertexAnalyzer::beginJob()
   vertexTree->Branch("nTracks",nTracks,"nTracks[nVertices]/i");
   vertexTree->Branch("trackWeightVtx",trackWeightVtx,"trackWeightVtx[nVertices][800]/F");
   vertexTree->Branch("trackPtVtx",trackPtVtx,"trackPtVtx[nVertices][800]/F");
+  vertexTree->Branch("trackPtErrVtx",trackPtErrVtx,"trackPtErrVtx[nVertices][800]/F");
   vertexTree->Branch("trackXVtx",trackXVtx,"trackXVtx[nVertices][800]/F");
   vertexTree->Branch("trackYVtx",trackYVtx,"trackYVtx[nVertices][800]/F");
   vertexTree->Branch("trackZVtx",trackZVtx,"trackZVtx[nVertices][800]/F");
+  vertexTree->Branch("trackHPVtx",trackHPVtx,"trackHPVtx[nVertices][800]/O");
 
 //  DiHadronCorrelationMultiBaseNew::beginJob();
 }
@@ -99,9 +101,11 @@ void VertexAnalyzer::GetVertices(const edm::Event& iEvent, const edm::EventSetup
 
            trackWeightVtx[nVertices][nTracksTmp] = vtx.trackWeight(*iTrack);
            trackPtVtx[nVertices][nTracksTmp] = track->pt();
+           trackPtErrVtx[nVertices][nTracksTmp] = track->ptError();
            trackXVtx[nVertices][nTracksTmp] = track->vx();
            trackYVtx[nVertices][nTracksTmp] = track->vy();
            trackZVtx[nVertices][nTracksTmp] = track->vz();
+           trackHPVtx[nVertices][nTracksTmp] = track->quality(reco::TrackBase::highPurity);
 
 //std::cout<<trackWeightVtx[nVertices][nTracksTmp]<<" "<<trackPtVtx[nVertices][nTracksTmp]<<std::endl;
 

@@ -39,6 +39,10 @@ void EPPtDecoAnalyzerSP::beginJob()
     
       hSignalCosn[itrg][jass] = theOutputs->make<TH2D>(Form("signalcosn_trg%d_ass%d",itrg,jass),";cos(n#Delta#phi);n",20000,-1.0,1.0,3,1.5,4.5);
       hBackgroundCosn[itrg][jass] = theOutputs->make<TH2D>(Form("backgroundcosn_trg%d_ass%d",itrg,jass),";cos(n#Delta#phi);n",20000,-1.0,1.0,3,1.5,4.5);
+      hSignalCosnNew[itrg][jass] = theOutputs->make<TH2D>(Form("signalcosnnew_trg%d_ass%d",itrg,jass),";cos(n#Delta#phi);n",20000,-1.0,1.0,3,1.5,4.5);
+      hBackgroundCosnNew[itrg][jass] = theOutputs->make<TH2D>(Form("backgroundcosnnew_trg%d_ass%d",itrg,jass),";cos(n#Delta#phi);n",20000,-1.0,1.0,3,1.5,4.5);
+      hSignalNpairs[itrg][jass] = theOutputs->make<TH1D>(Form("signalnpairs_trg%d_ass%d",itrg,jass),";Npairs",10000,0,1000000);
+      hBackgroundNpairs[itrg][jass] = theOutputs->make<TH1D>(Form("backgroundnpairs_trg%d_ass%d",itrg,jass),";Npairs",10000,0,1000000);
     }
   }
 
@@ -217,8 +221,18 @@ void EPPtDecoAnalyzerSP::FillHistsBackground(const DiHadronCorrelationEvent& eve
           }
         Qx = Qx/npairs_tot;
         Qy = Qy/npairs_tot;
-        if(eventcorr_trg.run==eventcorr_ass.run && eventcorr_trg.event==eventcorr_ass.event) hSignalCosn[itrg][jass]->Fill(Qx,nn+1);
-        else hBackgroundCosn[itrg][jass]->Fill(Qx,nn+1);
+        if(eventcorr_trg.run==eventcorr_ass.run && eventcorr_trg.event==eventcorr_ass.event)
+        { 
+          hSignalCosn[itrg][jass]->Fill(Qx,nn+1,npairs_tot);
+          hSignalCosnNew[itrg][jass]->Fill(Qx,nn+1);
+          hSignalNpairs[itrg][jass]->Fill(npairs_tot);
+        }
+        else
+        {
+          hBackgroundCosn[itrg][jass]->Fill(Qx,nn+1,npairs_tot);
+          hBackgroundCosnNew[itrg][jass]->Fill(Qx,nn+1);
+          hBackgroundNpairs[itrg][jass]->Fill(npairs_tot);
+        }
       }
     }
 }

@@ -97,6 +97,7 @@ class MultiplicityAnalyzer : public edm::EDAnalyzer {
    TH2D*  hXYVtx;
    TH2D*  hMultRawVsGen;
    TH2D*  hMultCorrVsGen;
+   TH2D*  hMultRawVsEta;
    TH2D*  hMultRawVsPt_eta1;
    TH2D*  hMultRawVsPtCorr_eta1;
    TH2D*  hMultRawVsPt_eta2;

@@ -1,11 +1,11 @@
 import FWCore.ParameterSet.Config as cms
 
-process = cms.Process("track")
+process = cms.Process("corr")
 process.load("FWCore.MessageService.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = 2000
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(100000)
+    input = cms.untracked.int32(3000)
 )
 
 #Trigger Selection
@@ -39,17 +39,18 @@ process.PAcollisionEventSelection = cms.Sequence(
 
 process.eventFilter_HM = cms.Sequence(
 #    process.hlt *
-#    process.PAcollisionEventSelection
+    process.PAcollisionEventSelection
 )
 
 process.source = cms.Source("PoolSource",
                                 fileNames = cms.untracked.vstring(
-#'root://cmsxrootd.fnal.gov//store/hidata/PARun2016C/PAHighMultiplicity1/AOD/PromptReco-v1/000/286/471/00000/02778130-2ABD-E611-8640-02163E014467.root'
-'root://cms-xrd-global.cern.ch//store/data/Run2016G/ZeroBias/AOD/PromptReco-v1/000/280/330/00000/44EE54CF-8577-E611-BB1E-02163E0143EA.root'
+#'/store/hidata/PARun2016C/PAHighMultiplicity7/AOD/PromptReco-v1/000/285/530/00000/001FD395-CFB0-E611-B11B-02163E011AB6.root'
+#'/store/user/davidlw/PAHighMultiplicity7/RecoSkim2016_pPb_HM280_v4/170103_123148/0000/pPb_HM_127.root'
+'root://cmsxrootd.fnal.gov///store/hidata/PARun2016C/PAHighMultiplicity7/AOD/PromptReco-v1/000/285/480/00000/5E0F96D9-08AF-E611-9C83-FA163E0C8993.root'
                 )
 #                                secondaryFileNames = cms.untracked.vstring('')
                             )
-process.load("FlowCorrAna.DiHadronCorrelationAnalyzer.vertex_cff")
+process.load("FlowCorrAna.DiHadronCorrelationAnalyzer.vnptcorr_cff")
 
 process.options = cms.untracked.PSet(
     wantSummary = cms.untracked.bool(True)
@@ -57,7 +58,9 @@ process.options = cms.untracked.PSet(
 
 # Additional output definition
 process.TFileService = cms.Service("TFileService",
-                                   fileName = cms.string('vertex.root')
+                                   fileName = cms.string('vnptcorr.root')
                                    )
 
-process.ana = cms.Path(process.eventFilter_HM * process.vertex_ana)
+#process.vnptcorr_ana.nmin = cms.int32(185)
+#process.vnptcorr_ana.nmax = cms.int32(250)
+process.ana = cms.Path(process.eventFilter_HM * process.vnptcorr_ana)

@@ -16,9 +16,9 @@ if __name__ == '__main__':
     config.JobType.allowUndistributedCMSSW = True
 #    config.JobType.maxMemoryMB = 3000
 #    config.Data.unitsPerJob = 10
-    config.Data.totalUnits = 10
+    config.Data.totalUnits = 200
 #    config.Data.inputDBS = 'phys03'
-    config.Data.splitting = 'LumiBased'
+    config.Data.splitting = 'FileBased'
 #    config.Data.lumiMask = 'json_pPb.txt'
 #    config.Data.lumiMask = 'Cert_285479-286496_HI8TeV_PromptReco_pPbPbp_Collisions16_JSON_NoL1T.txt'
     config.Data.outLFNDirBase = '/store/user/%s/' % (getUsernameFromSiteDB())
@@ -38,8 +38,8 @@ if __name__ == '__main__':
     ## From now on that's what users should modify: this is the a-la-CRAB2 configuration part. ##
     #############################################################################################
 
-    config.General.requestName = 'vertex_ZB_Run2016G-PromptReco-v1_test2'
-    config.JobType.psetName = '../cfg/vertex_data_pPb_cfg.py'
-    config.Data.inputDataset = '/ZeroBias/Run2016G-PromptReco-v1/AOD'
+    config.General.requestName = 'vertex_MC16NoPU_v1'
+    config.JobType.psetName = '../cfg/vertex_mc_cfg.py'
+    config.Data.inputDataset = '/MinBias_TuneCUETP8M1_13TeV-pythia8/RunIISummer16DR80-NoPU_80X_mcRun2_asymptotic_v14-v1/AODSIM'
     config.Data.unitsPerJob = 1
     submit(config)

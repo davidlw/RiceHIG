@@ -5,14 +5,15 @@ process.load("FWCore.MessageService.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = 2000
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(100000)
+    input = cms.untracked.int32(10000)
 )
 
 #Trigger Selection
 ### Comment out for the timing being assuming running on secondary dataset with trigger bit selected already
 import HLTrigger.HLTfilters.hltHighLevel_cfi
 process.hlt = HLTrigger.HLTfilters.hltHighLevel_cfi.hltHighLevel.clone()
-process.hlt.HLTPaths = ['HLT_PAFullTracks_Multiplicity185*_v*'] # for allphysics
+#process.hlt.HLTPaths = ['HLT_PAFullTracks_Multiplicity185*_v*'] # for allphysics
+process.hlt.HLTPaths = ['HLT_*_v*'] # for allphysics
 process.hlt.andOr = cms.bool(True)
 process.hlt.throw = cms.bool(False)
 
@@ -38,18 +39,17 @@ process.PAcollisionEventSelection = cms.Sequence(
                                          )
 
 process.eventFilter_HM = cms.Sequence(
-#    process.hlt *
-#    process.PAcollisionEventSelection
+    process.hlt *
+    process.PAcollisionEventSelection
 )
 
 process.source = cms.Source("PoolSource",
                                 fileNames = cms.untracked.vstring(
-#'root://cmsxrootd.fnal.gov//store/hidata/PARun2016C/PAHighMultiplicity1/AOD/PromptReco-v1/000/286/471/00000/02778130-2ABD-E611-8640-02163E014467.root'
-'root://cms-xrd-global.cern.ch//store/data/Run2016G/ZeroBias/AOD/PromptReco-v1/000/280/330/00000/44EE54CF-8577-E611-BB1E-02163E0143EA.root'
+'root://cmsxrootd.fnal.gov//store/hidata/PARun2016C/PAHighMultiplicity1/AOD/PromptReco-v1/000/286/471/00000/02778130-2ABD-E611-8640-02163E014467.root'
                 )
 #                                secondaryFileNames = cms.untracked.vstring('')
                             )
-process.load("FlowCorrAna.DiHadronCorrelationAnalyzer.vertex_cff")
+process.load("FlowCorrAna.DiHadronCorrelationAnalyzer.dedx_cff")
 
 process.options = cms.untracked.PSet(
     wantSummary = cms.untracked.bool(True)
@@ -57,7 +57,10 @@ process.options = cms.untracked.PSet(
 
 # Additional output definition
 process.TFileService = cms.Service("TFileService",
-                                   fileName = cms.string('vertex.root')
+                                   fileName = cms.string('dedx.root')
                                    )
 
-process.ana = cms.Path(process.eventFilter_HM * process.vertex_ana)
+#process.dedx_ana.nmin = cms.int32(185)
+#process.dedx_ana.nmax = cms.int32(250)
+
+process.ana = cms.Path(process.eventFilter_HM * process.dedx_ana)

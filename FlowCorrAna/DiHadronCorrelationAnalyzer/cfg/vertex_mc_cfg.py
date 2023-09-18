@@ -44,8 +44,7 @@ process.eventFilter_HM = cms.Sequence(
 
 process.source = cms.Source("PoolSource",
                                 fileNames = cms.untracked.vstring(
-#'root://cmsxrootd.fnal.gov//store/hidata/PARun2016C/PAHighMultiplicity1/AOD/PromptReco-v1/000/286/471/00000/02778130-2ABD-E611-8640-02163E014467.root'
-'root://cms-xrd-global.cern.ch//store/data/Run2016G/ZeroBias/AOD/PromptReco-v1/000/280/330/00000/44EE54CF-8577-E611-BB1E-02163E0143EA.root'
+'root://cms-xrd-global.cern.ch//store/mc/RunIISummer16DR80/MinBias_TuneCUETP8M1_13TeV-pythia8/AODSIM/NoPU_80X_mcRun2_asymptotic_v14-v1/90000/F6F8F73B-C773-E611-994B-FA163EF5B328.root'
                 )
 #                                secondaryFileNames = cms.untracked.vstring('')
                             )

@@ -20,6 +20,13 @@ epptdeco_ana_HI = epptdeco_ana.clone(
   EffFileName = cms.string('')
 )
 
+epptdeco_ana_PbPb2018 = epptdeco_ana.clone(
+  xvtxcenter = cms.double(0.094),
+  yvtxcenter = cms.double(-0.064),
+  zvtxcenter = cms.double(0.1),
+)
+
+
 epptdeco_ana_pPb = epptdeco_ana.clone(
 )
 

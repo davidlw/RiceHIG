@@ -86,6 +86,7 @@ void MultiplicityAnalyzer::beginJob()
    for(int i=140;i<150;i++) multbins[i] = multbins[139] + (i-139)*20;
    for(int i=150;i<156;i++) multbins[i] = multbins[149] + (i-149)*70;
 
+  hMultRawVsEta = theOutputs->make<TH2D>("multrawvseta",";N_{trk}^{offline};#eta",500,0,500,60,-3,3);
   hMultRawVsPt_eta1 = theOutputs->make<TH2D>("multrawvspt_eta1",";N_{trk}^{offline};p_{T} (GeV/c)",600,0,600,500,0,50);
   hMultRawVsPtCorr_eta1 = theOutputs->make<TH2D>("multrawvsptcorr_eta1",";N_{trk}^{offline};p_{T} (GeV/c)",600,0,600,500,0,50);
   hMultRawVsPt_eta2 = theOutputs->make<TH2D>("multrawvspt_eta2",";N_{trk}^{offline};p_{T} (GeV/c)",600,0,600,500,0,50);
@@ -164,6 +165,8 @@ void MultiplicityAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSet
     double eta = trk.eta();
     double pt  = trk.pt();
     double effweight = GetEffWeight(eta,pt);
+
+    if(pt>0.3) hMultRawVsEta->Fill(nMult,eta);
 
     if(fabs(eta)<1.0)
     {

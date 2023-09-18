@@ -34,9 +34,11 @@ class VertexAnalyzer : public DiHadronCorrelationMultiBaseNew {
    float ndofVtx[NMAXVTX];
    float trackWeightVtx[NMAXVTX][NMAXTRACKSVTX];
    float trackPtVtx[NMAXVTX][NMAXTRACKSVTX];
+   float trackPtErrVtx[NMAXVTX][NMAXTRACKSVTX];
    float trackXVtx[NMAXVTX][NMAXTRACKSVTX];
    float trackYVtx[NMAXVTX][NMAXTRACKSVTX];
    float trackZVtx[NMAXVTX][NMAXTRACKSVTX];
+   bool  trackHPVtx[NMAXVTX][NMAXTRACKSVTX];
 
    virtual void analyze(const edm::Event&, const edm::EventSetup&);
    virtual void beginJob();

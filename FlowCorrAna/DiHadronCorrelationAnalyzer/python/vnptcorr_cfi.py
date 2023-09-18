@@ -1,7 +1,6 @@
 import FWCore.ParameterSet.Config as cms
 
-epptdeco_ana = cms.EDAnalyzer('EPPtDecoAnalyzerSP',
-
+vnptcorr_ana = cms.EDAnalyzer('VnPtCorrAnalyzerNew',
 
   centralityBinLabel = cms.InputTag("centralityBin","HFtowers"), 
   centralitySrc = cms.InputTag("hiCentrality"),
@@ -36,10 +35,10 @@ epptdeco_ana = cms.EDAnalyzer('EPPtDecoAnalyzerSP',
   etatrgmax = cms.double(2.4),
   etaassmin = cms.double(-2.4),
   etaassmax = cms.double(2.4),
-  pttrgmin = cms.vdouble(0.5,1.0,1.5,2.0,2.5,3.0,4.0,5.0,6.0,8.0),
-  pttrgmax = cms.vdouble(1.0,1.5,2.0,2.5,3.0,4.0,5.0,6.0,8.0,10,0),
-  ptassmin = cms.vdouble(0.5,1.0,1.5,2.0,2.5,3.0,4.0,5.0,6.0,8.0),
-  ptassmax = cms.vdouble(1.0,1.5,2.0,2.5,3.0,4.0,5.0,6.0,8.0,10,0),
+  pttrgmin = cms.vdouble(0.3),
+  pttrgmax = cms.vdouble(3.0),
+  ptassmin = cms.vdouble(0.3),
+  ptassmax = cms.vdouble(3.0),
   etamultmin = cms.double(-2.4),
   etamultmax = cms.double(2.4),
   chargeasymmin = cms.double(-9999.9),
@@ -74,7 +73,7 @@ epptdeco_ana = cms.EDAnalyzer('EPPtDecoAnalyzerSP',
   IsV0BkgAss = cms.bool(False),
   IsHarmonics = cms.bool(True),
   IsHarmonicsEta1Eta2 = cms.bool(False),
-  IsFullMatrix = cms.bool(False),
+  IsFullMatrix = cms.bool(True),
   IsPtWeightTrg = cms.bool(False),
   IsPtWeightAss = cms.bool(False),
   IsTrgEtaCutAbs = cms.bool(False),
@@ -89,7 +88,9 @@ epptdeco_ana = cms.EDAnalyzer('EPPtDecoAnalyzerSP',
   IsCheckAssV0Dau = cms.bool(False),
   IsBoostRestFrameV0 = cms.bool(False),
 
-  EffFileName = cms.string(''),
+  EffFileName = cms.string('Hijing_8TeV_MB_eff_v2.root'),
+#  EffFileName = cms.string('Hijing_8TeV_MB_eff_v4_wide.root'),
+#  EffFileName = cms.string('Hijing_8TeV_MB_eff_v3_tight.root'),
   EffHistName = cms.string('rTotalEff3D_0'),
   EtaPhiFileName = cms.string('')
 )
