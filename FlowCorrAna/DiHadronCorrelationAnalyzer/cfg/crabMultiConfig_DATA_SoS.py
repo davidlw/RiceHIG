@@ -27,8 +27,8 @@ config.JobType.allowUndistributedCMSSW = True
 config.Data.allowNonValidInputDataset = True
 
 config.section_('Site')
-config.Data.ignoreLocality = True
-config.Site.whitelist = ['T1_US_*','T2_US_*','T1_FR_*','T2_FR_*','T2_CH_CERN','T2_BE_IIHE']
+#config.Data.ignoreLocality = True
+#config.Site.whitelist = ['T1_US_*','T2_US_*','T1_FR_*','T2_FR_*','T2_CH_CERN','T2_BE_IIHE']
 config.Site.storageSite = 'T2_CH_CERN'
 
 def submit(config):
@@ -50,12 +50,13 @@ dataMap = {
 #            "HIForward": { "PD": "/HIForward/HIRun2018A-04Apr2019-v1/AOD", "Units": 30, "Memory": 1800, "RunTime": 1400, "PSet": "PbPbSkimAndTree2018_DiMuContBoth_ZDC_ALLDIMU_cfg.py" },
             }
 
-for i in range(2,3):
+for i in range(0,1):
     dataMap[("HIMinimumBias"+str(i))] = { "PD": ("/HIMinimumBias"+str(i)+"/HIRun2018A-PbPb18_MiniAODv1-v1/MINIAOD"), "Units": 20, "Memory": 4000, "RunTime": 2100, "PSet": "SoS_PbPb2018_MINIAOD_cfg.py" } # UCC
 
 ## Submit the muon PDs
 for key, val in dataMap.items():
-    config.General.requestName = 'SoS_'+key+'_HIRun2018_04Apr2019_mergedtracks_effv4miniAODpidalicev2_eta0p5_20230725'
+#    config.General.requestName = 'SoS_'+key+'_HIRun2018_04Apr2019_mergedtracks_effv3miniAOD_eta0p5etamult0p5to1_20231105v1'
+    config.General.requestName = 'SoS_'+key+'_HIRun2018_04Apr2019_mergedtracks_effv3miniAOD_eta1p5to2_20231105v1'
     config.Data.inputDataset = val["PD"]
     config.Data.unitsPerJob = val["Units"]
     config.JobType.maxMemoryMB = val["Memory"]

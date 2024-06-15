@@ -31,7 +31,7 @@ config.Site.storageSite = 'T2_CH_CERN'
 
 def submit(config):
     try:
-        crabCommand('submit', config = config, dryrun=False)
+        crabCommand('submit', config = config, dryrun=True)
     except HTTPException as hte:
         print "Failed submitting task: %s" % (hte.headers)
     except ClientException as cle:
@@ -54,7 +54,8 @@ dataMap = {
 ## Submit the muon PDs
 for key, val in dataMap.items():
 #    config.General.requestName = 'SoS_'+key+'_mergedtracks_effv1AODclosure_eta0p5_20230416v1'
-    config.General.requestName = 'SoS_'+key+'_mergedtracks_effv4miniAOD_eta0p5_20230804v1'
+#    config.General.requestName = 'SoS_'+key+'_mergedtracks_effv4AOD_eta0p5etamult0to0p5gen1to2p4_20231209v1'
+    config.General.requestName = 'SoS_'+key+'_mergedtracks_effv4AOD_eta0p5etamult1to2p4_20231209v1'
 #    config.General.requestName = 'SoS_'+key+'_HFRes_20230725v2'
     config.Data.inputDataset = val["PD"]
     config.Data.unitsPerJob = val["Units"]

@@ -269,6 +269,7 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
    unsigned int  maxofflinetracks;
    int nCentBins;
    double hft;
+   double hftcut;
    int npixel;
    double zdc;
    int  NEtaBins;

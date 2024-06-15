@@ -24,7 +24,7 @@ process.source = cms.Source("PoolSource",
    fileNames = cms.untracked.vstring('root://cmsxrootd.fnal.gov//store/himc/HINPbPbAutumn18DR/MinBias_Hydjet_Drum5F_bLT6_2018_5p02TeV/AODSIM/NoPU_103X_upgrade2018_realistic_HI_v11-v2/2830000/002F738F-D258-5544-AA71-DC031EE68CA4.root'),
    inputCommands=cms.untracked.vstring('keep *', 'drop *_hiEvtPlane_*_*')
 )
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1000))
 
 # Set the global tag
 from Configuration.AlCa.GlobalTag import GlobalTag
@@ -92,10 +92,13 @@ process.corr_ana_PbPb2018.IsPPTrkQuality = cms.bool(False)
 process.corr_ana_PbPb2018.IsHITrkQuality = cms.bool(False)
 process.corr_ana_PbPb2018.IsCorr = cms.bool(False)
 process.corr_ana_PbPb2018.IsDebug = cms.bool(True)
+process.corr_ana_PbPb2018.IsTrgEtaCutAbs = cms.bool(True)
 process.corr_ana_PbPb2018.centmin = cms.int32(0)
 process.corr_ana_PbPb2018.centmax = cms.int32(200)
-process.corr_ana_PbPb2018.etamultmin = cms.double(-0.5)
-process.corr_ana_PbPb2018.etamultmax = cms.double(0.5)
+#process.corr_ana_PbPb2018.etamultmin = cms.double(-0.5)
+#process.corr_ana_PbPb2018.etamultmax = cms.double(0.5)
+process.corr_ana_PbPb2018.etamultmin = cms.double(1.0)
+process.corr_ana_PbPb2018.etamultmax = cms.double(2.4)
 process.corr_ana_PbPb2018.ptmultmin = cms.double(0.3)
 process.corr_ana_PbPb2018.pttrgmin = cms.vdouble(0.3)
 process.corr_ana_PbPb2018.pttrgmax = cms.vdouble(10000.0)
