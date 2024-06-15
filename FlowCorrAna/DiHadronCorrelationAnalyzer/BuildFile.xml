@@ -7,7 +7,6 @@
 <use   name="SimDataFormats/Vertex"/>
 <use   name="SimDataFormats/GeneratorProducts"/>
 <use   name="SimDataFormats/TrackingAnalysis"/>
-<use   name="SimTracker/Records"/>
 <use   name="SimTracker/TrackAssociation"/>
 <use   name="SimGeneral/HepPDTRecord"/>
 <use   name="CommonTools/UtilAlgos"/>
@@ -29,7 +28,6 @@
 <use   name="DataFormats/Common"/>
 <use   name="DataFormats/Math"/>
 <use   name="DataFormats/HeavyIonEvent"/>
-<use   name="RecoHI/HiCentralityAlgos"/>
 <use   name="Geometry/Records"/>
 <use   name="Geometry/TrackerGeometryBuilder"/>
 <use   name="Geometry/CommonDetUnit"/>

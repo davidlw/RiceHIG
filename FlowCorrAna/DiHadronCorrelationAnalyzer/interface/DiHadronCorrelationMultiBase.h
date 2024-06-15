@@ -10,12 +10,14 @@
 
 // user include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
-#include "FWCore/Framework/interface/EDAnalyzer.h"
+#include "FWCore/Framework/interface/one/EDAnalyzer.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/ESHandle.h"
 #include "FWCore/Framework/interface/EventSetup.h"
 #include "FWCore/Framework/interface/ConsumesCollector.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
+#include "FWCore/Framework/interface/ConsumesCollector.h"
+#include "FWCore/Utilities/interface/ESGetToken.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 #include "FWCore/ServiceRegistry/interface/Service.h"
@@ -88,7 +90,7 @@ using namespace HepMC;
 
 #define PI 3.141592
 
-class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
+class DiHadronCorrelationMultiBase : public edm::one::EDAnalyzer<edm::one::SharedResources> {
    
  protected:
   
@@ -137,8 +139,6 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
 
 //   CentralityProvider * cent;
    edm::Service<TFileService> theOutputs;
-
-   edm::ESHandle<ParticleDataTable> pdt;
 
    edm::Handle<int> cbin_;
    edm::EDGetTokenT<int> tag_;
@@ -295,6 +295,9 @@ class DiHadronCorrelationMultiBase : public edm::EDAnalyzer {
    double ptMean2_trg[MAXPTTRGBINS];
    double ptMean2_ass[MAXPTASSBINS];
   
+   edm::ESGetToken<HepPDT::ParticleDataTable, edm::DefaultRecord> token_pdt;
+   const HepPDT::ParticleDataTable* pdt;
+
    virtual void analyze(const edm::Event&, const edm::EventSetup&);
    virtual void beginRun(const edm::Run&, const edm::EventSetup&);
    virtual void beginJob();

@@ -52,9 +52,12 @@ DiHadronCorrelationMultiBase::DiHadronCorrelationMultiBase(const edm::ParameterS
   b_gen(-1.0),
   pol_lam(0.0),
   pol_lam_mean(0.0),
-  pol_lam_sigma(0.0)
+  pol_lam_sigma(0.0),
+  token_pdt(esConsumes<HepPDT::ParticleDataTable, edm::DefaultRecord>())
 {
   TH1::SetDefaultSumw2();
+
+  usesResource("TFileService");
 
   tag_ = consumes<int>(iConfig.getParameter<edm::InputTag>("centralityBinLabel"));
   centtag_ = consumes<reco::Centrality>(iConfig.getParameter<edm::InputTag>("centralitySrc"));
@@ -207,7 +210,7 @@ DiHadronCorrelationMultiBase::DiHadronCorrelationMultiBase(const edm::ParameterS
 //
 void DiHadronCorrelationMultiBase::beginRun(const edm::Run&, const edm::EventSetup& iSetup)
 {
-  if(trgID == kGenerator || assID == kGenerator) iSetup.getData(pdt);
+  if(trgID == kGenerator || assID == kGenerator) pdt = &iSetup.getData(token_pdt);
 }
 
 void DiHadronCorrelationMultiBase::beginJob()

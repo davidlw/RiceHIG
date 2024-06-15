@@ -38,6 +38,7 @@ MultiplicityAnalyzer::MultiplicityAnalyzer(const edm::ParameterSet& iConfig) :
   zVtxError(99999.)
 {
   TH1::SetDefaultSumw2();
+  usesResource("TFileService");
 
   token_vertices = consumes<std::vector<reco::Vertex>>(iConfig.getParameter<edm::InputTag>("VertexCollection"));
   token_tracks = consumes<std::vector<reco::Track>>(iConfig.getParameter<edm::InputTag>("TrgTrackCollection"));

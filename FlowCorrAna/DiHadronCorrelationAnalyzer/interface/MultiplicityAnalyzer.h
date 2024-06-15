@@ -10,7 +10,7 @@
 
 // user include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
-#include "FWCore/Framework/interface/EDAnalyzer.h"
+#include "FWCore/Framework/interface/one/EDAnalyzer.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/ConsumesCollector.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
@@ -80,7 +80,7 @@ using namespace edm;
 
 #define PI 3.141592
 
-class MultiplicityAnalyzer : public edm::EDAnalyzer {
+class MultiplicityAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> {
    
  protected:
    
