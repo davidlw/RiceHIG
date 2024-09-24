@@ -67,6 +67,7 @@ DiHadronCorrelationMultiBase::DiHadronCorrelationMultiBase(const edm::ParameterS
   token_genparticles = consumes<std::vector<reco::GenParticle>>(iConfig.getParameter<edm::InputTag>("GenParticleCollection"));
   token_v0candidates = consumes<std::vector<reco::VertexCompositeCandidate>>(iConfig.getParameter<edm::InputTag>("V0CandidateCollection"));
   token_pfcandidates = consumes<std::vector<reco::PFCandidate>>(iConfig.getParameter<edm::InputTag>("pfCandidateCollection"));
+  token_packedpfcandidates = consumes<pat::PackedCandidateCollection>(edm::InputTag("packedPFCandidates"));
   token_calotowers = consumes<edm::SortedCollection<CaloTower>>(edm::InputTag("towerMaker"));
   token_conversions = consumes<std::vector<reco::Conversion>>(iConfig.getParameter<edm::InputTag>("conversionCollection"));
 
@@ -260,7 +261,7 @@ void DiHadronCorrelationMultiBase::beginJob()
     hV0InvEtaVsPt = theOutputs->make<TH2D>("v0etavspt",";p_{T}(GeV);#pseudorapidity",100,0,10,48,-2.4,2.4);
   }
 
-  if(cutPara.IsDebug)
+//  if(cutPara.IsDebug)
   {
     hHFTowerSum = theOutputs->make<TH1D>("hftowersum",";HF Sum E_{T}",2400,0,12000);
     hHFvsNpixel = theOutputs->make<TH2D>("hfvsnpixel",";HF Sum E_{T}; Npixel;",2400,0,12000,1600,0,160000);
@@ -416,14 +417,6 @@ void DiHadronCorrelationMultiBase::analyze(const edm::Event& iEvent, const edm::
     hiCentrality = GetCentralityBin(iEvent,iSetup);
 
     if(hiCentrality<cutPara.centmin || hiCentrality>=cutPara.centmax) return;
-/*
-    if(cutPara.IsDebug)
-    {
-      hHFTowerSum->Fill(hft);
-      hHFvsNpixel->Fill(hft,npixel);
-      hHFvsZDC->Fill(hft,zdc);
-    }
-*/
   }
   hCentrality->Fill(hiCentrality);
 
@@ -431,10 +424,13 @@ void DiHadronCorrelationMultiBase::analyze(const edm::Event& iEvent, const edm::
 
   // Select multiplicity
   GetMult(iEvent,iSetup);
+  
   if((nMult<cutPara.nmin || nMult>=cutPara.nmax) && (cutPara.nmin!=-1 || cutPara.nmax!=-1)) return;
   hMultRawAll->Fill(nMult);
+
   if(cutPara.IsGenB) hMultVsB->Fill(nMult,b_gen);
   hMultCorrAll->Fill(nMultCorr,1.0/GetTrgWeight(nMult));
+
   hMultEtaAsym->Fill(nMult,(double)(nMultEtaP-nMultEtaM)/(nMultEtaP+nMultEtaM));
   hMultEtaPvsM->Fill(nMultEtaP,nMultEtaM);
 
@@ -498,6 +494,30 @@ void DiHadronCorrelationMultiBase::analyze(const edm::Event& iEvent, const edm::
      case kPFEgammaHF:
        LoopPFCandidates(iEvent,iSetup,1,reco::PFCandidate::egamma_HF);
        break;
+     case kPackedPFHadron:
+       LoopPackedPFCandidates(iEvent,iSetup,1,211);
+       break;
+     case kPackedPFPhoton:
+       cutPara.mass_trg=0.0;
+       LoopPackedPFCandidates(iEvent,iSetup,1,22);
+       break;
+     case kPackedPFElectron:
+       cutPara.mass_trg=0.000511;
+       LoopPackedPFCandidates(iEvent,iSetup,1,11);
+       break;
+     case kPackedPFMuon:
+       cutPara.mass_trg=0.1057;
+       LoopPackedPFCandidates(iEvent,iSetup,1,13);
+       break;
+     case kPackedPFNeutral:
+       LoopPackedPFCandidates(iEvent,iSetup,1,130);
+       break;
+     case kPackedPFHadronHF:
+       LoopPackedPFCandidates(iEvent,iSetup,1,1);
+       break;
+     case kPackedPFEgammaHF:
+       LoopPackedPFCandidates(iEvent,iSetup,1,2);
+       break;
      case kKshort:
        cutPara.mass_trg=0.4976;
        LoopV0Candidates(iEvent,iSetup, 1, "Kshort",-1);
@@ -525,6 +545,9 @@ void DiHadronCorrelationMultiBase::analyze(const edm::Event& iEvent, const edm::
      case kPFCandidate:
        LoopPFCandidates(iEvent,iSetup,1);
        break;
+     case kPackedPFCandidate:
+       LoopPackedPFCandidates(iEvent,iSetup,1);
+       break;       
      default:
        break;
   }
@@ -573,6 +596,30 @@ void DiHadronCorrelationMultiBase::analyze(const edm::Event& iEvent, const edm::
      case kPFEgammaHF:
        LoopPFCandidates(iEvent,iSetup,0,reco::PFCandidate::egamma_HF);
        break;
+     case kPackedPFHadron:
+       LoopPackedPFCandidates(iEvent,iSetup,0,211);
+       break;
+     case kPackedPFPhoton:
+       cutPara.mass_trg=0.0;
+       LoopPackedPFCandidates(iEvent,iSetup,0,22);
+       break;
+     case kPackedPFElectron:
+       cutPara.mass_trg=0.000511;
+       LoopPackedPFCandidates(iEvent,iSetup,0,11);
+       break;
+     case kPackedPFMuon:
+       cutPara.mass_trg=0.1057;
+       LoopPackedPFCandidates(iEvent,iSetup,0,13);
+       break;
+     case kPackedPFNeutral:
+       LoopPackedPFCandidates(iEvent,iSetup,0,130);
+       break;
+     case kPackedPFHadronHF:
+       LoopPackedPFCandidates(iEvent,iSetup,0,1);
+       break;
+     case kPackedPFEgammaHF:
+       LoopPackedPFCandidates(iEvent,iSetup,0,2);
+       break;       
      case kKshort:
        cutPara.mass_ass=0.4976;
        LoopV0Candidates(iEvent,iSetup,0, "Kshort",-1);
@@ -600,6 +647,9 @@ void DiHadronCorrelationMultiBase::analyze(const edm::Event& iEvent, const edm::
      case kPFCandidate:
        LoopPFCandidates(iEvent,iSetup,0);
        break;
+     case kPackedPFCandidate:
+       LoopPackedPFCandidates(iEvent,iSetup,0);
+       break;       
      default:
        break;
   }
@@ -689,7 +739,7 @@ void DiHadronCorrelationMultiBase::GetMult(const edm::Event& iEvent, const edm::
 
        // standard quality cuts
 
-         if(!trk.quality(reco::TrackBase::highPurity)) continue;
+        if(!trk.quality(reco::TrackBase::highPurity)) continue;
 
        if(cutPara.IsPPTrkQuality)
        {
@@ -702,19 +752,19 @@ void DiHadronCorrelationMultiBase::GetMult(const edm::Event& iEvent, const edm::
        if(cutPara.IsHITrkQuality)
        { 
          if(!trk.quality(reco::TrackBase::highPurity)) continue;
-         if(fabs(trk.ptError())/trk.pt()>0.1) continue;
+//         if(fabs(trk.ptError())/trk.pt()>0.1) continue;
          if(fabs(dzvtx/dzerror) > 3.0) continue;
          if(fabs(dxyvtx/dxyerror) > 3.0) continue;
-         if(nhits<11) continue;
-         if(chi2n/nlayers>0.18) continue;
+//         if(nhits<11) continue;
+//         if(chi2n/nlayers>0.18) continue;
        }
 
        double eta = trk.eta();
        double phi = trk.phi();
        double pt  = trk.pt();
 
-//       double effweight = GetEffWeight(eta,phi,pt,0.5*(cutPara.zvtxmax+cutPara.zvtxmin),hiCentrality,charge);
-       double effweight = GetEffWeight(eta,phi,pt,0.5*(cutPara.zvtxmax+cutPara.zvtxmin),npixel,charge);
+       double effweight = GetEffWeight(eta,phi,pt,0.5*(cutPara.zvtxmax+cutPara.zvtxmin),hiCentrality,charge);
+//       double effweight = GetEffWeight(eta,phi,pt,0.5*(cutPara.zvtxmax+cutPara.zvtxmin),npixel,charge);
 
        if(((eta>=cutPara.etamultmin && eta<=cutPara.etamultmax && !cutPara.IsTrgEtaCutAbs) || (fabs(eta)>=cutPara.etamultmin && fabs(eta)<=cutPara.etamultmax && cutPara.IsTrgEtaCutAbs)) && pt>=cutPara.ptmultmin && pt<=cutPara.ptmultmax) 
        { 
@@ -1045,15 +1095,15 @@ void DiHadronCorrelationMultiBase::LoopTracks(const edm::Event& iEvent, const ed
      if(cutPara.IsHITrkQuality)
      {
        if(!trk.quality(reco::TrackBase::highPurity)) continue;
-       if(fabs(trk.ptError())/trk.pt()>0.1) continue; //{ cout<<"filtered by pterr"<<endl; continue;}
+//       if(fabs(trk.ptError())/trk.pt()>0.1) continue; //{ cout<<"filtered by pterr"<<endl; continue;}
        if(fabs(dzvtx/dzerror) > 3.0) continue; //{ cout<<"filtered by dz"<<endl; continue;}
        if(fabs(dxyvtx/dxyerror) > 3.0) continue; //{ cout<<"filtered by dxy"<<endl; continue;}
-       if(nhits<11) continue; //{ cout<<"filtered by nhits"<<endl; continue;}
-       if(chi2n/nlayers>0.18) continue; //{ cout<<" filtered by chi2"<<endl; continue;}      
+//       if(nhits<11) continue; //{ cout<<"filtered by nhits"<<endl; continue;}
+//       if(chi2n/nlayers>0.18) continue; //{ cout<<" filtered by chi2"<<endl; continue;}      
      }
 
-//     double effweight = GetEffWeight(eta,phi,pt,0.5*(cutPara.zvtxmax+cutPara.zvtxmin),hiCentrality,charge);
-     double effweight = GetEffWeight(eta,phi,pt,0.5*(cutPara.zvtxmax+cutPara.zvtxmin),npixel,charge);
+     double effweight = GetEffWeight(eta,phi,pt,0.5*(cutPara.zvtxmax+cutPara.zvtxmin),hiCentrality,charge);
+//     double effweight = GetEffWeight(eta,phi,pt,0.5*(cutPara.zvtxmax+cutPara.zvtxmin),npixel,charge);
      double trgweight = GetTrgWeight(nMult);
 
 //cout<<effweight<<" "<<trgweight<<" "<<npixel<<" "<<eta<<" "<<pt<<endl;
@@ -1173,6 +1223,39 @@ void DiHadronCorrelationMultiBase::LoopV0Candidates(const edm::Event& iEvent, co
    }
 }
 
+void DiHadronCorrelationMultiBase::LoopPackedPFCandidates(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg, int pfID)
+{
+   edm::Handle<std::vector<pat::PackedCandidate>> packedPFCandidates;
+   iEvent.getByToken(token_packedpfcandidates, packedPFCandidates);
+   if(!packedPFCandidates->size()) return;
+
+   for(unsigned it = 0; it < packedPFCandidates->size(); ++it){
+
+     const pat::PackedCandidate & pfCand = (*packedPFCandidates)[it];
+
+     double eta = pfCand.eta();
+     double phi = pfCand.phi();
+     double pt  = pfCand.pt();
+//     double p   = pfCand.p();
+//     double etot = pfCand.ecalEnergy()+pfCand.hcalEnergy();
+//     double etot = pfCand.hcalEnergy();
+     double charge = pfCand.charge();
+     double mass = pfCand.mass();
+
+     if(fabs(pfCand.pdgId())!=pfID) continue;
+
+     // PID via velocity
+//     hBetaVsP->Fill(p,p/etot);
+
+     double effweight = 1.0;
+     if(pfID==211) effweight = GetEffWeight(eta,phi,pt,0.5*(cutPara.zvtxmax+cutPara.zvtxmin),hiCentrality,charge);
+
+     if(istrg) AssignTrgPtBins(pt,eta,phi,mass,charge,effweight);
+     else AssignAssPtBins(pt,eta,phi,mass,charge,effweight);
+   }
+}
+
+
 void DiHadronCorrelationMultiBase::LoopPFCandidates(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg, reco::PFCandidate::ParticleType pfID)
 {
    edm::Handle<reco::PFCandidateCollection > pfcandidates;
@@ -1195,6 +1278,28 @@ void DiHadronCorrelationMultiBase::LoopPFCandidates(const edm::Event& iEvent, co
 
      // PID via velocity
 //     hBetaVsP->Fill(p,p/etot);
+
+     double effweight = 1.0;
+     if(istrg) AssignTrgPtBins(pt,eta,phi,mass,charge,effweight);
+     else AssignAssPtBins(pt,eta,phi,mass,charge,effweight);
+   }
+}
+
+
+void DiHadronCorrelationMultiBase::LoopPackedPFCandidates(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg)
+{
+   edm::Handle<std::vector<pat::PackedCandidate>> packedPFCandidates;
+   iEvent.getByToken(token_packedpfcandidates, packedPFCandidates);
+   if(!packedPFCandidates->size()) return;
+
+   for(unsigned it = 0; it < packedPFCandidates->size(); ++it){
+
+     const pat::PackedCandidate & pfCand = (*packedPFCandidates)[it];
+     double eta = pfCand.eta();
+     double phi = pfCand.phi();
+     double pt  = pfCand.pt();
+     double charge = pfCand.charge();
+     double mass = pfCand.mass();
 
      double effweight = 1.0;
      if(istrg) AssignTrgPtBins(pt,eta,phi,mass,charge,effweight);
@@ -1496,7 +1601,7 @@ int DiHadronCorrelationMultiBase::GetCentralityBin(const edm::Event& iEvent, con
   int ntrk = cent->Ntracks();
   zdc = 10000.*(cent->zdcSumPlus()/7309.+cent->zdcSumMinus()/11420.);
 
-  if(zdc>(-170.*(hft-8500.))) { bin=-1; return bin; }
+//  if(zdc>(-170.*(hft-8500.))) { bin=-1; return bin; }
 
 // temporary smearing
 /////////////////////////////////////////////////
@@ -1694,6 +1799,24 @@ DiHadronCorrelationMultiBase::ParticleType DiHadronCorrelationMultiBase::GetPart
     type=kPFHadronHF;
   else if(particleid == "PFEgammaHF")
     type=kPFEgammaHF;
+  else if(particleid == "PackedPFHadron")
+    type=kPackedPFHadron;
+  else if(particleid == "PackedPFPhoton")
+    type=kPackedPFPhoton;
+  else if(particleid == "PackedPFHadronPhoton")
+    type=kPackedPFHadronPhoton;
+  else if(particleid == "PackedPFPhotonTrack")
+    type=kPackedPFPhotonTrack;
+  else if(particleid == "PackedPFElectron")
+    type=kPackedPFElectron;
+  else if(particleid == "PackedPFMuon")
+    type=kPackedPFMuon;
+  else if(particleid == "PackedPFNeutral")
+    type=kPackedPFNeutral;
+  else if(particleid == "PackedPFHadronHF")
+    type=kPackedPFHadronHF;
+  else if(particleid == "PackedPFEgammaHF")
+    type=kPackedPFEgammaHF;  
   else if(particleid == "PionZero")
     type=kPionZero;
   else if(particleid == "PionZeroBkgUp")
@@ -1720,5 +1843,7 @@ DiHadronCorrelationMultiBase::ParticleType DiHadronCorrelationMultiBase::GetPart
     type=kConversion;
   else if(particleid == "PFCandidate")
     type=kPFCandidate;
+  else if(particleid == "PackedPFCandidate")
+    type=kPackedPFCandidate;  
   return type;
 }

@@ -207,6 +207,23 @@ corr_ana_PbPb2018 = corr_ana.clone(
   EffHistName = cms.string('Eff_50_100')
 )
 
+corr_ana_PbPb2023 = corr_ana.clone(
+
+  pttrgmin = cms.vdouble(0.3),
+  pttrgmax = cms.vdouble(3.0),
+  ptassmin = cms.vdouble(0.3),
+  ptassmax = cms.vdouble(3.0),
+
+  xvtxcenter = cms.double(0.12),
+  yvtxcenter = cms.double(-0.18),
+  zvtxcenter = cms.double(-1.0),
+
+  EffFileName = cms.string(''),
+  EffHistName = cms.string(''),
+
+  rhomax = cms.double(0.5),  
+)
+
 corr_ana_HI = corr_ana.clone(
 #  TrgTrackCollection = cms.string('hiLowPtPixelTracks'),
   TrgTrackCollection = cms.string('hiGeneralAndPixelTracks'),

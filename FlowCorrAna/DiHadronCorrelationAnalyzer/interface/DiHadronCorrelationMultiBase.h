@@ -36,6 +36,7 @@
 #include "DataFormats/HcalRecHit/interface/HORecHit.h"
 #include "DataFormats/PatCandidates/interface/Jet.h"
 #include "DataFormats/JetReco/interface/CaloJet.h"
+#include "DataFormats/PatCandidates/interface/PackedCandidate.h"
 #include "DataFormats/RecoCandidate/interface/RecoChargedCandidate.h"
 #include "DataFormats/ParticleFlowCandidate/interface/PFCandidate.h"
 #include "DataFormats/TrackReco/interface/Track.h"
@@ -128,6 +129,16 @@ class DiHadronCorrelationMultiBase : public edm::one::EDAnalyzer<edm::one::Share
      kD0=29,
      kConversion=30,
      kPFCandidate=31,
+     kPackedPFCandidate=32,
+     kPackedPFHadron=33,
+     kPackedPFPhoton=34,
+     kPackedPFHadronPhoton=35,
+     kPackedPFPhotonTrack=36,
+     kPackedPFElectron=37,
+     kPackedPFMuon=38,
+     kPackedPFNeutral=39,
+     kPackedPFHadronHF=40,
+     kPackedPFEgammaHF=41,
    };
 
    ParticleType  trgID;
@@ -148,6 +159,7 @@ class DiHadronCorrelationMultiBase : public edm::one::EDAnalyzer<edm::one::Share
    edm::EDGetTokenT<reco::GenParticleCollection> token_genparticles;
    edm::EDGetTokenT<reco::VertexCompositeCandidateCollection> token_v0candidates;
    edm::EDGetTokenT<reco::PFCandidateCollection> token_pfcandidates;
+   edm::EDGetTokenT<pat::PackedCandidateCollection> token_packedpfcandidates;   
    edm::EDGetTokenT<edm::SortedCollection<CaloTower>> token_calotowers;
    edm::EDGetTokenT<reco::ConversionCollection> token_conversions;
 
@@ -310,6 +322,8 @@ class DiHadronCorrelationMultiBase : public edm::one::EDAnalyzer<edm::one::Share
    virtual void LoopCaloTower(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg);
    virtual void LoopConversions(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg);
    virtual void LoopV0Candidates(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg, TString candtype, int pdgID);
+   virtual void LoopPackedPFCandidates(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg, int pfID);   
+   virtual void LoopPackedPFCandidates(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg);   
    virtual void LoopPFCandidates(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg, reco::PFCandidate::ParticleType pfID);
    virtual void LoopPFCandidates(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg);
    virtual void GetVertices(const edm::Event& iEvent, const edm::EventSetup& iSetup);
