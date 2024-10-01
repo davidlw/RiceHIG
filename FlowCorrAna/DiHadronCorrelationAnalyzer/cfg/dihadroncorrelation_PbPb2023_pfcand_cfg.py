@@ -59,18 +59,23 @@ process.hltFilter.HLTPaths = [
 ]
 
 # ZDC info
-process.load('HeavyIonsAnalysis.ZDCAnalysis.QWZDC2018Producer_cfi')
-process.load('HeavyIonsAnalysis.ZDCAnalysis.QWZDC2018RecHit_cfi')
+#process.load('HeavyIonsAnalysis.ZDCAnalysis.QWZDC2018Producer_cfi')
+#process.load('HeavyIonsAnalysis.ZDCAnalysis.QWZDC2018RecHit_cfi')
 #process.pcentandep_step = cms.Sequence( process.zdcdigi * process.QWzdcreco * process.cent_seq )
 #process.pcentandep_step = cms.Sequence( process.zdcdigi * process.QWzdcreco * process.zdcanalyzer * process.cent_seq )
 
 # Add PbPb collision event selection
-process.load('HeavyIonsAnalysis.EventAnalysis.skimanalysis_cfi')
-process.load('HeavyIonsAnalysis.EventAnalysis.collisionEventSelection_cff')
-process.load('HeavyIonsAnalysis.EventAnalysis.hievtanalyzer_data_cfi')
-process.load('HeavyIonsAnalysis.EventAnalysis.hltanalysis_cfi')
-process.load('HeavyIonsAnalysis.EventAnalysis.hffilter_cfi')
-process.primaryVertexFilterHI.src = cms.InputTag("offlinePrimaryVertices")
+process.primaryVertexFilterHI = cms.EDFilter("VertexSelector",
+    src = cms.InputTag("offlinePrimaryVertices"),
+    cut = cms.string("!isFake && abs(z) <= 25 && position.Rho <= 2"), #in miniADO trackSize()==0, however there is no influence.
+    filter = cms.bool(True), # otherwise it won't filter the events
+)
+
+process.phfCoincFilter2Th4  = cms.EDFilter('HiHFFilter',
+   HFfilters      = cms.InputTag("hiHFfilters","hiHFfilters"),
+   threshold      = cms.int32(4),
+   minnumtowers  = cms.int32(2)
+)
 
 process.eventFilter_MB = cms.Sequence(
     process.hltFilter *
@@ -91,10 +96,10 @@ process.corr_ana_PbPb2023.TriggerID = cms.string('PackedPFHadronHF')
 #process.corr_ana_PbPb2023.AssociateID = cms.string('PackedPFHadron')
 #process.corr_ana_PbPb2023.TriggerID = cms.string('Track')
 process.corr_ana_PbPb2023.AssociateID = cms.string('Track')
-#process.corr_ana_PbPb2023.etatrgmin = cms.double(-5.5)
-#process.corr_ana_PbPb2023.etatrgmax = cms.double(5.5)
-process.corr_ana_PbPb2023.etatrgmin = cms.double(-2.4)
-process.corr_ana_PbPb2023.etatrgmax = cms.double(2.4)
+process.corr_ana_PbPb2023.etatrgmin = cms.double(-5.5)
+process.corr_ana_PbPb2023.etatrgmax = cms.double(5.5)
+#process.corr_ana_PbPb2023.etatrgmin = cms.double(-2.4)
+#process.corr_ana_PbPb2023.etatrgmax = cms.double(2.4)
 process.corr_ana_PbPb2023.etaassmin = cms.double(-2.4)
 process.corr_ana_PbPb2023.etaassmax = cms.double(2.4)
 process.corr_ana_PbPb2023.pttrgmin = cms.vdouble(0.0)
