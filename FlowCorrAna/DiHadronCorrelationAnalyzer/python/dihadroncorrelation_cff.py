@@ -219,7 +219,12 @@ corr_ana_PbPb2023 = corr_ana.clone(
   zvtxcenter = cms.double(-1.0),
 
   EffFileName = cms.string(''),
-  EffHistName = cms.string(''),
+#  EffFileName = cms.string('GeneralTracks_Eff_3D_Nominal_MB.root'),
+  EffHistName = cms.string('hEff_3D'),
+
+  FakFileName = cms.string(''),
+#  FakFileName = cms.string('GeneralTracks_Eff_3D_Nominal_MB.root'),
+  FakHistName = cms.string('hFak_3D'),
 
   rhomax = cms.double(0.5),  
 )
