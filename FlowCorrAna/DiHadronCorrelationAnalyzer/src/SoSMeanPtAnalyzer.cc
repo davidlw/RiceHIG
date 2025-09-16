@@ -41,9 +41,13 @@ SoSMeanPtAnalyzer::SoSMeanPtAnalyzer(const edm::ParameterSet& iConfig) :
   token_tracks = consumes<std::vector<reco::Track>>(iConfig.getParameter<edm::InputTag>("TrgTrackCollection"));
   token_genparticles = consumes<std::vector<reco::GenParticle>>(iConfig.getParameter<edm::InputTag>("GenParticleCollection"));
   token_packedPFCandidates = consumes<pat::PackedCandidateCollection>(edm::InputTag("packedPFCandidates")); 
+  token_packedgenparticles = consumes<pat::PackedGenParticleCollection>(edm::InputTag("packedGenParticles"));
   token_centrality = consumes<reco::Centrality>(iConfig.getParameter<edm::InputTag>("centralitySrc"));
   token_centralitybin = consumes<int>(iConfig.getParameter<edm::InputTag>("centralityBinLabel"));
-
+//  token_zdc = consumes<QIE10DigiCollection>(edm::InputTag("zdcDigiSrc"));
+  zdcDigiSrc_ = iConfig.getParameter<edm::InputTag>("zdcDigiSrc");
+  consumes<QIE10DigiCollection>(zdcDigiSrc_);
+  
   cutPara.xvtxcenter = iConfig.getParameter<double>("xvtxcenter");
   cutPara.yvtxcenter = iConfig.getParameter<double>("yvtxcenter");
   cutPara.zvtxcenter = iConfig.getParameter<double>("zvtxcenter");
@@ -99,45 +103,46 @@ SoSMeanPtAnalyzer::SoSMeanPtAnalyzer(const edm::ParameterSet& iConfig) :
 void SoSMeanPtAnalyzer::beginJob()
 {
   hZVtx = theOutputs->make<TH1D>("zvtx",";z_{vtx} (cm)",160,-20,20);
-  hXYVtx = theOutputs->make<TH2D>("xyvtx",";x_{vtx} (cm);y_{vtx} (cm)",100,-0.5,0.5,100,-0.5,0.5);
+  hXYVtx = theOutputs->make<TH2D>("xyvtx",";x_{vtx} (cm);y_{vtx} (cm)",50,-0.5,0.5,50,-0.5,0.5);
   hNVtx = theOutputs->make<TH1D>("nvtx",";nVertices",51,-0.5,50.5);
   hCentrality = theOutputs->make<TH1D>("centrality",";centbin",200,-1,200-1);
 
-  hHF = theOutputs->make<TH1D>("hHF",";#SigmaE^{HF}_{T} (3<|#eta|<5) (GeV)",40000,0,8000);
-  hHFvsNpixel = theOutputs->make<TH2D>("hHFvsnpixel",";HF Sum E_{T}; Npixel;",1600,0,8000,1600,0,160000);
-  hHFvsZDC = theOutputs->make<TH2D>("hHFvszdc",";HF Sum E_{T}; ZDC Sum E_{T};",1600,0,8000,1000,0,100000);
-  hHFvsZDCP = theOutputs->make<TH2D>("hHFvszdcp",";HF Sum E_{T}; ZDC Sum E_{T};",1600,0,8000,1000,0,100000);
-  hHFvsZDCM = theOutputs->make<TH2D>("hHFvszdcm",";HF Sum E_{T}; ZDC Sum E_{T};",1600,0,8000,1000,0,100000);  
-  hNVtxVsHF = theOutputs->make<TH2D>("hNVtxVsHF",";#SigmaE^{HF}_{T} (3<|#eta|<5) (GeV);nVertices",1000,0,8000,51,-0.5,10.5);
-  hCentVsHF = theOutputs->make<TH2D>("hCentVsHF",";centbin;#SigmaE^{HF}_{T} (3<|#eta|<5) (GeV)",200,-1,200-1,1600,0,8000);
-  hCentVsNpixel = theOutputs->make<TH2D>("hCentVsNpixel",";centbin; Npixel",200,-1,200-1,1600,0,160000);
-  hCentVsZDC = theOutputs->make<TH2D>("hCentVsZDC",";centbin; ZDC Sum E_{T}",200,-1,200-1,1000,0,100000);
-
+  hHF = theOutputs->make<TH1D>("hHF",";#SigmaE^{HF}_{T} (3<|#eta|<5) (GeV)",1240,0,6200);
+  hHFvsNpixel = theOutputs->make<TH2D>("hHFvsnpixel",";HF Sum E_{T}; Npixel;",800,0,8000,800,0,160000);
+  hHFvsZDC = theOutputs->make<TH2D>("hHFvszdc",";HF Sum E_{T}; ZDC Sum E_{T};",800,0,8000,400,0,800000);
+  /*
+  hHFvsZDCP = theOutputs->make<TH2D>("hHFvszdcp",";HF Sum E_{T}; ZDC Sum E_{T};",800,0,8000,200,0,400000);
+  hHFvsZDCM = theOutputs->make<TH2D>("hHFvszdcm",";HF Sum E_{T}; ZDC Sum E_{T};",800,0,8000,200,0,400000);  
+//  hNVtxVsHF = theOutputs->make<TH2D>("hNVtxVsHF",";#SigmaE^{HF}_{T} (3<|#eta|<5) (GeV);nVertices",800,0,8000,51,-0.5,10.5);
+  hCentVsHF = theOutputs->make<TH2D>("hCentVsHF",";centbin;#SigmaE^{HF}_{T} (3<|#eta|<5) (GeV)",200,-1,200-1,800,0,8000);
+  hCentVsNpixel = theOutputs->make<TH2D>("hCentVsNpixel",";centbin; Npixel",200,-1,200-1,800,0,160000);
+  hCentVsZDC = theOutputs->make<TH2D>("hCentVsZDC",";centbin; ZDC Sum E_{T}",200,-1,200-1,400,0,800000);
+*/
   for(int i=0;i<4;i++)
   {
-	  hEhftowerCentRapVsPt[i] = theOutputs->make<TH2D>(Form("EhftowerCentRapVsPt_Rap%d",i),";#SigmaE^{HF}_{T} (3<|#eta|<5) (GeV); p_{T} (GeV);",3200,0,8000,500,0,25);
-          hCentVsPt[i] = theOutputs->make<TH2D>(Form("CentVsPt_Rap%d",i),";centbin; p_{T} (GeV);",200,-1,200-1,500,0,25);
+	  hEhftowerCentRapVsPt[i] = theOutputs->make<TH2D>(Form("EhftowerCentRapVsPt_Rap%d",i),";#SigmaE^{HF}_{T} (3<|#eta|<5) (GeV); p_{T} (GeV);",1240,0,6200,500,0,25);
+//          hCentVsPt[i] = theOutputs->make<TH2D>(Form("CentVsPt_Rap%d",i),";centbin; p_{T} (GeV);",200,-1,200-1,500,0,25);
   }
 
   TString histname[] = {"#SigmaE_{T} (3<|#eta|<5) (GeV)","#SigmaE_{T} (4<|#eta|<5) (GeV)","#SigmaE_{T} (3<|#eta|<4) (GeV)"};
   for(int j=0;j<3;j++)
   {
-          hEhfcentestimator[j] = theOutputs->make<TH1D>(Form("Ehfcentestimator%d",j),Form(";%s;",histname[j].Data()),40000,0,8000);
-      	  for(int i=0;i<4;i++) hEhfCentRapVsPt[j][i] = theOutputs->make<TH2D>(Form("EhfCentRapVsPt_E%d_Rap%d",j,i),Form(";%s; p_{T} (GeV);",histname[i].Data()),3200,0,8000,500,0,25);
+          hEhfcentestimator[j] = theOutputs->make<TH1D>(Form("Ehfcentestimator%d",j),Form(";%s;",histname[j].Data()),1240,0,6200);
+      	  for(int i=0;i<4;i++) hEhfCentRapVsPt[j][i] = theOutputs->make<TH2D>(Form("EhfCentRapVsPt_E%d_Rap%d",j,i),Form(";%s; p_{T} (GeV);",histname[i].Data()),1240,0,6200,500,0,25);
   }
 
   TString histname1[] = {"#SigmaE_{T} (1<|#eta|<3) (GeV)","#SigmaE_{T} (2<|#eta|<3) (GeV)","#SigmaE_{T} (1<|#eta|<2) (GeV)","#SigmaE_{T} (0<|#eta|<1) (GeV)","#SigmaE_{T} (0.5<|#eta|<1) (GeV)","#SigmaE_{T} (0<|#eta|<0.5) (GeV)"};
   for(int i=0;i<6;i++)
   {
-	  hECentVsPtMidRap[i] = theOutputs->make<TH2D>(Form("ECentVsPtMidRap_E%d",i),Form(";%s; p_{T} (GeV);",histname1[i].Data()),3200,0,8000,500,0,25);
-          hEcentestimator[i] = theOutputs->make<TH1D>(Form("Ecentestimator%d",i),Form(";%s;",histname1[i].Data()),40000,0,8000);
+	  hECentVsPtMidRap[i] = theOutputs->make<TH2D>(Form("ECentVsPtMidRap_E%d",i),Form(";%s; p_{T} (GeV);",histname1[i].Data()),1240,0,6200,500,0,25);
+          hEcentestimator[i] = theOutputs->make<TH1D>(Form("Ecentestimator%d",i),Form(";%s;",histname1[i].Data()),1240,0,6200);
   }
 
   TString histname2[] = {"N_{ch} (1<|#eta|<2.4)", "N_{ch} (1<|#eta|<2)", "N_{ch} (0<|#eta|<1)", "N_{ch} (0<|#eta|<0.5)", "N_{ch} (0.5<|#eta|<1)"};
   for(int i=0;i<5;i++)
   {
-	  hNCentVsPtMidRap[i] = theOutputs->make<TH2D>(Form("NCentVsPtMidRap_N%d",i),Form(";%s; p_{T} (GeV);",histname2[i].Data()),4000,0,8000,500,0,25);
-          hNcentestimator[i] = theOutputs->make<TH1D>(Form("Ncentestimator%d",i),Form(";%s;",histname2[i].Data()),8000,0,8000);
+	  hNCentVsPtMidRap[i] = theOutputs->make<TH2D>(Form("NCentVsPtMidRap_N%d",i),Form(";%s; p_{T} (GeV);",histname2[i].Data()),1240,0,6200,500,0,25);
+          hNcentestimator[i] = theOutputs->make<TH1D>(Form("Ncentestimator%d",i),Form(";%s;",histname2[i].Data()),1240,0,6200);
   }
 }
 
@@ -166,26 +171,65 @@ void SoSMeanPtAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup&
   iEvent.getByToken(token_centrality, cent);
   double hft = cent->EtHFtowerSum();
   double npixel = cent->multiplicityPixel();
-  double zdcp = cent->zdcSumPlus();
-  double zdcm = cent->zdcSumMinus();  
-  double zdc = zdcp + zdcm*1.8;
+
+  edm::Handle<QIE10DigiCollection> zdcdigis;
+//  iEvent.getByToken(token_zdc, zdcdigis);
+  iEvent.getByLabel(zdcDigiSrc_, zdcdigis);
+
+  int nhits = 0;
+  float chargefC[6][56];
+  for (auto it = zdcdigis->begin(); it != zdcdigis->end(); it++)
+  {
+    const QIE10DataFrame digi = static_cast<const QIE10DataFrame>(*it);
+    for( int ts = 0; ts < digi.samples(); ts++ )
+      chargefC[ts][nhits] = QWAna::ZDC2018::QIE10_regular_fC[ digi[ts].adc() ][ digi[ts].capid() ];
+    nhits++;
+  }
+  // Very preliminary calibration
+  float sumcEMP = 0;
+  float sumcEMN = 0;
+  float sumcHDP = 0;
+  float sumcHDN = 0;
+  // 2023 EM: idet = 0-5 and 12-16
+  for( int idet = 0; idet < 5; idet++ )
+  {
+    int idet_m = idet;
+    int idet_p = idet + 12;
+    sumcEMN += chargefC[2][idet_m] - chargefC[1][idet_m];
+    sumcEMP += chargefC[2][idet_p] - chargefC[1][idet_p];
+  }
+  // 2023 HAD: idet = 8-11 and 20-23
+  for( int idet = 8; idet < 12; idet++ )
+  {
+    int idet_m = idet;
+    int idet_p = idet + 12;
+    sumcHDN += chargefC[2][idet_m] - chargefC[1][idet_m];
+    sumcHDP += chargefC[2][idet_p] - chargefC[1][idet_p];
+  }
+  double zdcSumMinus = (sumcEMN * 0.1 + sumcHDN) * 0.5031;
+  double zdcSumPlus  = (sumcEMP * 0.1 + sumcHDP) * 0.9397;
+  double zdc = zdcSumPlus + zdcSumMinus;
+  
+  if( zdc > (-56.*(hft-8100.)) ) return;
+  if( npixel > (7500.+18.5*hft) ) return; //for data
 
   hHF->Fill(hft);
   hHFvsNpixel->Fill(hft,npixel);
   hHFvsZDC->Fill(hft,zdc);
-  hHFvsZDCP->Fill(hft,zdcp);
-  hHFvsZDCM->Fill(hft,zdcm);  
-  hNVtxVsHF->Fill(hft,nVertices);
+//  hHFvsZDCP->Fill(hft,zdcSumPlus);
+//  hHFvsZDCM->Fill(hft,zdcSumMinus);  
+//  hNVtxVsHF->Fill(hft,nVertices);
 
   edm::Handle<int> cbin;
   iEvent.getByToken(token_centralitybin,cbin);
   int centbin = *cbin;
 
   hCentrality->Fill(centbin);
+  /*
   hCentVsHF->Fill(centbin,hft);
   hCentVsNpixel->Fill(centbin,npixel);
   hCentVsZDC->Fill(centbin,zdc);
-
+*/
 //---------------------------------------------------------------------------
 
   double etatrkmin[4] = {0.0,0.5,1.0,1.5};
@@ -204,6 +248,8 @@ void SoSMeanPtAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup&
   double ecentestimator[6] = {0.0};
   double ncentestimator[5] = {0.0};
  
+if(!cutPara.IsGenMult)
+{  
   edm::Handle<pat::PackedCandidateCollection> packedPFCandidates;
   iEvent.getByToken(token_packedPFCandidates, packedPFCandidates);
 
@@ -215,6 +261,8 @@ void SoSMeanPtAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup&
     double phi = cand.phi();
     int pdgId = cand.pdgId();
     
+    if(pt<0.4 && fabs(eta)<3) continue;
+
     for(int i=0;i<3;i++) if((fabs(pdgId) == 1 || fabs(pdgId) == 2) && fabs(eta)>ehfcentetamin[i] && fabs(eta)<ehfcentetamax[i]) ehfcentestimator[i] += pt;
     for(int i=0;i<6;i++) if(fabs(eta)>ecentetamin[i] && fabs(eta)<ecentetamax[i]) ecentestimator[i] += pt;
     // Do something with the candidate information
@@ -234,7 +282,7 @@ void SoSMeanPtAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup&
 
     const reco::Track & trk = (*tracks)[it];
 
-    if(trk.pt()<0.3) continue;
+    if(trk.pt()<0.4) continue;
 
     math::XYZPoint bestvtx(xVtx,yVtx,zVtx);
 
@@ -247,6 +295,7 @@ void SoSMeanPtAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup&
     {
       if(!trk.quality(reco::TrackBase::highPurity)) continue;
       if(fabs(trk.ptError())/trk.pt()>0.1) continue;
+//      if(fabs(trk.ptError())/trk.pt()>0.05) continue;
       if(fabs(dzvtx/dzerror) > 3.0) continue;
       if(fabs(dxyvtx/dxyerror) > 3.0) continue;
     }
@@ -254,10 +303,23 @@ void SoSMeanPtAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup&
     if(cutPara.IsHITrkQuality)
     {
       if(!trk.quality(reco::TrackBase::highPurity)) continue;
-//      if(fabs(trk.ptError())/trk.pt()>0.1) continue;
+      // Standard
+/*      
+      if(fabs(trk.ptError())/trk.pt()>0.1 && trk.pt()>10) continue;
       if(fabs(dzvtx/dzerror) > 3.0) continue;
       if(fabs(dxyvtx/dxyerror) > 3.0) continue;
-//         if(chi2n/nlayers>0.18) continue;
+*/      
+      // Tight
+       
+      if(fabs(trk.ptError())/trk.pt()>0.05) continue;
+      if(fabs(dzvtx/dzerror) > 2.0) continue;
+      if(fabs(dxyvtx/dxyerror) > 2.0) continue;
+      
+      // Loose
+      /*
+      if(fabs(dzvtx/dzerror) > 5.0) continue;
+      if(fabs(dxyvtx/dxyerror) > 5.0) continue;
+      */
     }
 
     double eta = trk.eta();
@@ -293,21 +355,36 @@ void SoSMeanPtAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup&
     if(cutPara.IsHITrkQuality)
     {
       if(!trk.quality(reco::TrackBase::highPurity)) continue;
-//      if(fabs(trk.ptError())/trk.pt()>0.1) continue;
+      // Standard
+/*      
+      if(fabs(trk.ptError())/trk.pt()>0.1 && trk.pt()>10) continue;
       if(fabs(dzvtx/dzerror) > 3.0) continue;
       if(fabs(dxyvtx/dxyerror) > 3.0) continue;
-//         if(chi2n/nlayers>0.18) continue;
+*/
+      // Tight
+      
+      if(fabs(trk.ptError())/trk.pt()>0.05) continue;
+      if(fabs(dzvtx/dzerror) > 2.0) continue;
+      if(fabs(dxyvtx/dxyerror) > 2.0) continue;
+      
+      // Loose
+      /*
+      if(fabs(dzvtx/dzerror) > 5.0) continue;
+      if(fabs(dxyvtx/dxyerror) > 5.0) continue;
+      */      
     }
 
     double eta = trk.eta();
     double pt  = trk.pt();
-    double effweight = GetEffWeight(eta,pt,centbin);
+//    double effweight = GetEffWeight(eta,pt,centbin);
+    double effweight = GetEffWeight(eta,pt,npixel);
 
+//    cout<<effweight<<endl;
     for(int i=0;i<4;i++)
       if(fabs(eta)>etatrkmin[i] && fabs(eta)<etatrkmax[i])
 	{	      
           hEhftowerCentRapVsPt[i]->Fill(hft,pt,1.0/effweight);
-	  hCentVsPt[i]->Fill(centbin,pt,1.0/effweight);
+//	  hCentVsPt[i]->Fill(centbin,pt,1.0/effweight);
 	}
 
     for(int j=0;j<3;j++)  
@@ -321,6 +398,65 @@ void SoSMeanPtAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup&
     for(int i=0;i<5;i++) 
         hNCentVsPtMidRap[i]->Fill(ncentestimator[i],pt,1.0/effweight);
   }
+}
+else
+{
+   edm::Handle<std::vector<pat::PackedGenParticle>> packedGenParticles;
+   iEvent.getByToken(token_packedgenparticles, packedGenParticles);
+   if(!packedGenParticles->size()) { cout<<"Invalid or empty PackedGenParticle collection!"<<endl; return; }
+
+   for(unsigned it = 0; it < packedGenParticles->size(); ++it){
+
+     const pat::PackedGenParticle & p = (*packedGenParticles)[it];
+
+     if(p.status() != 1) continue;
+
+     double eta = p.eta();
+     double phi = p.phi();
+     double pt  = p.pt();
+     double charge = p.charge();
+     double mass = p.mass();
+
+     for(int i=0;i<3;i++) if(fabs(eta)>ehfcentetamin[i] && fabs(eta)<ehfcentetamax[i]) ehfcentestimator[i] += pt;
+     for(int i=0;i<6;i++) if(fabs(eta)>ecentetamin[i] && fabs(eta)<ecentetamax[i]) ecentestimator[i] += pt;
+     for(int i=0;i<5;i++)
+       if(charge!=0 && fabs(eta)>ncentetamin[i] && fabs(eta)<ncentetamax[i])
+             ncentestimator[i]++;
+  }
+  for(int i=0;i<3;i++) hEhfcentestimator[i]->Fill(ehfcentestimator[i]);
+  for(int i=0;i<6;i++) hEcentestimator[i]->Fill(ecentestimator[i]);   
+  for(int i=0;i<5;i++) hNcentestimator[i]->Fill(ncentestimator[i]);  
+
+  for(unsigned it = 0; it < packedGenParticles->size(); ++it){
+
+    const pat::PackedGenParticle & p = (*packedGenParticles)[it];
+
+    if(p.status() != 1) continue;
+    if(p.charge() == 0) continue;
+
+    double eta = p.eta();
+    double pt  = p.pt();
+    double effweight = 1.0;
+
+    for(int i=0;i<4;i++)
+      if(fabs(eta)>etatrkmin[i] && fabs(eta)<etatrkmax[i])
+        {
+          hEhftowerCentRapVsPt[i]->Fill(hft,pt,1.0/effweight);
+//          hCentVsPt[i]->Fill(centbin,pt,1.0/effweight);
+        }
+
+    for(int j=0;j<3;j++)
+      for(int i=0;i<4;i++)
+        if(fabs(eta)>etatrkmin[i] && fabs(eta)<etatrkmax[i])
+          hEhfCentRapVsPt[j][i]->Fill(ehfcentestimator[j],pt,1.0/effweight);
+
+    for(int i=0;i<6;i++)
+        hECentVsPtMidRap[i]->Fill(ecentestimator[i],pt,1.0/effweight);
+
+    for(int i=0;i<5;i++)
+        hNCentVsPtMidRap[i]->Fill(ncentestimator[i],pt,1.0/effweight);     
+  }
+}
 }
 
 void SoSMeanPtAnalyzer::endJob()
@@ -374,12 +510,17 @@ double SoSMeanPtAnalyzer::GetTrgWeight(double nmult)
 
 double SoSMeanPtAnalyzer::GetEffWeight(double eta, double pt, int centbin)
 {
+  if(pt>9.8) pt=9.8;
+
   double effweight = 1.0;
   if(!hEffWeight) return effweight;
   effweight = hEffWeight->GetBinContent(hEffWeight->FindBin(eta,pt,centbin));
-//  if(effweight<0.001) effweight=1.0;
-
-  if(hFakWeight) effweight /= (1-hFakWeight->GetBinContent(hFakWeight->FindBin(eta,pt,centbin)));
+  if(effweight<0.0001) effweight=1.0;
+ 
+  if(!hFakWeight) return effweight; 
+  double fakweight = hFakWeight->GetBinContent(hFakWeight->FindBin(eta,pt,centbin));
+  if(fakweight>0.9999) fakweight=1.0;
+  effweight /= (1-fakweight);
 
   return effweight;
 }

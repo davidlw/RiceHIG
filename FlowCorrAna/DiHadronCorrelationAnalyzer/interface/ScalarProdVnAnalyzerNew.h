@@ -44,6 +44,5 @@ class ScalarProdVnAnalyzerNew : public DiHadronCorrelationMultiBaseNew {
    
  public:
    ScalarProdVnAnalyzerNew(const edm::ParameterSet&);
-//   ~ScalarProdVnAnalyzerNew();
 };
 #endif  // ScalarProdVnAnalyzerNew_

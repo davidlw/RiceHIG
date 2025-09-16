@@ -4,6 +4,9 @@
 #include <vector>
 #include <TVector3.h>
 #include <TLorentzVector.h>
+#include "Math/Vector4D.h"
+
+typedef ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiM4D<double>> SimpleLorentzVector;
 
 using namespace std;
 
@@ -16,6 +19,11 @@ using namespace std;
 #define MAXETATRGBINSPT 48
 #define ETATRGBINWIDTHPT 0.1
 
+constexpr double ETAMIN = -5.4;
+constexpr double ETAMAX = 5.4;
+constexpr int NETABINS = 54;
+constexpr double ETABINWIDTH = ((ETAMAX-ETAMIN)/NETABINS);
+
 class DiHadronCorrelationEvent {                                                                                  
 
  public:                                                                                           
@@ -24,6 +32,11 @@ class DiHadronCorrelationEvent {
    vector<TLorentzVector>  pVect_trg[MAXPTTRGBINS];
    vector<TLorentzVector>  pVect_trg_dau1[MAXPTTRGBINS];
    vector<TLorentzVector>  pVect_trg_dau2[MAXPTTRGBINS];
+/*   
+   vector<SimpleLorentzVector> pVect_trg[MAXPTTRGBINS];
+   vector<SimpleLorentzVector> pVect_trg_dau1[MAXPTTRGBINS];
+   vector<SimpleLorentzVector> pVect_trg_dau2[MAXPTTRGBINS];
+*/
    vector<float>    nMultCorrVect_trg;
    vector<float>    chgVect_trg[MAXPTTRGBINS];
    vector<float>    effVect_trg[MAXPTTRGBINS];
@@ -31,6 +44,11 @@ class DiHadronCorrelationEvent {
    vector<TLorentzVector>  pVect_ass[MAXPTASSBINS];
    vector<TLorentzVector>  pVect_ass_dau1[MAXPTASSBINS];
    vector<TLorentzVector>  pVect_ass_dau2[MAXPTASSBINS];
+/*
+   vector<SimpleLorentzVector> pVect_ass[MAXPTASSBINS];
+   vector<SimpleLorentzVector> pVect_ass_dau1[MAXPTASSBINS];
+   vector<SimpleLorentzVector> pVect_ass_dau2[MAXPTASSBINS];   
+*/
    vector<float>    nMultCorrVect_ass;
    vector<float>    chgVect_ass[MAXPTASSBINS];
    vector<float>    effVect_ass[MAXPTASSBINS];

@@ -10,7 +10,6 @@
 #include <TFile.h>
 #include <TList.h>
 #include <TIterator.h>
-#include <TLorentzVector.h>
 #include <TClonesArray.h>
 #include <TString.h>
 #include <TObjString.h>

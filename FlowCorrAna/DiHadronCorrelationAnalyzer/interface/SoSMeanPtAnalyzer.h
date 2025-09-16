@@ -32,6 +32,7 @@
 #include "DataFormats/HcalRecHit/interface/HFRecHit.h"
 #include "DataFormats/HcalRecHit/interface/HORecHit.h"
 #include "DataFormats/PatCandidates/interface/Jet.h"
+#include "DataFormats/PatCandidates/interface/PackedGenParticle.h"
 #include "DataFormats/JetReco/interface/CaloJet.h"
 #include "DataFormats/RecoCandidate/interface/RecoChargedCandidate.h"
 #include "DataFormats/ParticleFlowCandidate/interface/PFCandidate.h"
@@ -60,6 +61,20 @@
 #include "SimDataFormats/GeneratorProducts/interface/HepMCProduct.h"
 #include "FWCore/Common/interface/TriggerNames.h"
 #include "RecoJets/JetAlgorithms/interface/JetAlgoHelper.h"
+
+#include "DataFormats/HcalRecHit/interface/HcalRecHitCollections.h"
+#include "DataFormats/METReco/interface/HcalCaloFlagLabels.h"
+#include "CalibFormats/HcalObjects/interface/HcalCoderDb.h"
+#include "CalibFormats/HcalObjects/interface/HcalDbRecord.h"
+#include "CalibFormats/HcalObjects/interface/HcalDbService.h"
+#include "CalibCalorimetry/HcalAlgos/interface/HcalPulseShapes.h"
+#include "DataFormats/HcalDigi/interface/HcalQIESample.h"
+#include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/QWZDC2018Helper.h"
+#include "DataFormats/HcalDigi/interface/HcalDigiCollections.h"
+#include "Geometry/CaloGeometry/interface/CaloGeometry.h"
+#include "Geometry/Records/interface/CaloGeometryRecord.h"
+#include "Geometry/Records/interface/IdealGeometryRecord.h"
+
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/CutParameters.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/DiHadronCorrelationEvent.h"
 
@@ -90,8 +105,10 @@ class SoSMeanPtAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources>
    edm::EDGetTokenT<reco::VertexCollection> token_vertices;
    edm::EDGetTokenT<reco::GenParticleCollection> token_genparticles;
    edm::EDGetTokenT<pat::PackedCandidateCollection> token_packedPFCandidates;
+   edm::EDGetTokenT<pat::PackedGenParticleCollection> token_packedgenparticles;
    edm::EDGetTokenT<reco::Centrality> token_centrality;
    edm::EDGetTokenT<int> token_centralitybin;
+   edm::InputTag zdcDigiSrc_;
 
    // histograms
    TH3D*  hEffWeight;

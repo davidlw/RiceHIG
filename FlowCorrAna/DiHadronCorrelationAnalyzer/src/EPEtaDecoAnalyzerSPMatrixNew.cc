@@ -24,9 +24,6 @@ EPEtaDecoAnalyzerSPMatrixNew::EPEtaDecoAnalyzerSPMatrixNew(const edm::ParameterS
   etaBinWidth = iConfig.getParameter<double>("etaBinWidth"); 
 }
 
-EPEtaDecoAnalyzerSPMatrixNew::~EPEtaDecoAnalyzerSPMatrixNew() 
-{}
-
 void EPEtaDecoAnalyzerSPMatrixNew::beginJob()
 {
   hDeltaZvtx = theOutputs->make<TH1D>("deltazvtx",";#Delta z_{vtx}",200,-1.0,1.0);
@@ -54,7 +51,7 @@ void EPEtaDecoAnalyzerSPMatrixNew::endJob()
 void EPEtaDecoAnalyzerSPMatrixNew::NormalizeHists()
 {}
 
-void EPEtaDecoAnalyzerSPMatrixNew::FillHistsSignal(const DiHadronCorrelationEvent& eventcorr)
+void EPEtaDecoAnalyzerSPMatrixNew::FillHistsSignal(DiHadronCorrelationEvent& eventcorr)
 {
     unsigned int ntrgsize = eventcorr.pVect_trg[0].size();
 

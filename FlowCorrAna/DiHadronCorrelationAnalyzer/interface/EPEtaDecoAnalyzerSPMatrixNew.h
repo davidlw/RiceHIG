@@ -35,11 +35,10 @@ class EPEtaDecoAnalyzerSPMatrixNew : public DiHadronCorrelationMultiBaseNew {
    virtual void endJob();
 
    virtual void NormalizeHists();
-   virtual void FillHistsSignal(const DiHadronCorrelationEvent& eventcorr);
+   virtual void FillHistsSignal(DiHadronCorrelationEvent& eventcorr);
    
  public:
    EPEtaDecoAnalyzerSPMatrixNew(const edm::ParameterSet&);
-   ~EPEtaDecoAnalyzerSPMatrixNew();
 
 };
 #endif  // EPEtaDecoAnalyzerSPMatrixNew_

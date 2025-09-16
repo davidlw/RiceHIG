@@ -28,9 +28,6 @@ ScalarProdVnAnalyzerNew::ScalarProdVnAnalyzerNew(const edm::ParameterSet& iConfi
   etaBinWidth = iConfig.getParameter<double>("etaBinWidth");
 }
 
-//ScalarProdVnAnalyzerNew::~ScalarProdVnAnalyzerNew()
-//{}
-
 //
 // member functions
 //
@@ -59,15 +56,6 @@ void ScalarProdVnAnalyzerNew::beginJob()
 }
 
 // ------------ method called to for each event  -----------
-/*
-void ScalarProdVnAnalyzerNew::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
-{
-  DiHadronCorrelationMultiBaseNew::analyze(iEvent,iSetup);
-
-  FillHistsSignal(*eventcorr);
-}
-*/
-
 void ScalarProdVnAnalyzerNew::endJob()
 {}
 

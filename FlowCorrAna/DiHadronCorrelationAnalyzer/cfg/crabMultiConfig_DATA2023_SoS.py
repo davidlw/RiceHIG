@@ -7,6 +7,8 @@ from http.client import HTTPException  # updated import for Python 3
 from CRABClient.UserUtilities import config
 config = config()
 
+inputList = 'filelist_HIForward0.txt'
+
 config.section_("General")
 config.General.workArea = 'crab_projects'
 config.General.transferOutputs = True
@@ -14,12 +16,13 @@ config.General.transferLogs = False
 
 config.section_('JobType')
 config.JobType.pluginName = 'Analysis'
-#config.JobType.inputFiles = ['']
+config.JobType.scriptExe = 'submitScript.sh'
+config.JobType.inputFiles = ['emap_2023_newZDC_v3.txt']
 
 config.section_('Data')
 config.Data.inputDBS = 'global'
 config.Data.splitting = 'LumiBased'
-#config.Data.totalUnits = 5000
+config.Data.totalUnits = 5000
 config.Data.lumiMask = 'Cert_Collisions2023HI_374288_375823_Golden.json'
 config.Data.runRange = '374288-375823'
 config.Data.publication = False
@@ -33,7 +36,7 @@ config.Site.storageSite = 'T2_CH_CERN'
 
 def submit(config):
     try:
-        crabCommand('submit', config = config, dryrun=False)
+        crabCommand('submit', config = config, dryrun=True)
     except HTTPException as hte:
         print("Failed submitting task: %s" % (hte.headers))  # updated for Python 3
 
@@ -51,12 +54,12 @@ dataMap = {
 #            "HIForward": { "PD": "/HIForward/HIRun2018A-04Apr2019-v1/AOD", "Units": 30, "Memory": 1800, "RunTime": 1400, "PSet": "PbPbSkimAndTree2018_DiMuContBoth_ZDC_ALLDIMU_cfg.py" },
             }
 
-for i in range(1,2):
+for i in range(0,1):
     dataMap[("HIPhysicsRawPrime"+str(i))] = { "PD": ("/HIPhysicsRawPrime"+str(i)+"/HIRun2023A-PromptReco-v2/MINIAOD"), "Units": 25, "Memory": 4000, "RunTime": 2100, "PSet": "SoS_PbPb2023_MINIAOD_cfg.py" } # UCC
 
 ## Submit the muon PDs
 for key, val in dataMap.items():
-    config.General.requestName = 'SoS_'+key+'_HIRun2023_PromptReco_MBZDCOR_test_20240903v2'
+    config.General.requestName = 'SoS_'+key+'_HIRun2023_PromptReco_MBZDCOR_smalltestzdc_20241004v1'
     config.Data.inputDataset = val["PD"]
     config.Data.unitsPerJob = val["Units"]
     config.JobType.maxMemoryMB = val["Memory"]

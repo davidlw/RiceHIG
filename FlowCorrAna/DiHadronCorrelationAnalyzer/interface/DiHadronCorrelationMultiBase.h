@@ -39,6 +39,7 @@
 #include "DataFormats/PatCandidates/interface/PackedCandidate.h"
 #include "DataFormats/RecoCandidate/interface/RecoChargedCandidate.h"
 #include "DataFormats/ParticleFlowCandidate/interface/PFCandidate.h"
+#include "DataFormats/PatCandidates/interface/PackedGenParticle.h"
 #include "DataFormats/TrackReco/interface/Track.h"
 #include "DataFormats/TrackReco/interface/TrackFwd.h"
 #include "DataFormats/TrackReco/interface/DeDxData.h"
@@ -70,6 +71,20 @@
 #include "RecoJets/JetAlgorithms/interface/JetAlgoHelper.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/CutParameters.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/DiHadronCorrelationEvent.h"
+
+#include "DataFormats/HcalRecHit/interface/HcalRecHitCollections.h"
+#include "DataFormats/METReco/interface/HcalCaloFlagLabels.h"
+#include "CalibFormats/HcalObjects/interface/HcalCoderDb.h"
+#include "CalibFormats/HcalObjects/interface/HcalDbRecord.h"
+#include "CalibFormats/HcalObjects/interface/HcalDbService.h"
+#include "CalibCalorimetry/HcalAlgos/interface/HcalPulseShapes.h"
+#include "DataFormats/HcalDigi/interface/HcalQIESample.h"
+#include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/QWZDC2018Helper.h"
+#include "DataFormats/HcalDigi/interface/HcalDigiCollections.h"
+#include "Geometry/CaloGeometry/interface/CaloGeometry.h"
+#include "Geometry/Records/interface/CaloGeometryRecord.h"
+#include "Geometry/Records/interface/IdealGeometryRecord.h"
+
 //#include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/trackingEfficiency2018PbPb.h"
 
 class TBranch;
@@ -139,6 +154,7 @@ class DiHadronCorrelationMultiBase : public edm::one::EDAnalyzer<edm::one::Share
      kPackedPFNeutral=39,
      kPackedPFHadronHF=40,
      kPackedPFEgammaHF=41,
+     kPackedGenParticle=42,
    };
 
    ParticleType  trgID;
@@ -157,11 +173,13 @@ class DiHadronCorrelationMultiBase : public edm::one::EDAnalyzer<edm::one::Share
    edm::EDGetTokenT<reco::TrackCollection> token_tracks;
    edm::EDGetTokenT<reco::VertexCollection> token_vertices;
    edm::EDGetTokenT<reco::GenParticleCollection> token_genparticles;
+   edm::EDGetTokenT<pat::PackedGenParticleCollection> token_packedgenparticles;   
    edm::EDGetTokenT<reco::VertexCompositeCandidateCollection> token_v0candidates;
    edm::EDGetTokenT<reco::PFCandidateCollection> token_pfcandidates;
    edm::EDGetTokenT<pat::PackedCandidateCollection> token_packedpfcandidates;   
    edm::EDGetTokenT<edm::SortedCollection<CaloTower>> token_calotowers;
    edm::EDGetTokenT<reco::ConversionCollection> token_conversions;
+   edm::InputTag zdcDigiSrc_;
 
    TNtuple* trackNtuple;
 
@@ -189,6 +207,7 @@ class DiHadronCorrelationMultiBase : public edm::one::EDAnalyzer<edm::one::Share
    TH2D*  hV0InvEtaVsPt;
    TH1D*  hPtAll_trg;
    TH1D*  hPTotAll_trg;
+   TH3D*  hdNdetadptOccAll_trg; 
    TH2D*  hdNdetadptAll_trg;
    TH2D*  hdNdetadpAll_trg;
    TH2D*  hdNdetadphiAll_trg;
@@ -210,11 +229,22 @@ class DiHadronCorrelationMultiBase : public edm::one::EDAnalyzer<edm::one::Share
    TH2D*  hEventEngineer;
    TH1D*  hCentrality;
    TH1D*  hHFTowerSum; 
+   TH2D*  hHFAsymvsNtrk;
    TH2D*  hHFvsNpixel;
    TH2D*  hHFvsNtrk;
    TH2D*  hHFvsNtrkCorr;
    TH2D*  hHFvsZDC;
    TH2D*  hHFvsPt;
+   TH2D*  hHFPvsHFM1;
+   TH2D*  hHFPvsHFM2;
+   TH2D*  hHFPvsHFM3;   
+   TH1D*  hNtrk_Xn0n;
+   TH1D*  hNtrk_0nXn;
+   TH1D*  hNtrk_XnXn;   
+   TH2D*  hZDCPvsZDCM;   
+   TH2D*  hZDCPvsZDCM_HM;
+   TH2D*  hNpixelvsNtrk;
+   TH2D*  hNpixelOcc;
    TH2D*  hNpixelvsPt;
    TH2D*  hNtrkvsPt;
    TH2D*  hNtrkCorrvsPt;
@@ -284,6 +314,8 @@ class DiHadronCorrelationMultiBase : public edm::one::EDAnalyzer<edm::one::Share
    double hftcut;
    int npixel;
    double zdc;
+   double zdcSumPlus;
+   double zdcSumMinus;
    int  NEtaBins;
    int  NPhiBins;      
    double  xVtx;
@@ -318,6 +350,7 @@ class DiHadronCorrelationMultiBase : public edm::one::EDAnalyzer<edm::one::Share
    virtual void GetMult(const edm::Event& iEvent, const edm::EventSetup& iSetup);
    virtual void LoopGenerators(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg, int pdgid, bool isstable, bool ischarge);
    virtual void LoopParticles(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg, int pdgid, bool isstable, bool ischarge);    
+   virtual void LoopPackedParticles(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg, int pdgid, bool isstable, bool ischarge);
    virtual void LoopTracks(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg, int icharge=999);
    virtual void LoopCaloTower(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg);
    virtual void LoopConversions(const edm::Event& iEvent, const edm::EventSetup& iSetup, bool istrg);

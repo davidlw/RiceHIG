@@ -227,6 +227,9 @@ corr_ana_PbPb2023 = corr_ana.clone(
   FakHistName = cms.string('hFak_3D'),
 
   rhomax = cms.double(0.5),  
+
+  IsHITrkQuality = cms.bool(True),
+  IsPPTrkQuality = cms.bool(False)
 )
 
 corr_ana_HI = corr_ana.clone(

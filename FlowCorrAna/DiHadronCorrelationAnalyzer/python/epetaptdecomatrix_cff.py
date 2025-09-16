@@ -41,6 +41,9 @@ epetaptdecomatrix_ana_PbPb2023 = epetaptdecomatrix_ana.clone(
   yvtxcenter = cms.double(0.0),
   zvtxcenter = cms.double(0.0),
 
+  rhomin = cms.double(0.0),
+  rhomax = cms.double(1.0),
+  
   IsHITrkQuality = cms.bool(True),
   IsPPTrkQuality = cms.bool(False),
 

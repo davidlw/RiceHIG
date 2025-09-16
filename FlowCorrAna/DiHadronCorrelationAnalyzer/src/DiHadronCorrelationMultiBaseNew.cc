@@ -11,7 +11,6 @@
 #include <TFile.h>
 #include <TList.h>
 #include <TIterator.h>
-#include <TLorentzVector.h>
 #include <TClonesArray.h>
 #include <TString.h>
 #include <TObjString.h>
@@ -43,6 +42,7 @@ void DiHadronCorrelationMultiBaseNew::analyze(const edm::Event& iEvent, const ed
   nMultAllCorr_trg=0;
   nMultAll_ass=0;
   nMultAllCorr_ass=0;
+  hfGen=0;
 
   psi0_gen = -999.0;
   if(cutPara.IsGenRP) 
@@ -82,19 +82,13 @@ void DiHadronCorrelationMultiBaseNew::analyze(const edm::Event& iEvent, const ed
     hZVtx->Fill(zVtx);
     hXYVtx->Fill(xVtx,yVtx);
   }
+
   hiCentrality=-1;
   if(cutPara.centmin!=-1 && cutPara.centmax!=-1)
   {
     hiCentrality = GetCentralityBin(iEvent,iSetup);
+
     if(hiCentrality<cutPara.centmin || hiCentrality>=cutPara.centmax) return;
-/*
-    if(cutPara.IsDebug)
-    {
-      hHFTowerSum->Fill(hft);
-      hHFvsNpixel->Fill(hft,npixel);
-      hHFvsZDC->Fill(hft,zdc);
-    }
-*/
   }
   hCentrality->Fill(hiCentrality);
 
@@ -102,12 +96,23 @@ void DiHadronCorrelationMultiBaseNew::analyze(const edm::Event& iEvent, const ed
 
   // Select multiplicity
   GetMult(iEvent,iSetup);
+  
   if((nMult<cutPara.nmin || nMult>=cutPara.nmax) && (cutPara.nmin!=-1 || cutPara.nmax!=-1)) return;
   hMultRawAll->Fill(nMult);
+
   if(cutPara.IsGenB) hMultVsB->Fill(nMult,b_gen);
   hMultCorrAll->Fill(nMultCorr,1.0/GetTrgWeight(nMult));
+
   hMultEtaAsym->Fill(nMult,(double)(nMultEtaP-nMultEtaM)/(nMultEtaP+nMultEtaM));
   hMultEtaPvsM->Fill(nMultEtaP,nMultEtaM);
+
+//  if(nMult<0.09375*hft && !cutPara.IsGenMult) return; // PbPb 2018
+//  if(nMult<0.45*(hft-3000.)+1250) return; // XeXe 2017
+
+  if(cutPara.IsGenCentrality) hftcut = hfGen;
+
+  hHFvsNtrk->Fill(hftcut,nMult);
+  hHFvsNtrkCorr->Fill(hftcut,nMultCorr);
 
   double asym = (double)(nMultP-nMultM)/(nMultP+nMultM);
   if( asym<cutPara.chargeasymmin || asym>cutPara.chargeasymmax ) return;
@@ -115,7 +120,6 @@ void DiHadronCorrelationMultiBaseNew::analyze(const edm::Event& iEvent, const ed
 
   if(cutPara.IsEventEngineer) hEventEngineer->Fill(hiCentrality,GetEventEngineer(iEvent,iSetup,2));
 
-  eventcorr = 0;
   eventcorr = new DiHadronCorrelationEvent();
 
   switch (trgID)
@@ -126,6 +130,9 @@ void DiHadronCorrelationMultiBaseNew::analyze(const edm::Event& iEvent, const ed
      case kGenerator:
        LoopGenerators(iEvent,iSetup,1,cutPara.genpdgId_trg,cutPara.isstable_trg,cutPara.ischarge_trg);
        break;
+     case kPackedGenParticle:
+       LoopPackedParticles(iEvent,iSetup,1,cutPara.genpdgId_trg,cutPara.isstable_trg,cutPara.ischarge_trg);
+       break;       
      case kTrack:
        LoopTracks(iEvent,iSetup,1,-999);
        break;
@@ -162,6 +169,30 @@ void DiHadronCorrelationMultiBaseNew::analyze(const edm::Event& iEvent, const ed
      case kPFEgammaHF:
        LoopPFCandidates(iEvent,iSetup,1,reco::PFCandidate::egamma_HF);
        break;
+     case kPackedPFHadron:
+       LoopPackedPFCandidates(iEvent,iSetup,1,211);
+       break;
+     case kPackedPFPhoton:
+       cutPara.mass_trg=0.0;
+       LoopPackedPFCandidates(iEvent,iSetup,1,22);
+       break;
+     case kPackedPFElectron:
+       cutPara.mass_trg=0.000511;
+       LoopPackedPFCandidates(iEvent,iSetup,1,11);
+       break;
+     case kPackedPFMuon:
+       cutPara.mass_trg=0.1057;
+       LoopPackedPFCandidates(iEvent,iSetup,1,13);
+       break;
+     case kPackedPFNeutral:
+       LoopPackedPFCandidates(iEvent,iSetup,1,130);
+       break;
+     case kPackedPFHadronHF:
+       LoopPackedPFCandidates(iEvent,iSetup,1,1);
+       break;
+     case kPackedPFEgammaHF:
+       LoopPackedPFCandidates(iEvent,iSetup,1,2);
+       break;
      case kKshort:
        cutPara.mass_trg=0.4976;
        LoopV0Candidates(iEvent,iSetup, 1, "Kshort",-1);
@@ -181,10 +212,17 @@ void DiHadronCorrelationMultiBaseNew::analyze(const edm::Event& iEvent, const ed
      case kD0:
        cutPara.mass_trg=1.86484;
        LoopV0Candidates(iEvent,iSetup, 1 , "D0",-1);
+       break;
      case kConversion:
        cutPara.mass_trg=0.0;
        LoopConversions(iEvent,iSetup, 1);
        break;
+     case kPFCandidate:
+       LoopPFCandidates(iEvent,iSetup,1);
+       break;
+     case kPackedPFCandidate:
+       LoopPackedPFCandidates(iEvent,iSetup,1);
+       break;       
      default:
        break;
   }
@@ -196,6 +234,9 @@ void DiHadronCorrelationMultiBaseNew::analyze(const edm::Event& iEvent, const ed
        break;     
      case kGenerator:
        LoopGenerators(iEvent,iSetup,0,cutPara.genpdgId_ass,cutPara.isstable_ass,cutPara.ischarge_ass);
+       break;
+     case kPackedGenParticle:
+       LoopPackedParticles(iEvent,iSetup,0,cutPara.genpdgId_trg,cutPara.isstable_trg,cutPara.ischarge_trg);
        break;
      case kTrack:
        LoopTracks(iEvent,iSetup,0,-999);
@@ -213,15 +254,15 @@ void DiHadronCorrelationMultiBaseNew::analyze(const edm::Event& iEvent, const ed
        LoopPFCandidates(iEvent,iSetup,0,reco::PFCandidate::h);
        break;
      case kPFPhoton:
-       cutPara.mass_trg=0.0;
+       cutPara.mass_ass=0.0;
        LoopPFCandidates(iEvent,iSetup,0,reco::PFCandidate::gamma);
        break;
      case kPFElectron:
-       cutPara.mass_trg=0.000511;
+       cutPara.mass_ass=0.000511;
        LoopPFCandidates(iEvent,iSetup,0,reco::PFCandidate::e);
        break;
      case kPFMuon:
-       cutPara.mass_trg=0.1057;
+       cutPara.mass_ass=0.1057;
        LoopPFCandidates(iEvent,iSetup,0,reco::PFCandidate::mu);
        break;
      case kPFNeutral:
@@ -233,6 +274,30 @@ void DiHadronCorrelationMultiBaseNew::analyze(const edm::Event& iEvent, const ed
      case kPFEgammaHF:
        LoopPFCandidates(iEvent,iSetup,0,reco::PFCandidate::egamma_HF);
        break;
+     case kPackedPFHadron:
+       LoopPackedPFCandidates(iEvent,iSetup,0,211);
+       break;
+     case kPackedPFPhoton:
+       cutPara.mass_trg=0.0;
+       LoopPackedPFCandidates(iEvent,iSetup,0,22);
+       break;
+     case kPackedPFElectron:
+       cutPara.mass_trg=0.000511;
+       LoopPackedPFCandidates(iEvent,iSetup,0,11);
+       break;
+     case kPackedPFMuon:
+       cutPara.mass_trg=0.1057;
+       LoopPackedPFCandidates(iEvent,iSetup,0,13);
+       break;
+     case kPackedPFNeutral:
+       LoopPackedPFCandidates(iEvent,iSetup,0,130);
+       break;
+     case kPackedPFHadronHF:
+       LoopPackedPFCandidates(iEvent,iSetup,0,1);
+       break;
+     case kPackedPFEgammaHF:
+       LoopPackedPFCandidates(iEvent,iSetup,0,2);
+       break;       
      case kKshort:
        cutPara.mass_ass=0.4976;
        LoopV0Candidates(iEvent,iSetup,0, "Kshort",-1);
@@ -257,9 +322,15 @@ void DiHadronCorrelationMultiBaseNew::analyze(const edm::Event& iEvent, const ed
        cutPara.mass_ass=0.0;
        LoopConversions(iEvent,iSetup, 0);
        break;
+     case kPFCandidate:
+       LoopPFCandidates(iEvent,iSetup,0);
+       break;
+     case kPackedPFCandidate:
+       LoopPackedPFCandidates(iEvent,iSetup,0);
+       break;       
      default:
        break;
-  }
+  }	  
 
 //  eventcorr->lumi = iEvent.luminosityBlock();
   eventcorr->event = iEvent.id().event();

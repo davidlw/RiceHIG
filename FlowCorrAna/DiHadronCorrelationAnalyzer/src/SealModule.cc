@@ -13,7 +13,9 @@
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/EPEtaDecoAnalyzerSPMatrixNew.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/EPEtaDecoAnalyzerSPMatrix.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/EPPtDecoAnalyzerSPMatrix.h"
+#include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/EPPtDecoAnalyzerSPMatrixNew.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/EPEtaPtDecoAnalyzerSPMatrix.h"
+#include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/EPEtaPtDecoAnalyzerSPMatrixNew.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/EPPtDecoAnalyzerSPNew.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/EbyEFlowAnalyzer.h"
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/InvMassAnalyzer.h"
@@ -32,7 +34,6 @@
 #include "FlowCorrAna/DiHadronCorrelationAnalyzer/interface/TrackAnalyzer.h"
 
 //DEFINE_SEAL_MODULE();
-
 DEFINE_FWK_MODULE(DiHadronCorrelationMultiBase);
 DEFINE_FWK_MODULE(DiHadronCorrelationMultiBaseNew);
 DEFINE_FWK_MODULE(DiHadronCorrelationMultiAnalyzer);
@@ -44,7 +45,9 @@ DEFINE_FWK_MODULE(EPEtaDecoAnalyzerSP2);
 DEFINE_FWK_MODULE(EPEtaDecoAnalyzerSPMatrixNew);
 DEFINE_FWK_MODULE(EPEtaDecoAnalyzerSPMatrix);
 DEFINE_FWK_MODULE(EPPtDecoAnalyzerSPMatrix);
+DEFINE_FWK_MODULE(EPPtDecoAnalyzerSPMatrixNew);
 DEFINE_FWK_MODULE(EPEtaPtDecoAnalyzerSPMatrix);
+DEFINE_FWK_MODULE(EPEtaPtDecoAnalyzerSPMatrixNew);
 DEFINE_FWK_MODULE(EPPtDecoAnalyzerSPNew);
 DEFINE_FWK_MODULE(EbyEFlowAnalyzer);
 DEFINE_FWK_MODULE(InvMassAnalyzer);

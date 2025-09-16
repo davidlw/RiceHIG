@@ -49,11 +49,12 @@ dataMap = {
             }
 
 for i in range(0,1):
-    dataMap[("HIForward"+str(i))] = { "PD": ("/HIForward"+str(i)+"/HIRun2023A-16Jan2024-v1/MINIAOD"), "Units": 25, "Memory": 2000, "RunTime": 1200, "PSet": "dihadroncorrelation_PbPb2023_pfcand_cfg.py" } # UCC
+#    dataMap[("HIForward"+str(i))] = { "PD": ("/HIForward"+str(i)+"/HIRun2023A-16Jan2024-v1/MINIAOD"), "Units": 25, "Memory": 2000, "RunTime": 1200, "PSet": "dihadroncorrelation_PbPb2023_pfcand_cfg.py" } # UCC
+    dataMap[("HIPhysicsRawPrime"+str(i))] = { "PD": ("/HIPhysicsRawPrime"+str(i)+"/HIRun2023A-PromptReco-v2/MINIAOD"), "Units": 20, "Memory": 4000, "RunTime": 2100, "PSet": "dihadroncorrelation_PbPb2023_pfcand_cfg.py" } # UCC
 
 ## Submit the muon PDs
 for key, val in dataMap.items():
-    config.General.requestName = 'dihadroncorrelation_'+key+'_pfcand_20240926v1'
+    config.General.requestName = 'dihadroncorrelation_'+key+'_pfcand_20241013v1'
     config.Data.inputDataset = val["PD"]
     config.Data.unitsPerJob = val["Units"]
     config.JobType.maxMemoryMB = val["Memory"]

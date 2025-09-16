@@ -11,6 +11,7 @@
 class TH1D;
 class TH2D;
 class TH3D;
+class TProfile2D;
 class TTree;
 class TList;
 
@@ -20,10 +21,10 @@ class EPEtaPtDecoAnalyzerSPMatrix : public DiHadronCorrelationMultiBase {
 
    // histograms
    TH1D* hDeltaZvtx;
-   TH3D* hSignalCosn[5][MAXPTTRGBINS][MAXPTASSBINS];
-   TH3D* hBackgroundCosn[5][MAXPTTRGBINS][MAXPTASSBINS];
-   TH3D* hSignalSinn[5][MAXPTTRGBINS][MAXPTASSBINS];
-   TH3D* hBackgroundSinn[5][MAXPTTRGBINS][MAXPTASSBINS];
+   TProfile2D* hSignalCosn[5];
+   TProfile2D* hBackgroundCosn[5];
+   TProfile2D* hSignalSinn[5];
+   TProfile2D* hBackgroundSinn[5];
 
    // parameters
    int    bkgFactor;
@@ -34,6 +35,7 @@ class EPEtaPtDecoAnalyzerSPMatrix : public DiHadronCorrelationMultiBase {
    virtual void NormalizeHists();
 //   virtual void FillHistsSignal(const DiHadronCorrelationEvent& eventcorr);
    virtual void FillHistsBackground(const DiHadronCorrelationEvent& eventcorr_trg, const DiHadronCorrelationEvent& eventcorr_ass);
+   virtual int getEtaBin(double eta, double etamin, double etamax, double binwidth); 
    
  public:
    EPEtaPtDecoAnalyzerSPMatrix(const edm::ParameterSet&);

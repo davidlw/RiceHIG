@@ -51,12 +51,12 @@ dataMap = {
 #            "HIForward": { "PD": "/HIForward/HIRun2018A-04Apr2019-v1/AOD", "Units": 30, "Memory": 1800, "RunTime": 1400, "PSet": "PbPbSkimAndTree2018_DiMuContBoth_ZDC_ALLDIMU_cfg.py" },
             }
 
-for i in range(0,2):
-    dataMap[("HIPhysicsRawPrime"+str(i))] = { "PD": ("/HIPhysicsRawPrime"+str(i)+"/HIRun2023A-PromptReco-v2/MINIAOD"), "Units": 25, "Memory": 4000, "RunTime": 2100, "PSet": "epetaptdecomatrix_PbPb2023_pfcand_cfg.py" } # UCC
+for i in range(0,1):
+    dataMap[("HIPhysicsRawPrime"+str(i))] = { "PD": ("/HIPhysicsRawPrime"+str(i)+"/HIRun2023A-PromptReco-v2/MINIAOD"), "Units": 10, "Memory": 4600, "RunTime": 2100, "PSet": "epetaptdecomatrix_PbPb2023_pfcand_cfg.py" } # UCC
 
 ## Submit the muon PDs
 for key, val in dataMap.items():
-    config.General.requestName = 'epetaptdecomatrix_'+key+'_HIRun2023_PromptReco_MBZDCOR_cent010_weighteduncor_20240910v3'
+    config.General.requestName = 'epetaptdecomatrix_'+key+'_HIRun2023_PRMBpt053_mid_weco_20250831v4'
     config.Data.inputDataset = val["PD"]
     config.Data.unitsPerJob = val["Units"]
     config.JobType.maxMemoryMB = val["Memory"]

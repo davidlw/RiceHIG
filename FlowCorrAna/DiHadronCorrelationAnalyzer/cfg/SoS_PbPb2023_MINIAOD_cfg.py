@@ -1,8 +1,8 @@
 import FWCore.ParameterSet.Config as cms
 
 from Configuration.Eras.Era_Run3_pp_on_PbPb_cff import Run3_pp_on_PbPb
-process = cms.Process('ANASKIM', Run3_pp_on_PbPb)
-#process = cms.Process('ANASKIM')
+#process = cms.Process('ANASKIM', Run3_pp_on_PbPb)
+process = cms.Process('ANASKIM')
 process.load('Configuration.StandardSequences.Services_cff')
 process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
 process.load('FWCore.MessageService.MessageLogger_cfi')
@@ -23,12 +23,18 @@ process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
 process.source = cms.Source("PoolSource",
    fileNames = cms.untracked.vstring(
            #'root://cmsxrootd.fnal.gov///store/hidata/HIRun2023A/HIPhysicsRawPrime0/MINIAOD/PromptReco-v2/000/374/681/00000/fb9e1e0d-041c-4bba-aa1b-61b697fcf168.root'),
-           #'root://xrootd-cms.infn.it//store/hidata/HIRun2023A/HIPhysicsRawPrime0/MINIAOD/PromptReco-v2/000/375/790/00000/56ad580f-b228-4f3c-b8e3-17f9d95c7654.root'
-           'root://xrootd-cms.infn.it//store/hidata/HIRun2023A/HIPhysicsRawPrime0/MINIAOD/PromptReco-v2/000/374/828/00000/495c8e99-0571-4c79-b70b-f9025a68591c.root'
+#           'root://xrootd-cms.infn.it//store/hidata/HIRun2023A/HIPhysicsRawPrime0/MINIAOD/PromptReco-v2/000/375/790/00000/56ad580f-b228-4f3c-b8e3-17f9d95c7654.root'
+#           'root://xrootd-cms.infn.it//store/hidata/HIRun2023A/HIPhysicsRawPrime0/MINIAOD/PromptReco-v1/000/374/666/00000/033537c9-002b-412c-81b8-0bad81afbcfe.root'
+           'root://xrootd-cms.infn.it//store/hidata/HIRun2023A/HIPhysicsRawPrime0/MINIAOD/PromptReco-v2/000/375/666/00000/7b6ad1f4-b004-4d44-942d-3c4aa84202bf.root'
 #'root://xrootd-cms.infn.it//store/hidata/HIRun2023A/HIForward0/MINIAOD/16Jan2024-v1/30000/a99ea21d-d0cc-4f1e-8097-c2c6d2f79cdb.root',
+#'root://xrootd-cms.infn.it//store/hidata/HIRun2023A/HIForward0/MINIAOD/16Jan2024-v1/2810000/3151fd93-8b9b-40ea-9275-826a3977638c.root'
 )
 )
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(10000))
+
+import FWCore.PythonUtilities.LumiList as LumiList
+process.source.lumisToProcess = LumiList.LumiList(filename = 'Cert_Collisions2023HI_374288_375823_Golden.json').getVLuminosityBlockRange()
+
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(20000))
 
 # Other statements
 from Configuration.AlCa.GlobalTag import GlobalTag
@@ -36,7 +42,6 @@ process.GlobalTag = GlobalTag(process.GlobalTag, '132X_dataRun3_Prompt_v7', '')
 
 # ==================================================================
 # ==================== modification needed for 2023 data ===========
-'''
 from CondCore.CondDB.CondDB_cfi import *
 process.es_pool = cms.ESSource("PoolDBESSource",
     timetype = cms.string('runnumber'),
@@ -62,7 +67,6 @@ process.es_ascii = cms.ESSource(
              )
         )
     )
-'''
 # =======================================================================
 
 # Add PbPb centrality
@@ -105,6 +109,8 @@ process.hltFilter.HLTPaths = [
 #    'HLT_HIMinimumBiasHF1AND_*', # MinimumBias      
 #    'HLT_HIUPC_ZeroBias_SinglePixelTrackLowPt_MaxPixelCluster400_v*',
 #    'HLT_HIUPC_ZeroBias_MinPixelCluster400_MaxPixelCluster10000_v*'
+#     'HLT_HIUPC_ZDC1nAsymXOR_MBHF1AND_PixelTrackMultiplicity20_v*',
+#     'HLT_HIUPC_ZDC1nXOR_MBHF1AND_PixelTrackMultiplicity20_v*',
 ]
 
 process.hltFilterUCC = process.hltFilter.clone()
@@ -139,7 +145,7 @@ process.primaryVertexFilterHI.src = cms.InputTag("offlinePrimaryVertices")
 
 process.eventFilter_MB = cms.Sequence(
     process.hltFilter *
-    process.primaryVertexFilterHI *
+    process.primaryVertexFilterHI * 
     process.clusterCompatibilityFilter  *
     process.phfCoincFilter2Th4 *
     process.pcentandep_step
@@ -159,10 +165,12 @@ process.eventFilter_UCC = cms.Sequence(
 process.load("FlowCorrAna.DiHadronCorrelationAnalyzer.sosmeanptanalyzer_cfi")
 process.sosmeanpt_ana.TrgTrackCollection = cms.InputTag("generalTracks")
 process.sosmeanpt_ana.VertexCollection = cms.InputTag("offlinePrimaryVertices")
-process.sosmeanpt_ana.EffFileName = cms.string('GeneralTracks_Eff_3D_Nominal_MB.root')
-process.sosmeanpt_ana.EffHistName = cms.string('hEff_3D')
-process.sosmeanpt_ana.FakFileName = cms.string('GeneralTracks_Eff_3D_Nominal_MB.root')
-process.sosmeanpt_ana.FakHistName = cms.string('hFak_3D')
+process.sosmeanpt_ana.IsHITrkQuality = cms.bool(True)
+process.sosmeanpt_ana.IsPPTrkQuality = cms.bool(False)
+process.sosmeanpt_ana.EffFileName = cms.string('EffCorrectionsPbPb2023_general_3D_cheb4_mcnpix_miniAOD_v6btight.root')
+process.sosmeanpt_ana.EffHistName = cms.string('Cor3D')
+#process.sosmeanpt_ana.FakFileName = cms.string('GeneralTracks_Eff_3D_Nominal_MB.root')
+#process.sosmeanpt_ana.FakHistName = cms.string('hFak_3D')
 
 process.sosmeanpt_ana_ucc = process.sosmeanpt_ana.clone()
 
