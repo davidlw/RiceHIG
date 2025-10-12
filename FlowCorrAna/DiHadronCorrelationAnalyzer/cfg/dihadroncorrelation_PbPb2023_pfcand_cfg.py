@@ -57,7 +57,7 @@ process.es_ascii = cms.ESSource(
         cms.PSet(
 
             object = cms.string('ElectronicsMap'),
-            file = cms.FileInPath("emap_2023_newZDC_v3.txt")
+            file = cms.FileInPath("FlowCorrAna/DiHadronCorrelationAnalyzer/data/emap_2023_newZDC_v3.txt")
 
              )
         )

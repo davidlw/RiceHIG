@@ -304,17 +304,16 @@ if(!cutPara.IsGenMult)
     {
       if(!trk.quality(reco::TrackBase::highPurity)) continue;
       // Standard
-/*      
       if(fabs(trk.ptError())/trk.pt()>0.1 && trk.pt()>10) continue;
       if(fabs(dzvtx/dzerror) > 3.0) continue;
       if(fabs(dxyvtx/dxyerror) > 3.0) continue;
-*/      
+      
       // Tight
-       
+/*       
       if(fabs(trk.ptError())/trk.pt()>0.05) continue;
       if(fabs(dzvtx/dzerror) > 2.0) continue;
       if(fabs(dxyvtx/dxyerror) > 2.0) continue;
-      
+*/      
       // Loose
       /*
       if(fabs(dzvtx/dzerror) > 5.0) continue;
@@ -356,17 +355,16 @@ if(!cutPara.IsGenMult)
     {
       if(!trk.quality(reco::TrackBase::highPurity)) continue;
       // Standard
-/*      
       if(fabs(trk.ptError())/trk.pt()>0.1 && trk.pt()>10) continue;
       if(fabs(dzvtx/dzerror) > 3.0) continue;
       if(fabs(dxyvtx/dxyerror) > 3.0) continue;
-*/
+
       // Tight
-      
+/*
       if(fabs(trk.ptError())/trk.pt()>0.05) continue;
       if(fabs(dzvtx/dzerror) > 2.0) continue;
       if(fabs(dxyvtx/dxyerror) > 2.0) continue;
-      
+*/      
       // Loose
       /*
       if(fabs(dzvtx/dzerror) > 5.0) continue;

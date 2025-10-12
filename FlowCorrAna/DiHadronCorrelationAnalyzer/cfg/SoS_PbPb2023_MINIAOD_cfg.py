@@ -34,7 +34,7 @@ process.source = cms.Source("PoolSource",
 import FWCore.PythonUtilities.LumiList as LumiList
 process.source.lumisToProcess = LumiList.LumiList(filename = 'Cert_Collisions2023HI_374288_375823_Golden.json').getVLuminosityBlockRange()
 
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(20000))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(10000))
 
 # Other statements
 from Configuration.AlCa.GlobalTag import GlobalTag
@@ -62,7 +62,7 @@ process.es_ascii = cms.ESSource(
         cms.PSet(
 
             object = cms.string('ElectronicsMap'),
-            file = cms.FileInPath("emap_2023_newZDC_v3.txt")
+            file = cms.FileInPath("FlowCorrAna/DiHadronCorrelationAnalyzer/data/emap_2023_newZDC_v3.txt")
 
              )
         )
@@ -167,8 +167,9 @@ process.sosmeanpt_ana.TrgTrackCollection = cms.InputTag("generalTracks")
 process.sosmeanpt_ana.VertexCollection = cms.InputTag("offlinePrimaryVertices")
 process.sosmeanpt_ana.IsHITrkQuality = cms.bool(True)
 process.sosmeanpt_ana.IsPPTrkQuality = cms.bool(False)
-process.sosmeanpt_ana.EffFileName = cms.string('EffCorrectionsPbPb2023_general_3D_cheb4_mcnpix_miniAOD_v6btight.root')
-process.sosmeanpt_ana.EffHistName = cms.string('Cor3D')
+process.sosmeanpt_ana.EffFileName = cms.string('')
+#process.sosmeanpt_ana.EffFileName = cms.string('EffCorrectionsPbPb2023_general_3D_cheb4_mcnpix_miniAOD_v6btight.root')
+#process.sosmeanpt_ana.EffHistName = cms.string('Cor3D')
 #process.sosmeanpt_ana.FakFileName = cms.string('GeneralTracks_Eff_3D_Nominal_MB.root')
 #process.sosmeanpt_ana.FakHistName = cms.string('hFak_3D')
 
