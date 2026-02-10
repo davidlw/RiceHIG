@@ -15,6 +15,8 @@ class CutParameters {
    int     nmax;
    int     centmin;
    int     centmax;
+   double  hfsummin;
+   double  hfsummax;
    double  b_genmin;
    double  b_genmax;
    double  etatrgmin;                                                                                     
@@ -43,6 +45,7 @@ class CutParameters {
    double  etacms;
    double  etagap;
    int     nvtxmax;
+   int     fixedcentbin;
    bool    istrigger;
    vector<TString> triggernames;
    vector<TString> vetonames;
@@ -123,6 +126,7 @@ class CutParameters {
    bool IsGenRP;
    bool IsGenB;
    bool IsGenAcc;
+   bool IsZDC;
 };
 
 #endif  // CutParameters_

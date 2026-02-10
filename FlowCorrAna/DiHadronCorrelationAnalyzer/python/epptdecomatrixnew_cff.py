@@ -91,3 +91,30 @@ epptdecomatrixnew_ana_pp2023_gen = epptdecomatrixnew_ana_pp2023.clone(
   TriggerID = cms.string('GenParticle')
 
 )
+
+epptdecomatrixnew_ana_OO2025 = epptdecomatrixnew_ana.clone(
+  xvtxcenter = cms.double(0.0),
+  yvtxcenter = cms.double(0.0),
+  zvtxcenter = cms.double(0.0),
+
+  rhomin = cms.double(0.0),
+  rhomax = cms.double(1.0),
+
+  pttrgmin = cms.vdouble(0.15,0.3,0.5,0.7,1.0,1.3,1.6,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,7.0,8.0,9.0,10,12,15),
+  pttrgmax = cms.vdouble(0.3,0.5,0.7,1.0,1.3,1.6,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,7.0,8.0,9.0,10.,12,15,20),
+  ptassmin = cms.vdouble(0.0),
+  ptassmax = cms.vdouble(0.0),
+
+  IsHITrkQuality = cms.bool(True),
+  IsPPTrkQuality = cms.bool(False),
+
+  EffFileName = cms.string(''),
+  EffHistName = cms.string('hEff_3D'),
+
+  FakFileName = cms.string(''),
+  FakHistName = cms.string('hFak_3D'),
+
+  AssociateID = cms.string('')
+)
+
+epptdecomatrixnew_ana_NeNe2025 = epptdecomatrixnew_ana_OO2025.clone()

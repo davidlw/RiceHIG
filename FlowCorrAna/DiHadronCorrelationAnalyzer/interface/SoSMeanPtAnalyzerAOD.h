@@ -1,5 +1,5 @@
-#ifndef SoSMeanPtAnalyzer_
-#define SoSMeanPtAnalyzer_
+#ifndef SoSMeanPtAnalyzerAOD_
+#define SoSMeanPtAnalyzerAOD_
 
 #include <exception>
 #include <vector>
@@ -96,7 +96,7 @@ using namespace edm;
 
 #define PI 3.141592
 
-class SoSMeanPtAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> {
+class SoSMeanPtAnalyzerAOD : public edm::one::EDAnalyzer<edm::one::SharedResources> {
    
  protected:
    
@@ -104,8 +104,6 @@ class SoSMeanPtAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources>
    edm::EDGetTokenT<reco::TrackCollection> token_tracks;
    edm::EDGetTokenT<reco::VertexCollection> token_vertices;
    edm::EDGetTokenT<reco::GenParticleCollection> token_genparticles;
-   edm::EDGetTokenT<pat::PackedCandidateCollection> token_packedPFCandidates;
-   edm::EDGetTokenT<pat::PackedGenParticleCollection> token_packedgenparticles;
    edm::EDGetTokenT<reco::Centrality> token_centrality;
    edm::EDGetTokenT<int> token_centralitybin;
    edm::InputTag zdcDigiSrc_;
@@ -157,11 +155,10 @@ class SoSMeanPtAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources>
    virtual void GetVertices(const edm::Event& iEvent, const edm::EventSetup& iSetup);
    virtual double GetTrgWeight(double nmult);
    virtual double GetEffWeight(double eta, double pt, int centbin);
-   virtual int FindCentBinFromHFT(double hft);
    
  public:
 
-   explicit SoSMeanPtAnalyzer(const edm::ParameterSet&);
-   ~SoSMeanPtAnalyzer() {};
+   explicit SoSMeanPtAnalyzerAOD(const edm::ParameterSet&);
+   ~SoSMeanPtAnalyzerAOD() {};
 };
-#endif  // SoSMeanPtAnalyzer_
+#endif  // SoSMeanPtAnalyzerAOD_

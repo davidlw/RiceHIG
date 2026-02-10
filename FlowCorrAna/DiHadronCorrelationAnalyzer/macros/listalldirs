@@ -1,0 +1,10 @@
+ls -d ~/eos/IonPhysics0/epptdecomatrixnew_IonPhysics*_OO2025PR_effv1pu2_20251207v1/*/*/ > dirlist0.txt
+ls -d ~/eos/IonPhysics1/epptdecomatrixnew_IonPhysics*_OO2025PR_effv1pu2_20251207v1/*/*/ > dirlist1.txt
+ls -d ~/eos/IonPhysics2/epptdecomatrixnew_IonPhysics*_OO2025PR_effv1pu2_20251207v1/*/*/ > dirlist2.txt
+ls -d ~/eos/IonPhysics3/epptdecomatrixnew_IonPhysics*_OO2025PR_effv1pu2_20251207v1/*/*/ > dirlist3.txt
+ls -d ~/eos/IonPhysics4/epptdecomatrixnew_IonPhysics*_OO2025PR_effv1pu2_20251207v1/*/*/ > dirlist4.txt
+ls -d ~/eos/IonPhysics5/epptdecomatrixnew_IonPhysics*_OO2025PR_effv1pu2_20251207v1/*/*/ > dirlist5.txt
+ls -d ~/eos/IonPhysics6/epptdecomatrixnew_IonPhysics*_OO2025PR_effv1pu2_20251207v1/*/*/ > dirlist6.txt
+ls -d ~/eos/IonPhysics7/epptdecomatrixnew_IonPhysics*_OO2025PR_effv1pu2_20251207v1/*/*/ > dirlist7.txt
+ls -d ~/eos/IonPhysics8/epptdecomatrixnew_IonPhysics*_OO2025PR_effv1pu2_20251207v1/*/*/ > dirlist8.txt
+ls -d ~/eos/IonPhysics9/epptdecomatrixnew_IonPhysics*_OO2025PR_effv1pu2_20251207v1/*/*/ > dirlist9.txt

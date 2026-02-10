@@ -1,0 +1,16 @@
+brilcalc lumi -i Cert_Collisions2025OO_394153_394217_golden.json --byls -u /nb --output-style csv > lumi_OO.csv
+
+python3 split_by_mu_bins_from_csv.py \
+  -j Cert_Collisions2025OO_394153_394217_golden.json \
+  -l lumi_OO.csv \
+  -b 0 0.15 0.2 0.5 \
+  --sigma 1.4e6
+
+
+brilcalc lumi -i Cert_Collisions2025Nene_394269_394272_golden.json --byls -u /nb --output-style csv > lumi_NeNe.csv
+
+python3 split_by_mu_bins_from_csv.py \
+  -j Cert_Collisions2025Nene_394269_394272_golden.json \
+  -l lumi_NeNe.csv \
+  -b 0 0.10 0.5 \
+  --sigma 1.4e6

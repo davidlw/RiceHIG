@@ -86,6 +86,8 @@ DiHadronCorrelationMultiBase::DiHadronCorrelationMultiBase(const edm::ParameterS
   cutPara.nmax = iConfig.getParameter<int>("nmax");
   cutPara.centmin = iConfig.getParameter<int>("centmin");
   cutPara.centmax = iConfig.getParameter<int>("centmax");
+  cutPara.hfsummin = iConfig.getParameter<double>("hfsummin");
+  cutPara.hfsummax = iConfig.getParameter<double>("hfsummax");
 //  cutPara.b_genmin = iConfig.getParameter<double>("b_genmin");
 //  cutPara.b_genmax = iConfig.getParameter<double>("b_genmax");
   cutPara.b_genmin = -999.0;
@@ -146,6 +148,8 @@ DiHadronCorrelationMultiBase::DiHadronCorrelationMultiBase(const edm::ParameterS
   cutPara.IsAssEtaCutAbs = iConfig.getParameter<bool>("IsAssEtaCutAbs");
   cutPara.IsPPTrkQuality = iConfig.getParameter<bool>("IsPPTrkQuality");
   cutPara.IsHITrkQuality = iConfig.getParameter<bool>("IsHITrkQuality");
+  cutPara.IsZDC = iConfig.getParameter<bool>("IsZDC");
+
   cutPara.IsDebug = iConfig.getParameter<bool>("IsDebug");
   cutPara.IsInvMass = iConfig.getParameter<bool>("IsInvMass");
   cutPara.IsEventEngineer = iConfig.getParameter<bool>("IsEventEngineer");
@@ -459,6 +463,8 @@ void DiHadronCorrelationMultiBase::analyze(const edm::Event& iEvent, const edm::
     if(hiCentrality<cutPara.centmin || hiCentrality>=cutPara.centmax) return;
   }
   hCentrality->Fill(hiCentrality);
+
+  if(hftcut<cutPara.hfsummin || hftcut>cutPara.hfsummax) return;
 
   if(cutPara.IsDSGenEvt && !IsDSGen(iEvent,iSetup)) return;
 
@@ -822,8 +828,9 @@ void DiHadronCorrelationMultiBase::GetMult(const edm::Event& iEvent, const edm::
        double phi = trk.phi();
        double pt  = trk.pt();
 
-       double effweight = GetEffWeight(eta,phi,pt,0.5*(cutPara.zvtxmax+cutPara.zvtxmin),hiCentrality,charge);
-//       double effweight = GetEffWeight(eta,phi,pt,0.5*(cutPara.zvtxmax+cutPara.zvtxmin),npixel,charge);
+//       double effweight = GetEffWeight(eta,phi,pt,0.5*(cutPara.zvtxmax+cutPara.zvtxmin),10,charge);
+//       double effweight = GetEffWeight(eta,phi,pt,0.5*(cutPara.zvtxmax+cutPara.zvtxmin),hiCentrality,charge);
+       double effweight = GetEffWeight(eta,phi,pt,0.5*(cutPara.zvtxmax+cutPara.zvtxmin),npixel,charge);
 
        if(((eta>=cutPara.etamultmin && eta<=cutPara.etamultmax && !cutPara.IsTrgEtaCutAbs) || (fabs(eta)>=cutPara.etamultmin && fabs(eta)<=cutPara.etamultmax && cutPara.IsTrgEtaCutAbs)) && pt>=cutPara.ptmultmin && pt<=cutPara.ptmultmax) 
        { 
@@ -1229,8 +1236,9 @@ void DiHadronCorrelationMultiBase::LoopTracks(const edm::Event& iEvent, const ed
 	 */
      }
 
-     double effweight = GetEffWeight(eta,phi,pt,0.5*(cutPara.zvtxmax+cutPara.zvtxmin),hiCentrality,charge);
-//     double effweight = GetEffWeight(eta,phi,pt,0.5*(cutPara.zvtxmax+cutPara.zvtxmin),npixel,charge);
+//     double effweight = GetEffWeight(eta,phi,pt,0.5*(cutPara.zvtxmax+cutPara.zvtxmin),10,charge);
+//     double effweight = GetEffWeight(eta,phi,pt,0.5*(cutPara.zvtxmax+cutPara.zvtxmin),hiCentrality,charge);
+     double effweight = GetEffWeight(eta,phi,pt,0.5*(cutPara.zvtxmax+cutPara.zvtxmin),npixel,charge);
      double trgweight = GetTrgWeight(nMult);
 
      if(charge!=icharge && icharge!=-999) continue;     
@@ -1374,7 +1382,8 @@ void DiHadronCorrelationMultiBase::LoopPackedPFCandidates(const edm::Event& iEve
 //     hBetaVsP->Fill(p,p/etot);
 
      double effweight = 1.0;
-     if(pfID==211) effweight = GetEffWeight(eta,phi,pt,0.5*(cutPara.zvtxmax+cutPara.zvtxmin),hiCentrality,charge);
+//     if(pfID==211) effweight = GetEffWeight(eta,phi,pt,0.5*(cutPara.zvtxmax+cutPara.zvtxmin),hiCentrality,charge);
+     if(pfID==211) effweight = GetEffWeight(eta,phi,pt,0.5*(cutPara.zvtxmax+cutPara.zvtxmin),npixel,charge);
 
      if(istrg) AssignTrgPtBins(pt,eta,phi,mass,charge,effweight);
      else AssignAssPtBins(pt,eta,phi,mass,charge,effweight);
@@ -1708,9 +1717,6 @@ double DiHadronCorrelationMultiBase::GetRP(const edm::Event& iEvent, const edm::
 
 int DiHadronCorrelationMultiBase::GetCentralityBin(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
-//  if(!cent) cent = new CentralityProvider(iSetup);
-//  cent->newEvent(iEvent,iSetup);
-
   edm::Handle<reco::Centrality> cent;
   iEvent.getByToken(centtag_, cent);
 
@@ -1718,7 +1724,6 @@ int DiHadronCorrelationMultiBase::GetCentralityBin(const edm::Event& iEvent, con
   int bin = *cbin_;
 
   hft = cent->EtHFtowerSum();
-//  hftcut = cent->EtHFtruncated();
   hftcut = cent->EtHFtowerSum();
 
   double hfp = cent->EtHFtowerSumPlus();
@@ -1726,48 +1731,14 @@ int DiHadronCorrelationMultiBase::GetCentralityBin(const edm::Event& iEvent, con
 
   npixel = cent->multiplicityPixel();
   int ntrk = cent->Ntracks();
-//cout<<npixel<<endl;
+  zdc = cent->zdcSumPlus()+cent->zdcSumMinus();
 
-  edm::Handle<QIE10DigiCollection> zdcdigis;
-  iEvent.getByLabel(zdcDigiSrc_, zdcdigis);
-
-  int nhits = 0;
-  float chargefC[6][56];
-  for (auto it = zdcdigis->begin(); it != zdcdigis->end(); it++)
+  if(cutPara.IsZDC)
   {
-    const QIE10DataFrame digi = static_cast<const QIE10DataFrame>(*it);
-    for( int ts = 0; ts < digi.samples(); ts++ )
-      chargefC[ts][nhits] = QWAna::ZDC2018::QIE10_regular_fC[ digi[ts].adc() ][ digi[ts].capid() ];
-    nhits++;
-  }
-  // Very preliminary calibration
-  float sumcEMP = 0;
-  float sumcEMN = 0;
-  float sumcHDP = 0;
-  float sumcHDN = 0;
-  // 2023 EM: idet = 0-5 and 12-16
-  for( int idet = 0; idet < 5; idet++ )
-  {
-    int idet_m = idet;
-    int idet_p = idet + 12;
-    sumcEMN += chargefC[2][idet_m] - chargefC[1][idet_m];
-    sumcEMP += chargefC[2][idet_p] - chargefC[1][idet_p];
-  }
-  // 2023 HAD: idet = 8-11 and 20-23
-  for( int idet = 8; idet < 12; idet++ )
-  {
-    int idet_m = idet;
-    int idet_p = idet + 12;
-    sumcHDN += chargefC[2][idet_m] - chargefC[1][idet_m];
-    sumcHDP += chargefC[2][idet_p] - chargefC[1][idet_p];
-  }
-  zdcSumMinus = (sumcEMN * 0.1 + sumcHDN) * 0.5031;
-  zdcSumPlus  = (sumcEMP * 0.1 + sumcHDP) * 0.9397;
-  zdc = zdcSumPlus + zdcSumMinus;
-  //  zdc = 10000.*(cent->zdcSumPlus()/7309.+cent->zdcSumMinus()/11420.);
+    if( zdc > (-146.*(hft-710.)) ) { bin=-1; return bin; } // OO
+//    if( zdc > (-179.*(hft-800.)) ) { bin=-1; return bin; } // NeNe
 
-//  if( zdc > (-56.*(hft-8100.)) ) { bin=-1; return bin; }
-
+  }
 // temporary smearing
 /////////////////////////////////////////////////
 //  hft = gRandom->Gaus(hft,hft*0.0035);
@@ -1775,7 +1746,6 @@ int DiHadronCorrelationMultiBase::GetCentralityBin(const edm::Event& iEvent, con
 //
 
 //  if(cutPara.IsDebug)
-  /*
   {
     hHFTowerSum->Fill(hftcut);
     hHFvsNpixel->Fill(hftcut,npixel);
@@ -1789,48 +1759,7 @@ int DiHadronCorrelationMultiBase::GetCentralityBin(const edm::Event& iEvent, con
     hNpixelvsNtrk->Fill(ntrk,npixel);
     hNpixelOcc->Fill(bin,npixel);
   }
-*/
-//  int bin = cent->getBin();
 
-// UCC centrality bins
-//0.1%: 4730-4900
-//0.01%: 4900-
-
-//  if(hft>4730 && hft<4900 && cutPara.centmin==1000 && cutPara.centmax == 10000) bin=1000;
-//  if(hft>4900 && cutPara.centmin==2000 && cutPara.centmax == 10000) bin=2000;
-
-/*
-  if(hft>3400 && hft<3600 && npixel>51000 && npixel<57000 && cutPara.centmin==2000 && cutPara.centmax == 10000) bin=2000;
-  if(hft>3400 && hft<3600 && npixel>51000 && npixel<57000 && zdc<2000 && cutPara.centmin==3000 && cutPara.centmax == 10000) bin=3000;
-  if(hft>3129.3 && cutPara.centmin==500 && cutPara.centmax == 10000) bin=500;
-  if(hft>3094.3 && npixel>48787 && cutPara.centmin==510 && cutPara.centmax == 10000) bin=510;
-  if((7.0*hft+zdc)<36000 && cutPara.centmin==5000 && cutPara.centmax == 10000) bin=5000;
-//  if((7.0*hft+zdc)<36000 && hft>3260 && npixel>51400 && cutPara.centmin==1100 && cutPara.centmax == 10000) bin=1100; // hft>3420 && npixel>31300 && 45*hft+zdc<188372
-//  if((20.*hft+zdc)<114000 && hft>3400 && npixel>31000 && cutPara.centmin==1100 && cutPara.centmax == 10000) bin=1100;
-  if((20.*hft+zdc)<114000 && hft>3420 && npixel>31500 && cutPara.centmin==1100 && cutPara.centmax == 10000) bin=1100;
-  if((7.0*hft+zdc)<36000 && 1.15*hft>zdc && hft>3260 && npixel>51400 && cutPara.centmin==1200 && cutPara.centmax == 10000) bin=1200;
-  if((7.0*hft+zdc)<36000 && hft>3393 && npixel>53450 && cutPara.centmin==2100 && cutPara.centmax == 10000) bin=2100;
-  if((7.0*hft+zdc)<36000 && 1.15*hft>zdc && hft>3393 && npixel>53450 && cutPara.centmin==2200 && cutPara.centmax == 10000) bin=2200;
-*/
-// pPb centrality bins
-/*
-  if(!cutPara.centralityCollection.Contains("pACentrality")) return bin;
-  if(hft<10.) bin=0;  
-  if(hft>10. && hft<20.) bin=1;
-  if(hft>20. && hft<30.) bin=2;
-  if(hft>30. && hft<40.) bin=3;
-  if(hft>40. && hft<60.) bin=4;
-  if(hft>60. && hft<80.) bin=5;
-  if(hft>80. && hft<100.) bin=6;
-  if(hft>100. && hft<120.) bin=7;
-  if(hft>120. && hft<140.) bin=8;
-  if(hft>140. && hft<155.) bin=9;
-  if(hft>155. && hft<170.) bin=10;
-  if(hft>170. && hft<190.) bin=11;
-  if(hft>190. && hft<210.) bin=12;
-  if(hft>210. && hft<250.) bin=13;
-  if(hft>250.) bin=14;
-*/
   return bin;
 }
 

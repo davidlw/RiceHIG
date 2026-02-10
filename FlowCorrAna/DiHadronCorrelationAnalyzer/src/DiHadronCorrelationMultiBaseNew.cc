@@ -92,6 +92,8 @@ void DiHadronCorrelationMultiBaseNew::analyze(const edm::Event& iEvent, const ed
   }
   hCentrality->Fill(hiCentrality);
 
+  if(hftcut<cutPara.hfsummin || hftcut>cutPara.hfsummax) return;
+
   if(cutPara.IsDSGenEvt && !IsDSGen(iEvent,iSetup)) return;
 
   // Select multiplicity

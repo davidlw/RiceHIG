@@ -75,3 +75,25 @@ epetaptdecomatrixnew_ana_pp2023 = epetaptdecomatrixnew_ana.clone(
 
   AssociateID = cms.string('')
 )
+
+epetaptdecomatrixnew_ana_OO2025 = epetaptdecomatrixnew_ana.clone(
+  xvtxcenter = cms.double(0.0),
+  yvtxcenter = cms.double(0.0),
+  zvtxcenter = cms.double(0.0),
+
+  rhomin = cms.double(0.0),
+  rhomax = cms.double(1.0),
+
+  IsHITrkQuality = cms.bool(True),
+  IsPPTrkQuality = cms.bool(False),
+
+  EffFileName = cms.string(''),
+  EffHistName = cms.string('hEff_3D'),
+
+  FakFileName = cms.string(''),
+  FakHistName = cms.string('hFak_3D'),
+
+  AssociateID = cms.string('')
+)
+
+epetaptdecomatrixnew_ana_NeNe2025 = epetaptdecomatrixnew_ana_OO2025.clone()

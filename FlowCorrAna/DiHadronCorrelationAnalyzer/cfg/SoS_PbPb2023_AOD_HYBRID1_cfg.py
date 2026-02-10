@@ -22,7 +22,16 @@ process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
 # Define the input source
 process.source = cms.Source("PoolSource",
    fileNames = cms.untracked.vstring(
-'root://xrootd-cms.infn.it//store/user/anstahll/CERN/PbPb2025/ZEROS/2025_11_09/HITrackerNZS/RECO_Step2_HITrackerNZS_HIRun2023A_v1_AODSIM_2025_11_09/251109_114314/0000/reco_step2_104.root',
+#'root://xrootd-cms.infn.it//store/user/anstahll/CERN/PbPb2025/ZEROS/2025_11_09/HITrackerNZS/RECO_Step2_HITrackerNZS_HIRun2023A_v1_AODSIM_2025_11_09/251109_114314/0000/reco_step2_104.root',
+'file:/eos/cms/store/group/phys_heavyions/soohwan/TrackerStudies2025/reco_0.root',
+'file:/eos/cms/store/group/phys_heavyions/soohwan/TrackerStudies2025/reco_71.root',
+'file:/eos/cms/store/group/phys_heavyions/soohwan/TrackerStudies2025/reco_23.root',
+'file:/eos/cms/store/group/phys_heavyions/soohwan/TrackerStudies2025/reco_24.root',
+'file:/eos/cms/store/group/phys_heavyions/soohwan/TrackerStudies2025/reco_74.root',
+'file:/eos/cms/store/group/phys_heavyions/soohwan/TrackerStudies2025/reco_66.root',
+'file:/eos/cms/store/group/phys_heavyions/soohwan/TrackerStudies2025/reco_39.root',
+'file:/eos/cms/store/group/phys_heavyions/soohwan/TrackerStudies2025/reco_37.root',
+'file:/eos/cms/store/group/phys_heavyions/soohwan/TrackerStudies2025/reco_18.root',
 )
 )
 
@@ -160,8 +169,6 @@ process.eventFilter_UCC = cms.Sequence(
 
 # Define the analysis steps
 process.load("FlowCorrAna.DiHadronCorrelationAnalyzer.sosmeanptanalyzeraod_cfi")
-#process.sosmeanpt_ana.TrgTrackCollection = cms.InputTag("generalTracks","","ZEROS1")
-#process.sosmeanpt_ana.VertexCollection = cms.InputTag("offlinePrimaryVertices","","ZEROS1")
 process.sosmeanpt_ana.TrgTrackCollection = cms.InputTag("generalTracks","","HYBRID1")
 process.sosmeanpt_ana.VertexCollection = cms.InputTag("offlinePrimaryVertices","","HYBRID1")
 #process.sosmeanpt_ana.EffFileName = cms.string('GeneralTracks_Eff_3D_Nominal_MB.root')
@@ -180,7 +187,8 @@ process.out = cms.OutputModule("PoolOutputModule",
 #process.output_step = cms.EndPath(process.out)
 
 # Define the output
-process.TFileService = cms.Service("TFileService", fileName = cms.string('SoS_2023_HYBRID1.root'))
+process.TFileService = cms.Service("TFileService", fileName = cms.string('SoS_2025_HYBRID1.root'))
+#process.TFileService = cms.Service("TFileService", fileName = cms.string('SoS_2023_HYBRID1.root'))
 #process.TFileService = cms.Service("TFileService", fileName = cms.string('SoS_2023_ZEROS1.root'))
 
 # Define the process schedule

@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# Move the emap to search path
-mv emap_2023_newZDC_v3.txt CMSSW_13_2_11/src
+export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch
+source $VO_CMS_SW_DIR/cmsset_default.sh
+scramv1 runtime -sh
 
 # Run the code
-cmsRun -j FrameworkJobReport.xml -p PSet.py
+cmsRun -j FrameworkJobReport.xml PSet.py

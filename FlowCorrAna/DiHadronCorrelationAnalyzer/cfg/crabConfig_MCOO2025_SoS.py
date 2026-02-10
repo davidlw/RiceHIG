@@ -18,10 +18,7 @@ config.JobType.pluginName = 'Analysis'
 
 config.section_('Data')
 config.Data.inputDBS = 'global'
-config.Data.splitting = 'LumiBased'
-#config.Data.totalUnits = 5000
-config.Data.lumiMask = 'Cert_Collisions2023HI_374288_375823_Golden.json'
-config.Data.runRange = '374288-375823'
+config.Data.splitting = 'FileBased'
 config.Data.publication = False
 config.JobType.allowUndistributedCMSSW = True
 config.Data.allowNonValidInputDataset = True
@@ -45,20 +42,18 @@ def submit(config):
 #############################################################################################
 
 dataMap = {
-#            "HIDoubleMuon": { "PD": "/HIDoubleMuon/HIRun2018A-04Apr2019-v1/AOD", "Units": 5, "Memory": 2500, "RunTime": 1800, "PSet": "PbPbSkimAndTree2018_DiMuContBoth_ZDC_cfg.py" },
-#            "HISingleMuon": { "PD": "/HISingleMuon/HIRun2018A-04Apr2019-v1/AOD", "Units": 5, "Memory": 2500, "RunTime": 1800, "PSet": "PbPbSkimAndTree2018_DiMuContBoth_ZDC_cfg.py" },
-#            "HIDoubleMuonPsiPeri": { "PD": "/HIDoubleMuonPsiPeri/HIRun2018A-04Apr2019-v1/AOD", "Units": 5, "Memory": 2500, "RunTime": 1800, "PSet": "PbPbSkimAndTree2018_DiMuContBoth_ZDC_cfg.py" },
-#            "HIForward": { "PD": "/HIForward/HIRun2018A-04Apr2019-v1/AOD", "Units": 30, "Memory": 1800, "RunTime": 1400, "PSet": "PbPbSkimAndTree2018_DiMuContBoth_ZDC_ALLDIMU_cfg.py" },
+#            "HijingMBMC": { "PD": "/MinBias_OO_5p36TeV_hijing/HINOOSpring25MiniAOD-NoPU_150X_mcRun3_2025_forOO_realistic_v7-v2/MINIAODSIM", "Units": 1, "Memory": 1800, "RunTime": 1400, "PSet": "SoS_OO2025_MINIAOD_mc_cfg.py" },
+            "HijingMBGen": { "PD": "/MinBias_OO_5p36TeV_hijing/HINOOSpring25MiniAOD-NoPU_150X_mcRun3_2025_forOO_realistic_v7-v2/MINIAODSIM", "Units": 1, "Memory": 1800, "RunTime": 1400, "PSet": "SoS_OO2025_MINIAOD_gen_cfg.py" },
+#            "HijingQCDMC": { "PD": "/QCD-dijet_Pthat-15_TuneCP5_OO_5p36TeV_pythia8/HINOOSpring25MiniAOD-150X_mcRun3_2025_forOO_realistic_v7-v2/MINIAODSIM", "Units": 1, "Memory": 1800, "RunTime": 1400, "PSet": "SoS_OO2025_MINIAOD_mc_cfg.py" },
+#            "HijingQCDGen": { "PD": "/QCD-dijet_Pthat-15_TuneCP5_OO_5p36TeV_pythia8/HINOOSpring25MiniAOD-150X_mcRun3_2025_forOO_realistic_v7-v2/MINIAODSIM", "Units": 1, "Memory": 1800, "RunTime": 1400, "PSet": "SoS_OO2025_MINIAOD_gen_cfg.py" },
             }
 
-for i in range(0,1):
-#    dataMap[("HIPhysicsRawPrime"+str(i))] = { "PD": ("/HIPhysicsRawPrime"+str(i)+"/HIRun2023A-PromptReco-v2/MINIAOD"), "Units": 25, "Memory": 4600, "RunTime": 2100, "PSet": "epetaptdecomatrixnew_PbPb2023_pfcand_cfg.py" } # UCC
-    dataMap[("HIPhysicsRawPrime"+str(i))] = { "PD": ("/HIPhysicsRawPrime"+str(i)+"/HIRun2023A-PromptReco-v2/MINIAOD"), "Units": 25, "Memory": 4600, "RunTime": 2100, "PSet": "epetaptdecomatrixnew_PbPb2023_pfcandmerged_cfg.py" } # UCC
+#for i in range(0,10):
+#    dataMap[("IonPhysics"+str(i))] = { "PD": ("/IonPhysics"+str(i)+"/OORun2025-PromptReco-v1/MINIAOD"), "Units": 25, "Memory": 4000, "RunTime": 2100, "PSet": "SoS_OO2025_MINIAOD_cfg.py" } 
 
 ## Submit the muon PDs
 for key, val in dataMap.items():
-#    config.General.requestName = 'epetaptdecomatrixnew_'+key+'_HIRun2023_PRMB_weunco_20250831v3'
-    config.General.requestName = 'epetaptdecomatrixnew_'+key+'_HIRun2023_PRMBMerged_weco_20250901v1'
+    config.General.requestName = 'sosana_'+key+'_OO2025_20251016v3'
     config.Data.inputDataset = val["PD"]
     config.Data.unitsPerJob = val["Units"]
     config.JobType.maxMemoryMB = val["Memory"]
@@ -68,5 +63,10 @@ for key, val in dataMap.items():
     config.Data.outLFNDirBase = '/store/group/phys_heavyions/davidlw/' 
 
     print("Submitting CRAB job for: " + val["PD"])  # updated for Python 3
+
+    # --- important: drop cached pset so a different cfg can be loaded
+    import sys
+    if 'pset' in sys.modules:
+        del sys.modules['pset']
 
     submit(config)

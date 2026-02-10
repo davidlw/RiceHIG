@@ -1,0 +1,10 @@
+nohup root -l 'mergeProfilesFromDirList_RECURSIVE.C+("dirlist0.txt", "/afs/cern.ch/user/d/davidlw/eos/mergefiletmpdir/epptdecomatrixnew_IonPhysics0_OO2025PR_effv1pu2_20251207v1.root")' > nohup0.txt &
+nohup root -l 'mergeProfilesFromDirList_RECURSIVE.C+("dirlist1.txt", "/afs/cern.ch/user/d/davidlw/eos/mergefiletmpdir/epptdecomatrixnew_IonPhysics1_OO2025PR_effv1pu2_20251207v1.root")' > nohup1.txt &
+nohup root -l 'mergeProfilesFromDirList_RECURSIVE.C+("dirlist2.txt", "/afs/cern.ch/user/d/davidlw/eos/mergefiletmpdir/epptdecomatrixnew_IonPhysics2_OO2025PR_effv1pu2_20251207v1.root")' > nohup2.txt &
+nohup root -l 'mergeProfilesFromDirList_RECURSIVE.C+("dirlist3.txt", "/afs/cern.ch/user/d/davidlw/eos/mergefiletmpdir/epptdecomatrixnew_IonPhysics3_OO2025PR_effv1pu2_20251207v1.root")' > nohup3.txt &
+nohup root -l 'mergeProfilesFromDirList_RECURSIVE.C+("dirlist4.txt", "/afs/cern.ch/user/d/davidlw/eos/mergefiletmpdir/epptdecomatrixnew_IonPhysics4_OO2025PR_effv1pu2_20251207v1.root")' > nohup4.txt &
+nohup root -l 'mergeProfilesFromDirList_RECURSIVE.C+("dirlist5.txt", "/afs/cern.ch/user/d/davidlw/eos/mergefiletmpdir/epptdecomatrixnew_IonPhysics5_OO2025PR_effv1pu2_20251207v1.root")' > nohup5.txt &
+nohup root -l 'mergeProfilesFromDirList_RECURSIVE.C+("dirlist6.txt", "/afs/cern.ch/user/d/davidlw/eos/mergefiletmpdir/epptdecomatrixnew_IonPhysics6_OO2025PR_effv1pu2_20251207v1.root")' > nohup6.txt &
+nohup root -l 'mergeProfilesFromDirList_RECURSIVE.C+("dirlist7.txt", "/afs/cern.ch/user/d/davidlw/eos/mergefiletmpdir/epptdecomatrixnew_IonPhysics7_OO2025PR_effv1pu2_20251207v1.root")' > nohup7.txt &
+nohup root -l 'mergeProfilesFromDirList_RECURSIVE.C+("dirlist8.txt", "/afs/cern.ch/user/d/davidlw/eos/mergefiletmpdir/epptdecomatrixnew_IonPhysics8_OO2025PR_effv1pu2_20251207v1.root")' > nohup8.txt &
+nohup root -l 'mergeProfilesFromDirList_RECURSIVE.C+("dirlist9.txt", "/afs/cern.ch/user/d/davidlw/eos/mergefiletmpdir/epptdecomatrixnew_IonPhysics9_OO2025PR_effv1pu2_20251207v1.root")' > nohup9.txt &

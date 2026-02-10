@@ -1,11 +1,10 @@
 import FWCore.ParameterSet.Config as cms
 
-sosmeanpt_ana = cms.EDAnalyzer('SoSMeanPtAnalyzer',
+sosmeanpt_ana = cms.EDAnalyzer('SoSMeanPtAnalyzerAOD',
 
   TrgTrackCollection = cms.InputTag('generalTracks'),
   VertexCollection = cms.InputTag('offlinePrimaryVertices'),
   GenParticleCollection = cms.InputTag('genParticles'),
-  packedGenParticles = cms.InputTag('packedGenParticles'),
   centralitySrc = cms.InputTag("hiCentrality"),
   centralityBinLabel = cms.InputTag("centralityBin","HFtowers"),  
   zdcDigiSrc = cms.InputTag("hcalDigis", "ZDC"),
